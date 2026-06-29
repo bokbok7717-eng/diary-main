@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📔 나의 일기장</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#fdf6ee;font-family:'Georgia',serif;min-height:100vh;padding-bottom:70px}
+.top-bar{position:fixed;top:0;left:0;right:0;background:#7c4f2a;color:#fff;z-index:200;padding:8px 16px;display:flex;align-items:center;gap:6px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.top-bar .ttl{font-size:15px;font-weight:bold;letter-spacing:1px;flex-shrink:0}
+.top-bar input{background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:5px 6px;color:#fff;font-size:14px;font-weight:600;outline:none;text-align:center}
+.top-bar input.inp-year{width:72px}
+.top-bar input.inp-month{width:44px}
+.top-bar .sep{opacity:.6;font-size:13px;flex-shrink:0}
+.tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid #e8d5c0;display:flex;z-index:100;box-shadow:0 -2px 8px rgba(124,79,42,.08)}
+.tb{flex:1;padding:10px 0 8px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;color:#b08060;font-family:inherit}
+.tb.active{color:#7c4f2a;font-weight:bold}
+.tb .ic{font-size:20px;line-height:1}
+.tab-content{display:none;padding:68px 16px 16px;max-width:720px;margin:0 auto}
+.tab-content.active{display:block}
+.box{background:#fff;border-radius:12px;padding:14px;margin-bottom:14px;border:1px solid #e8d5c0;box-shadow:0 1px 4px rgba(124,79,42,.06)}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#7c4f2a;color:#fff;padding:8px 20px;border-radius:20px;font-size:12px;display:none;z-index:999;white-space:nowrap}
+/* 통계 카드 */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+.sc{background:#fff;border:1px solid #e8d5c0;border-radius:10px;padding:10px;text-align:center}
+.sc .sv{font-size:20px;font-weight:bold;color:#7c4f2a}
+.sc .sl{font-size:10px;color:#b08060;margin-top:2px}
+/* 에디터 */
+.meta-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.date-lbl{font-size:15px;font-weight:bold;color:#7c4f2a;flex-shrink:0}
+.emj-btn{font-size:20px;cursor:pointer;padding:2px 3px;border-radius:6px;border:2px solid transparent;background:none;opacity:.5;transition:all .15s;flex-shrink:0}
+.emj-btn.on{opacity:1;border-color:#e8c4a0;background:#fdf0e0}
+.mood-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
+.entry-title-inp{width:100%;border:none;border-bottom:1.5px solid #e8d5c0;background:transparent;font-size:16px;color:#5a3a1a;padding:6px 0 8px;outline:none;font-family:inherit;margin-bottom:10px}
+.entry-title-inp::placeholder{color:#d0b090}
+.entry-body-inp{width:100%;border:none;background:transparent;font-size:14px;color:#5a3a1a;line-height:2;outline:none;resize:none;min-height:260px;font-family:inherit;background-image:repeating-linear-gradient(transparent,transparent 27px,#f0e8de 27px,#f0e8de 28px);background-size:100% 28px}
+.entry-body-inp::placeholder{color:#d0b090}
+.ef{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #e8d5c0;flex-wrap:wrap;gap:8px;margin-top:10px}
+.cc{font-size:11px;color:#b08060}
+.btn-row{display:flex;gap:8px}
+.bs{background:#7c4f2a;color:#fff;border:none;border-radius:8px;padding:7px 18px;font-size:12px;cursor:pointer;font-family:inherit}
+.bd{background:none;border:1.5px solid #e8c4a0;color:#b08060;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+.bn{background:none;border:1.5px solid #7c4f2a;color:#7c4f2a;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+/* 목록 */
+.si{width:100%;background:#fff;border:1.5px solid #e8d5c0;border-radius:10px;padding:8px 14px;font-size:13px;color:#5a3a1a;outline:none;font-family:inherit;margin-bottom:10px}
+.si:focus{border-color:#c8a080}
+.fsel{border:1.5px solid #e8d5c0;border-radius:8px;padding:7px 8px;font-size:12px;color:#5a3a1a;outline:none;background:#fff;font-family:inherit}
+.ec{background:#fff;border:1px solid #e8d5c0;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.ec:hover{border-color:#c8a080}
+.ech{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ecd{font-size:11px;color:#b08060}
+.eci{font-size:14px}
+.ect{font-size:13px;color:#5a3a1a;font-weight:bold;margin-bottom:3px}
+.ecp{font-size:11px;color:#9a7a5a;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+/* 캘린더 */
+.bcn{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.bcn span{font-size:15px;font-weight:bold;color:#7c4f2a}
+.bcn button{background:#fff;border:1.5px solid #e8d5c0;border-radius:8px;padding:5px 14px;color:#7c4f2a;cursor:pointer;font-size:14px;font-family:inherit}
+.bcg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.bch{text-align:center;font-size:11px;font-weight:bold;color:#b08060;padding:5px 0}
+.bch:first-child{color:#e87070}
+.bch:last-child{color:#7090e8}
+.bcd{border-radius:8px;background:#fff;border:1px solid #f0e0d0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;padding:3px 2px}
+.bcd:hover{border-color:#c8a080}
+.bcd.today{border:2px solid #7c4f2a}
+.bcd.has-e{background:#fdf8f0}
+.bcd.empty{background:transparent;border-color:transparent;cursor:default}
+.bcd .dn{font-size:9px;color:#b08060;position:absolute;top:3px;right:5px}
+.bcd.sun .dn{color:#e87070}
+.bcd.sat .dn{color:#7090e8}
+.bcd .dm{font-size:20px;line-height:1}
+.bcd .dw{font-size:11px;margin-top:1px}
+/* 통계 */
+.cw{position:relative;width:100%;max-width:260px;height:260px;margin:0 auto 14px}
+.ml{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:14px}
+.mli{display:flex;align-items:center;gap:4px;font-size:11px;color:#7c4f2a;background:#fff8f0;border-radius:8px;padding:4px 10px;border:1px solid #e8d5c0}
+.wsr{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.wsb{flex:1;height:10px;background:#f0e8de;border-radius:5px;overflow:hidden}
+.wsbf{height:100%;border-radius:5px;background:#e8c4a0}
+.wsl{font-size:13px;width:22px}
+.wsc{font-size:11px;color:#b08060;width:28px;text-align:right}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="ttl">📔 일기장</span>
+  <input type="number" class="inp-year" id="g-year" min="2000" max="2099" value="2026" onchange="onYMChange()">
+  <span class="sep">년</span>
+  <input type="number" class="inp-month" id="g-month" min="1" max="12" value="6" onchange="onYMChange()">
+  <span class="sep">월</span>
+</div>
+
+<!-- 탭1: 일기 -->
+<div class="tab-content active" id="tab-write">
+  <div class="stats-row">
+    <div class="sc"><div class="sv" id="s-total">0</div><div class="sl">총 일기</div></div>
+    <div class="sc"><div class="sv" id="s-streak">0</div><div class="sl">연속 작성</div></div>
+    <div class="sc"><div class="sv" id="s-month">0</div><div class="sl">이번달</div></div>
+  </div>
+  <div class="box">
+    <div class="meta-row">
+      <div class="date-lbl" id="ed-date">오늘 날짜</div>
+      <button class="emj-btn" id="w-sun" onclick="setW('☀️')">☀️</button>
+      <button class="emj-btn" id="w-cloud1" onclick="setW('⛅')">⛅</button>
+      <button class="emj-btn" id="w-cloud2" onclick="setW('☁️')">☁️</button>
+      <button class="emj-btn" id="w-rain" onclick="setW('☔')">☔</button>
+      <button class="emj-btn" id="w-snow" onclick="setW('❄️')">❄️</button>
+    </div>
+    <div class="mood-row">
+      <button class="emj-btn" id="m-1" onclick="setM('😄')">😄</button>
+      <button class="emj-btn" id="m-2" onclick="setM('😊')">😊</button>
+      <button class="emj-btn" id="m-3" onclick="setM('🥰')">🥰</button>
+      <button class="emj-btn" id="m-4" onclick="setM('😐')">😐</button>
+      <button class="emj-btn" id="m-5" onclick="setM('😔')">😔</button>
+      <button class="emj-btn" id="m-6" onclick="setM('😢')">😢</button>
+      <button class="emj-btn" id="m-7" onclick="setM('😡')">😡</button>
+      <button class="emj-btn" id="m-8" onclick="setM('😴')">😴</button>
+    </div>
+    <input type="text" class="entry-title-inp" id="e-title" placeholder="제목을 입력하세요..." maxlength="50">
+    <textarea class="entry-body-inp" id="e-body" placeholder="오늘 하루는 어땠나요?&#10;&#10;여기에 일기를 작성해보세요..." oninput="updCC()"></textarea>
+    <div class="ef">
+      <span class="cc" id="cc">0자</span>
+      <div class="btn-row">
+        <button class="bd" onclick="delEntry()">삭제</button>
+        <button class="bn" onclick="newEntry()">새 일기</button>
+        <button class="bs" onclick="saveEntry()">💾 저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 탭2: 캘린더 -->
+<div class="tab-content" id="tab-cal">
+  <div class="box">
+    <div class="bcn">
+      <button onclick="bcMove(-1)">◀</button>
+      <span id="bc-title"></span>
+      <button onclick="bcMove(1)">▶</button>
+    </div>
+    <div class="bcg" id="bc-grid"></div>
+  </div>
+</div>
+
+<!-- 탭3: 목록 -->
+<div class="tab-content" id="tab-list">
+  <div class="box" style="padding:10px 14px">
+    <input type="text" class="si" id="s-input" placeholder="🔍 제목/내용 검색..." oninput="renderFL()">
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <select class="fsel" id="f-mood" onchange="renderFL()">
+        <option value="">기분 전체</option>
+        <option>😄</option><option>😊</option><option>🥰</option>
+        <option>😐</option><option>😔</option><option>😢</option>
+        <option>😡</option><option>😴</option>
+      </select>
+      <select class="fsel" id="f-weather" onchange="renderFL()">
+        <option value="">날씨 전체</option>
+        <option>☀️</option><option>⛅</option><option>☁️</option>
+        <option>☔</option><option>❄️</option>
+      </select>
+      <select class="fsel" id="f-range" onchange="renderFL()">
+        <option value="month">이번달</option>
+        <option value="year">올해</option>
+        <option value="all">전체</option>
+      </select>
+    </div>
+    <div style="font-size:11px;color:#b08060" id="list-count"></div>
+  </div>
+  <div id="fl-list"></div>
+</div>
+
+<!-- 탭4: 통계 -->
+<div class="tab-content" id="tab-stats">
+  <div class="box">
+    <div style="font-size:13px;font-weight:bold;color:#7c4f2a;margin-bottom:10px">😊 기분 통계</div>
+    <div class="cw"><canvas id="mood-chart"></canvas></div>
+    <div class="ml" id="mood-leg"></div>
+  </div>
+  <div class="box">
+    <div style="font-size:13px;font-weight:bold;color:#7c4f2a;margin-bottom:10px">🌤 날씨 통계</div>
+    <div id="w-stat"></div>
+  </div>
+  <div class="box">
+    <div style="font-size:13px;font-weight:bold;color:#7c4f2a;margin-bottom:10px">📝 월별 일기 수</div>
+    <div style="position:relative;height:180px"><canvas id="mo-chart"></canvas></div>
+  </div>
+</div>
+
+<nav class="tab-bar">
+  <button class="tb active" id="tbtn-write" onclick="goTab('write')"><span class="ic">✍️</span>일기</button>
+  <button class="tb" id="tbtn-cal" onclick="goTab('cal')"><span class="ic">📅</span>캘린더</button>
+  <button class="tb" id="tbtn-list" onclick="goTab('list')"><span class="ic">📋</span>목록</button>
+  <button class="tb" id="tbtn-stats" onclick="goTab('stats')"><span class="ic">📊</span>통계</button>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SAVE_KEY='diary_v2';
+var entries={};
+var selDate=null, selMood='', selWeather='';
+var bcYear, bcMonth;
+var moodChart=null, moChart=null;
+var DAYS=['일','월','화','수','목','금','토'];
+var MONTHS=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+var MOOD_COLORS={'😄':'#fbbf24','😊':'#a3e635','🥰':'#f472b6','😐':'#94a3b8','😔':'#60a5fa','😢':'#818cf8','😡':'#f87171','😴':'#c084fc'};
+var MOOD_LABELS={'😄':'신남','😊':'좋음','🥰':'사랑','😐':'보통','😔':'슬픔','😢':'눈물','😡':'화남','😴':'피곤'};
+var WEATHER_IDS={'☀️':'w-sun','⛅':'w-cloud1','☁️':'w-cloud2','☔':'w-rain','❄️':'w-snow'};
+var MOOD_IDS={'😄':'m-1','😊':'m-2','🥰':'m-3','😐':'m-4','😔':'m-5','😢':'m-6','😡':'m-7','😴':'m-8'};
+
+function load(){try{entries=JSON.parse(localStorage.getItem(SAVE_KEY))||{};}catch(e){entries={};}}
+function save(){localStorage.setItem(SAVE_KEY,JSON.stringify(entries));}
+function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function parseDate(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2]);}
+function getYM(){return document.getElementById('g-year').value+'-'+String(document.getElementById('g-month').value).padStart(2,'0');}
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.style.display='block';clearTimeout(toast._t);toast._t=setTimeout(function(){t.style.display='none';},1800);}
+
+// 탭 이동
+function goTab(id){
+  document.querySelectorAll('.tab-content').forEach(function(el){el.classList.remove('active');});
+  document.querySelectorAll('.tb').forEach(function(el){el.classList.remove('active');});
+  document.getElementById('tab-'+id).classList.add('active');
+  document.getElementById('tbtn-'+id).classList.add('active');
+  if(id==='cal') renderBC();
+  if(id==='list') renderFL();
+  if(id==='stats') renderStats();
+}
+
+// 년/월 변경
+function onYMChange(){
+  var y=parseInt(document.getElementById('g-year').value)||2026;
+  var m=parseInt(document.getElementById('g-month').value)||1;
+  if(m<1||m>12) return;
+  bcYear=y; bcMonth=m-1;
+  renderBC(); renderStats(); renderStatCards(); renderList();
+}
+
+// 날씨/기분 선택
+function setW(w){
+  selWeather=(selWeather===w)?'':w;
+  Object.keys(WEATHER_IDS).forEach(function(k){
+    document.getElementById(WEATHER_IDS[k]).classList.toggle('on', k===selWeather);
+  });
+}
+function setM(m){
+  selMood=(selMood===m)?'':m;
+  Object.keys(MOOD_IDS).forEach(function(k){
+    document.getElementById(MOOD_IDS[k]).classList.toggle('on', k===selMood);
+  });
+}
+
+// 에디터
+function selectDate(ds){
+  selDate=ds;
+  var d=parseDate(ds);
+  document.getElementById('ed-date').textContent=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
+  var e=entries[ds];
+  document.getElementById('e-title').value=e?e.title||'':'';
+  document.getElementById('e-body').value=e?e.body||'':'';
+  selMood=e?e.mood||'':'';
+  selWeather=e?e.weather||'':'';
+  Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.toggle('on',k===selMood);});
+  Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.toggle('on',k===selWeather);});
+  updCC();
+  goTab('write');
+}
+
+function newEntry(){
+  selDate=fmt(new Date());
+  selectDate(selDate);
+}
+
+function saveEntry(){
+  if(!selDate){toast('날짜를 선택해주세요!');return;}
+  var body=document.getElementById('e-body').value.trim();
+  if(!body){toast('내용을 입력해주세요!');return;}
+  entries[selDate]={title:document.getElementById('e-title').value.trim(),body:body,mood:selMood,weather:selWeather,updatedAt:Date.now()};
+  save(); toast('💾 저장됐어요!');
+  renderList(); renderStatCards();
+}
+
+function delEntry(){
+  if(!selDate||!entries[selDate]){toast('삭제할 일기가 없어요');return;}
+  if(!confirm('이 일기를 삭제할까요?')) return;
+  delete entries[selDate]; save();
+  document.getElementById('e-title').value='';
+  document.getElementById('e-body').value='';
+  selMood=''; selWeather='';
+  Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.remove('on');});
+  Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.remove('on');});
+  updCC(); toast('삭제됐어요');
+  renderList(); renderStatCards();
+}
+
+function updCC(){document.getElementById('cc').textContent=document.getElementById('e-body').value.length.toLocaleString()+'자';}
+
+// 일기 탭 목록 (이번달)
+function renderList(){
+  // 일기 탭에는 별도 목록 없음 (목록 탭에서 관리)
+}
+
+// 통계 카드
+function renderStatCards(){
+  var keys=Object.keys(entries);
+  document.getElementById('s-total').textContent=keys.length;
+  var streak=0,d=new Date();
+  while(entries[fmt(d)]){streak++;d.setDate(d.getDate()-1);if(streak>365)break;}
+  document.getElementById('s-streak').textContent=streak+'일';
+  var ym=getYM();
+  document.getElementById('s-month').textContent=keys.filter(function(k){return k.startsWith(ym);}).length+'편';
+}
+
+// 캘린더
+function renderBC(){
+  var y=bcYear,m=bcMonth;
+  document.getElementById('bc-title').textContent=y+'년 '+MONTHS[m];
+  var first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate();
+  var today=fmt(new Date());
+  var html=DAYS.map(function(d){return '<div class="bch">'+d+'</div>';}).join('');
+  for(var i=0;i<first;i++) html+='<div class="bcd empty"></div>';
+  for(var d=1;d<=last;d++){
+    var ds=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var e=entries[ds];
+    var dow=(first+d-1)%7;
+    var cls='bcd'+(dow===0?' sun':dow===6?' sat':'')+(ds===today?' today':'')+(e?' has-e':'');
+    html+='<div class="'+cls+'" onclick="selectDate(\''+ds+'\')">'
+      +'<span class="dn">'+d+'</span>'
+      +(e&&e.mood?'<span class="dm">'+e.mood+'</span>':'<span class="dm" style="opacity:.1">·</span>')
+      +(e&&e.weather?'<span class="dw">'+e.weather+'</span>':'')
+      +'</div>';
+  }
+  document.getElementById('bc-grid').innerHTML=html;
+}
+
+function bcMove(dir){
+  bcMonth+=dir;
+  if(bcMonth<0){bcMonth=11;bcYear--;}
+  if(bcMonth>11){bcMonth=0;bcYear++;}
+  document.getElementById('g-year').value=bcYear;
+  document.getElementById('g-month').value=bcMonth+1;
+  renderBC();
+}
+
+// 목록 탭
+function renderFL(){
+  var q=(document.getElementById('s-input').value||'').toLowerCase();
+  var mf=document.getElementById('f-mood').value;
+  var wf=document.getElementById('f-weather').value;
+  var range=document.getElementById('f-range').value;
+  var ym=getYM(), yr=bcYear;
+  var keys=Object.keys(entries).sort().reverse().filter(function(k){
+    if(range==='month'&&!k.startsWith(ym)) return false;
+    if(range==='year'&&!k.startsWith(String(yr))) return false;
+    var e=entries[k];
+    if(q&&!(e.title||'').toLowerCase().includes(q)&&!(e.body||'').toLowerCase().includes(q)) return false;
+    if(mf&&e.mood!==mf) return false;
+    if(wf&&e.weather!==wf) return false;
+    return true;
+  });
+  document.getElementById('list-count').textContent=keys.length+'개의 일기';
+  var container=document.getElementById('fl-list');
+  if(keys.length===0){container.innerHTML='<div style="text-align:center;color:#d0b090;font-size:13px;padding:32px">검색 결과가 없어요 🔍</div>';return;}
+  var groups={};
+  keys.forEach(function(k){var ym2=k.slice(0,7);if(!groups[ym2])groups[ym2]=[];groups[ym2].push(k);});
+  var html='';
+  Object.keys(groups).sort().reverse().forEach(function(ym2){
+    var pts=ym2.split('-');
+    html+='<div style="font-size:12px;font-weight:bold;color:#b08060;margin:12px 0 6px 2px">'+pts[0]+'년 '+parseInt(pts[1])+'월 ('+groups[ym2].length+'편)</div>';
+    groups[ym2].forEach(function(k){
+      var e=entries[k],d=parseDate(k);
+      var ds=(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
+      html+='<div class="ec" onclick="selectDate(\''+k+'\')">'
+        +'<div class="ech"><span class="ecd">'+ds+'</span><span class="eci">'+(e.weather||'')+' '+(e.mood||'')+'</span></div>'
+        +'<div class="ect">'+(e.title||'(제목 없음)')+'</div>'
+        +'<div class="ecp">'+(e.body||'').replace(/\n/g,' ')+'</div>'
+        +'</div>';
+    });
+  });
+  container.innerHTML=html;
+}
+
+// 통계
+function renderStats(){
+  var ym=getYM(),yr=bcYear;
+  var mKeys=Object.keys(entries).filter(function(k){return k.startsWith(ym);});
+  var moodCounts={};
+  mKeys.forEach(function(k){var m=entries[k].mood;if(m)moodCounts[m]=(moodCounts[m]||0)+1;});
+  var mk=Object.keys(moodCounts);
+  if(moodChart) moodChart.destroy();
+  if(mk.length>0){
+    moodChart=new Chart(document.getElementById('mood-chart'),{
+      type:'doughnut',
+      data:{labels:mk.map(function(m){return m+' '+MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return MOOD_COLORS[m]||'#e8c4a0';}),borderWidth:2,borderColor:'#fdf6ee'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/mKeys.length*100)+'%)';}}}}}
+    });
+    document.getElementById('mood-leg').innerHTML=mk.map(function(m){
+      var pct=Math.round(moodCounts[m]/mKeys.length*100);
+      return '<div class="mli"><span>'+m+'</span><span style="color:#b08060;font-size:11px">'+MOOD_LABELS[m]+' '+moodCounts[m]+'일 ('+pct+'%)</span></div>';
+    }).join('');
+  } else {
+    document.getElementById('mood-leg').innerHTML='<div style="font-size:12px;color:#d0b090;text-align:center;width:100%">이달 기분 기록이 없어요</div>';
+    var ctx=document.getElementById('mood-chart').getContext('2d');
+    ctx.clearRect(0,0,260,260);
+    ctx.font='13px Georgia';ctx.fillStyle='#d0b090';ctx.textAlign='center';
+    ctx.fillText('기록 없음',130,130);
+  }
+  var wc={};
+  mKeys.forEach(function(k){var w=entries[k].weather;if(w)wc[w]=(wc[w]||0)+1;});
+  var wk=Object.keys(wc),wt=mKeys.length||1;
+  document.getElementById('w-stat').innerHTML=wk.length>0
+    ?wk.map(function(w){var pct=Math.round(wc[w]/wt*100);return '<div class="wsr"><span class="wsl">'+w+'</span><div class="wsb"><div class="wsbf" style="width:'+pct+'%"></div></div><span class="wsc">'+wc[w]+'일</span></div>';}).join('')
+    :'<div style="font-size:12px;color:#d0b090">날씨 기록이 없어요</div>';
+  var moData=Array.from({length:12},function(_,i){var ym2=yr+'-'+String(i+1).padStart(2,'0');return Object.keys(entries).filter(function(k){return k.startsWith(ym2);}).length;});
+  if(moChart) moChart.destroy();
+  moChart=new Chart(document.getElementById('mo-chart'),{
+    type:'bar',
+    data:{labels:MONTHS,datasets:[{label:'일기 수',data:moData,backgroundColor:'#e8c4a099',borderColor:'#c8a070',borderWidth:1,borderRadius:4}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{stepSize:1},beginAtZero:true}}}
+  });
+}
+
+// 초기화
+load();
+var now=new Date();
+bcYear=now.getFullYear(); bcMonth=now.getMonth();
+document.getElementById('g-year').value=bcYear;
+document.getElementById('g-month').value=bcMonth+1;
+newEntry();
+renderStatCards();
+</script>
+</body>
+</html>
