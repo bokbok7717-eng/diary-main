@@ -120,7 +120,8 @@ body.mode-couple .toast{background:#ff6b8a}
 .dday-card .start-date{font-size:11px;opacity:.85;margin-bottom:4px}
 .dday-card .dday-num{font-size:28px;font-weight:900;margin-bottom:2px}
 .dday-set-row{display:flex;gap:6px;margin-top:10px}
-.dday-set-row input{flex:1;border:none;border-radius:8px;padding:7px 10px;font-size:12px;outline:none}
+.dday-set-row input{flex:1;min-width:0;border:none;border-radius:8px;padding:7px 8px;font-size:12px;outline:none}
+.dday-set-row button{flex-shrink:0}
 .dday-set-row button{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:8px;padding:7px 14px;font-size:12px;cursor:pointer;font-family:inherit}
 .anniv-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #ffeef1}
 .anniv-item:last-child{border-bottom:none}
@@ -128,10 +129,11 @@ body.mode-couple .toast{background:#ff6b8a}
 .anniv-date{font-size:11px;color:#bbb}
 .anniv-dday{font-size:13px;font-weight:700;color:#ff6b8a}
 .anniv-del{background:none;border:none;color:#ffc9d4;cursor:pointer;font-size:14px;margin-left:6px}
-.anniv-form{display:grid;grid-template-columns:1fr 110px 36px;gap:6px;margin-top:10px}
+.anniv-form{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
+.anniv-form input#anniv-name{grid-column:1/3}
 .anniv-form input{border:1.5px solid #ffe0e6;border-radius:8px;padding:7px 10px;font-size:12px;outline:none;font-family:inherit}
 .anniv-form input:focus{border-color:#ff6b8a}
-.anniv-add-btn{background:#ff6b8a;color:#fff;border:none;border-radius:8px;font-size:18px;cursor:pointer}
+.anniv-add-btn{background:#ff6b8a;color:#fff;border:none;border-radius:8px;font-size:18px;cursor:pointer;padding:7px 14px;grid-column:2/3}
 .cp-cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .cp-cal-nav span{font-size:14px;font-weight:700;color:#444}
 .cp-cal-nav button{background:#fff0f3;border:none;border-radius:8px;padding:5px 14px;color:#ff6b8a;cursor:pointer;font-size:14px}
@@ -190,7 +192,7 @@ body.mode-couple .toast{background:#ff6b8a}
 .bucket-date{font-size:10px;color:#ffb3c1;flex-shrink:0}
 .bucket-del{background:none;border:none;color:#ffd0da;cursor:pointer;font-size:15px;flex-shrink:0}
 .bucket-form{display:flex;gap:6px;margin-top:10px}
-.bucket-form input{flex:1;border:1.5px solid #ffe0e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;font-family:inherit}
+.bucket-form input{flex:1;min-width:0;border:1.5px solid #ffe0e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;font-family:inherit}
 .bucket-form input:focus{border-color:#ff6b8a}
 .bucket-form button{background:#ff6b8a;color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:18px;cursor:pointer}
 .bucket-progress{margin-bottom:12px}
