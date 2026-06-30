@@ -15,7 +15,7 @@ body.mode-couple{background:#fff5f7;font-family:sans-serif}
 .top-bar{position:fixed;top:0;left:0;right:0;z-index:200;padding:8px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:background .3s}
 body.mode-diary .top-bar{background:#7c4f2a}
 body.mode-couple .top-bar{background:#ff6b8a}
-.top-bar .ttl{font-size:15px;font-weight:bold;letter-spacing:.5px;flex-shrink:0}
+.top-bar .ttl{font-size:14px;font-weight:bold;letter-spacing:.3px;flex-shrink:0;white-space:nowrap}
 .top-bar input{background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:5px 6px;color:#fff;font-size:14px;font-weight:600;outline:none;text-align:center}
 .top-bar input.inp-year{width:68px}
 .top-bar input.inp-month{width:42px}
@@ -203,14 +203,13 @@ body.mode-couple .toast{background:#ff6b8a}
 
 <!-- 상단바 -->
 <div class="top-bar">
-  <span class="ttl" id="top-title">📔 일기장</span>
+  <span class="ttl" id="top-title">📔</span>
   <input type="number" class="inp-year" id="g-year" min="2000" max="2099" value="2026" onchange="onYMChange()">
   <span class="sep">년</span>
   <input type="number" class="inp-month" id="g-month" min="1" max="12" value="6" onchange="onYMChange()">
   <span class="sep">월</span>
   <span class="dday-chip" id="top-dday" style="display:none">D+0</span>
   <button class="backup-btn" onclick="openBackupModal()">💾</button>
-  <span style="font-size:16px;flex-shrink:0" id="mode-label-icon">🤍</span>
   <label class="mode-switch" title="일기장 ↔ 커플 다이어리">
     <input type="checkbox" id="mode-toggle" onchange="onModeToggle()">
     <span class="mode-switch-track"><span class="knob"></span></span>
@@ -455,7 +454,6 @@ function onModeToggle(){
 
 function applyMode(){
   var body=document.body;
-  var labelIcon=document.getElementById('mode-label-icon');
   var topTitle=document.getElementById('top-title');
   var topDday=document.getElementById('top-dday');
   var backupTitle=document.getElementById('backup-mode-label');
@@ -467,8 +465,7 @@ function applyMode(){
 
   if(currentMode==='couple'){
     body.classList.remove('mode-diary'); body.classList.add('mode-couple');
-    labelIcon.textContent='🩷';
-    topTitle.textContent='💑 커플 다이어리';
+    topTitle.textContent='🤍';
     topDday.style.display='inline-block';
     updateTopDday();
     backupTitle.textContent='커플 다이어리';
@@ -477,8 +474,7 @@ function applyMode(){
     renderCpCal(); renderThrowback();
   } else {
     body.classList.remove('mode-couple'); body.classList.add('mode-diary');
-    labelIcon.textContent='🤍';
-    topTitle.textContent='📔 일기장';
+    topTitle.textContent='📔';
     topDday.style.display='none';
     backupTitle.textContent='일기장';
     dlBtn.style.background='#7c4f2a';
