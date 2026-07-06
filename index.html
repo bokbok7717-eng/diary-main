@@ -147,7 +147,7 @@ body.mode-couple .toast{background:#ff6b8a}
 .cp-cal-day img{width:100%;height:100%;object-fit:cover}
 .cp-cal-day .dn{position:absolute;top:2px;left:4px;font-size:9px;color:#fff;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.5);z-index:2}
 .cp-cal-day:not(.has-photo) .dn{color:#d89aa5;text-shadow:none}
-.cp-cal-day .dmood{position:absolute;bottom:2px;right:3px;font-size:13px;z-index:2}
+.cp-cal-day .dmood{position:absolute;bottom:2px;right:3px;font-size:13px;z-index:5}
 .cp-cal-day .dphoto-count{position:absolute;top:2px;right:3px;background:rgba(255,107,138,.85);color:#fff;font-size:8px;font-weight:700;border-radius:8px;padding:1px 4px;z-index:2}
 .entry-modal{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;display:none;align-items:flex-end;justify-content:center}
 .entry-modal.open{display:flex}
@@ -251,6 +251,17 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
 .bcd.mood-😢{background:#ede0ff !important;border-color:#d0b8ff !important}
 .bcd.mood-😡{background:#ffe4d4 !important;border-color:#ffb890 !important}
 .bcd.mood-😴{background:#ebebeb !important;border-color:#ddd !important}
+
+/* ===== 커플 달력 기분 색상 오버레이 ===== */
+.cp-cal-day .mood-ov{position:absolute;inset:0;z-index:2;pointer-events:none}
+.cp-cal-day .dmood{position:absolute;bottom:2px;right:3px;z-index:4;font-size:9px;line-height:1}
+
+/* 커플 5가지 기분 테두리 */
+.cp-cal-day.cp-mood-🥰{border-color:#f8cad9 !important} .cp-cal-day.cp-mood-🥰 .mood-ov{background:#fce8f0;opacity:.35}
+.cp-cal-day.cp-mood-😊{border-color:#ffe08a !important} .cp-cal-day.cp-mood-😊 .mood-ov{background:#fff3cc;opacity:.35}
+.cp-cal-day.cp-mood-😐{border-color:#c0c8c0 !important} .cp-cal-day.cp-mood-😐 .mood-ov{background:#e8eee8;opacity:.35}
+.cp-cal-day.cp-mood-😢{border-color:#d0b8ff !important} .cp-cal-day.cp-mood-😢 .mood-ov{background:#ede0ff;opacity:.35}
+.cp-cal-day.cp-mood-😡{border-color:#ffb890 !important} .cp-cal-day.cp-mood-😡 .mood-ov{background:#ffe4d4;opacity:.35}
 </style>
 </head>
 <body class="mode-diary">
@@ -487,11 +498,11 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
         <div class="multi-photo-grid" id="multi-photo-grid"></div>
       </div>
       <div class="mood-row-cp" id="mood-row">
-        <button class="mood-btn" data-mood="💕" onclick="setEntryMood('💕')">💕</button>
+        <button class="mood-btn" data-mood="🥰" onclick="setEntryMood('🥰')">🥰</button>
         <button class="mood-btn" data-mood="😊" onclick="setEntryMood('😊')">😊</button>
-        <button class="mood-btn" data-mood="😶" onclick="setEntryMood('😶')">😶</button>
-        <button class="mood-btn" data-mood="💢" onclick="setEntryMood('💢')">💢</button>
+        <button class="mood-btn" data-mood="😐" onclick="setEntryMood('😐')">😐</button>
         <button class="mood-btn" data-mood="😢" onclick="setEntryMood('😢')">😢</button>
+        <button class="mood-btn" data-mood="😡" onclick="setEntryMood('😡')">😡</button>
       </div>
       <textarea class="entry-textarea" id="entry-text" placeholder="오늘의 한마디를 남겨보세요 💌"></textarea>
       <div class="entry-btns">
@@ -1021,8 +1032,9 @@ function renderCpCal(){
     var e=cpData.entries[ds];
     var hasPhoto = e && e.photos && e.photos.length>0;
     var hasPromise=cpData.promises&&cpData.promises[ds];
-    var cls='cp-cal-day'+(ds===todayStr?' today':'')+(hasPhoto?' has-photo':'')+(hasPromise?' has-promise':'');
-    var inner='<span class="dn">'+d+'</span>';
+    var cpMoodCls=e&&e.mood?' cp-mood-'+e.mood:'';
+    var cls='cp-cal-day'+(ds===todayStr?' today':'')+(hasPhoto?' has-photo':'')+(hasPromise?' has-promise':'')+cpMoodCls;
+    var inner='<span class="dn">'+d+'</span>'+(e&&e.mood?'<div class="mood-ov"></div>':'');
     if(hasPhoto){
       inner+='<img src="'+e.photos[0]+'">';
       if(e.photos.length>1) inner+='<span class="dphoto-count">+'+(e.photos.length-1)+'</span>';
@@ -1132,7 +1144,7 @@ function deleteEntry(){
 }
 
 function renderGalleryFilter(){
-  var moods=['💕','😊','😶','💢','😢'];
+  var moods=['🥰','😊','😐','😢','😡'];
   var html='<button class="gf'+(galleryFilterMood===''?' active':'')+'" onclick="setGalleryFilter(\'\')">전체</button>';
   html+=moods.map(function(m){
     return '<button class="gf'+(galleryFilterMood===m?' active':'')+'" onclick="setGalleryFilter(\''+m+'\')">'+m+'</button>';
@@ -1476,7 +1488,7 @@ function openBucketDoneModal(id){
   document.getElementById('bucket-done-id').value=id;
   var pname=getPartnerName();
   var titleEl=document.getElementById('bucket-done-title');
-  if(titleEl) titleEl.textContent='@'+pname+'이와 하고 싶던 걸 드디어 했군요 👀';
+  if(titleEl) titleEl.textContent=pname+'이와 하고 싶던 걸 드디어 했군요 👀';
   document.getElementById('bucket-done-modal').style.display='flex';
 }
 function closeBucketDoneModal(){
@@ -1615,7 +1627,7 @@ function renderCoupleCards(){
       +'<span class="card-icon">🔥</span>'
       +'<div class="card-body">'
       +'<div class="card-title">'+msg+'</div>'
-      +'<div class="card-desc">@'+pname2+'이와 '+nextMile+'일까지 '+remain+'일만 더!</div>'
+      +'<div class="card-desc">'+pname2+'이와 '+nextMile+'일까지 '+remain+'일만 더!</div>'
       +'</div>'
       +'</div>';
   }
@@ -1641,7 +1653,7 @@ function renderCoupleCards(){
         html+='<div class="diary-card" style="background:'+bgColor+';border:1px solid #ffc9d4;cursor:default">'
           +'<span class="card-icon">📅</span>'
           +'<div class="card-body" style="flex:1">'
-          +'<div class="card-title" style="color:'+titleColor+'">'+dLabel+' @'+pname3+'이와 약속!</div>'
+          +'<div class="card-title" style="color:'+titleColor+'">'+dLabel+' '+pname3+'이와 약속!</div>'
           +'<div class="card-desc">'+(memo?memo+' · ':'')+( nextD.getMonth()+1)+'월 '+nextD.getDate()+'일</div>'
           +'</div>'
           +'</div>';
@@ -1832,19 +1844,24 @@ function checkPushNotifications(){
     });
   }
 
-  // 2. 약속 알림 (오늘 or D-1)
+  // 2. 약속 알림 (D-7까지)
   if(cpData.promises){
     var keys=Object.keys(cpData.promises).sort();
     for(var i=0;i<keys.length;i++){
       var ds=keys[i];
       var d=new Date(ds+'T00:00:00'); d.setHours(0,0,0,0);
       var diff2=Math.round((d-today)/86400000);
-      var memo=cpData.promises[ds]&&cpData.promises[ds].memo?cpData.promises[ds].memo:'약속';
+      var memo=cpData.promises[ds]&&cpData.promises[ds].memo?cpData.promises[ds].memo:'';
+      var memoStr=memo?memo:'약속';
+      if(diff2<0) continue; // 지난 약속 스킵
       if(diff2===0){
-        setTimeout(function(m){showPush('📅','오늘 약속 있어요!',m,5000);}(memo),1200);
+        setTimeout(function(m){showPush('📅','오늘 약속 있어요!',m,5000);}(memoStr),1200);
         break;
       } else if(diff2===1){
-        setTimeout(function(m){showPush('📅','내일 약속 있어요 D-1',m,4000);}(memo),1200);
+        setTimeout(function(m){showPush('📅','내일 약속 있어요 D-1',m,4000);}(memoStr),1400);
+        break;
+      } else if(diff2<=7){
+        setTimeout(function(m,d2){showPush('📅','D-'+d2+' 약속이 있어요',m,4000);}(memoStr,diff2),1400);
         break;
       }
     }
@@ -1907,9 +1924,12 @@ function checkPushNotifications(){
   <div style="background:#fff;border-radius:20px;padding:24px 20px;max-width:320px;width:100%;box-sizing:border-box;text-align:center">
     <div style="font-size:24px;margin-bottom:8px">💑</div>
     <div style="font-size:16px;font-weight:700;color:#ff6b8a;margin-bottom:4px">상대방 이름 설정</div>
-    <div style="font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.6">카드에 @이름 으로 표시돼요</div>
-    <input id="partner-name-input" type="text" placeholder="예: 이, 준, 민준..." maxlength="10"
-      style="width:100%;border:1.5px solid #ffc9d4;border-radius:10px;padding:10px 14px;font-size:16px;text-align:center;outline:none;font-family:inherit;margin-bottom:16px;box-sizing:border-box;color:#ff6b8a;font-weight:700">
+    <div style="font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.6">카드에 @<span style="color:#ff6b8a;font-weight:700">이름</span> 으로 표시돼요</div>
+    <div style="display:flex;align-items:center;border:1.5px solid #ffc9d4;border-radius:10px;overflow:hidden;margin-bottom:16px">
+      <span style="padding:10px 10px 10px 14px;font-size:16px;font-weight:700;color:#ff6b8a;flex-shrink:0">@</span>
+      <input id="partner-name-input" type="text" placeholder="이, 준, 민준..." maxlength="10"
+        style="flex:1;border:none;padding:10px 14px 10px 0;font-size:16px;outline:none;font-family:inherit;color:#ff6b8a;font-weight:700;background:transparent">
+    </div>
     <button onclick="savePartnerName()" style="width:100%;background:#ff6b8a;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px">저장 💕</button>
     <button onclick="closePartnerNameModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">취소</button>
   </div>
