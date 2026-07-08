@@ -51,6 +51,18 @@ body.mode-couple .tab-bar{border-top-color:#ffe0e6}
 body.mode-diary .box{background:#fff;border-color:#d4e8c4;box-shadow:0 1px 4px rgba(122,170,130,.06);border-radius:12px}
 body.mode-couple .box{background:#fff;border-color:#ffe0e6;box-shadow:0 1px 4px rgba(255,107,138,.08)}
 .box-title{font-size:13px;font-weight:700;margin-bottom:10px}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 2px;border-bottom:1px solid #f0ede4;cursor:pointer;font-size:13px}
+.settings-row:last-child{border-bottom:none}
+.settings-row .settings-arrow{color:#d0b090;font-size:15px}
+body.mode-diary .settings-row{color:#5a3a1a}
+body.mode-couple .settings-row{color:#444;border-bottom-color:#ffeef1}
+body.mode-couple .settings-row .settings-arrow{color:#ffc9d4}
+body.dark-mode .settings-row{border-bottom-color:#3a3a3a;color:#e8e8e8}
+body.dark-mode .settings-row .settings-arrow{color:#666}
+.settings-toggle-btn{flex:1;padding:8px;border:1.5px solid #e0e0e0;background:#fff;color:#888;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
+.settings-toggle-btn.active{border-color:#7aaa82;background:#f4f9ef;color:#7aaa82;font-weight:600}
+body.dark-mode .settings-toggle-btn{background:#232323;border-color:#3a3a3a;color:#999}
+body.dark-mode .settings-toggle-btn.active{background:#2a3320;border-color:#4a5a3a;color:#a8d8a8}
 body.mode-diary .box-title{color:#7aaa82}
 body.mode-couple .box-title{color:#ff6b8a}
 
@@ -67,6 +79,7 @@ body.mode-couple .toast{background:#ff6b8a}
 .date-lbl{font-size:15px;font-weight:bold;color:#7aaa82;flex-shrink:0}
 .emj-btn{font-size:20px;cursor:pointer;padding:2px 3px;border-radius:6px;border:2px solid transparent;background:none;opacity:.5;transition:all .15s;flex-shrink:0}
 .emj-btn.on{opacity:1;border-color:#e8c4a0;background:#eef7e8}
+body.dark-mode .emj-btn.on{border-color:#5a4a30;background:#2a3320}
 .mood-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
 .entry-title-inp{width:100%;border:none;border-bottom:1.5px solid #d4e8c4;background:transparent;font-size:16px;color:#5a3a1a;padding:6px 0 8px;outline:none;font-family:inherit;margin-bottom:10px}
 .entry-title-inp::placeholder{color:#d0b090}
@@ -95,7 +108,10 @@ body.mode-couple .toast{background:#ff6b8a}
 .bch{text-align:center;font-size:11px;font-weight:bold;color:#9dc4a0;padding:5px 0}
 .bch:first-child{color:#e87070}
 .bch:last-child{color:#7090e8}
-.bcd{border-radius:8px;background:#fff;border:1px solid #f0e0d0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;padding:3px 2px}
+.bcd{border-radius:8px;background:#fff;border:1px solid #f0e0d0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;padding:3px 2px}
+.bcd-photo-bg{position:absolute;inset:-4px;background-size:cover;background-position:center;filter:blur(3px);opacity:.3;z-index:0}
+.bcd .dn{z-index:2}
+.bcd .dm,.bcd .dw{position:relative;z-index:1}
 .bcd:hover{border-color:#a8c888}
 .bcd.today{border:2px solid #7aaa82}
 .bcd.has-e{background:#fdf8f0}
@@ -156,12 +172,24 @@ body.mode-couple .toast{background:#ff6b8a}
 .mood-row-cp{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
 .mood-btn{font-size:24px;cursor:pointer;padding:4px 6px;border-radius:10px;border:2px solid transparent;opacity:.35;background:none}
 .mood-btn.on{opacity:1;border-color:#ffd0da;background:#fff5f7}
+body.dark-mode .mood-btn.on{border-color:#5a3540;background:#3a2830}
 .entry-textarea{width:100%;border:1.5px solid #ffe0e6;border-radius:10px;padding:10px 12px;font-size:13px;outline:none;resize:none;min-height:90px;font-family:inherit;line-height:1.6}
 .entry-textarea:focus{border-color:#ff6b8a}
 .entry-btns{display:flex;gap:8px;margin-top:12px}
 .eb-cancel{flex:1;background:#f5f5f5;color:#999;border:none;border-radius:10px;padding:12px;font-size:13px;cursor:pointer;font-family:inherit}
 .eb-del{flex:1;background:#ffe0e6;color:#ff6b8a;border:none;border-radius:10px;padding:12px;font-size:13px;cursor:pointer;font-family:inherit}
 .eb-save{flex:2;background:#ff6b8a;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.gtab-btn{flex:1;padding:7px;border:1.5px solid #eee;border-radius:8px;background:#fff;color:#aaa;font-size:12px;cursor:pointer;font-family:inherit;font-weight:400}
+.gtab-btn.active{border-color:#ffc9d4;background:#fff5f7;color:#d17a8a;font-weight:600}
+#promise-toggle-btn.active{background:#ff6b8a !important;border-color:#ff6b8a !important;color:#fff !important}
+#backup-dl-btn{background:#7aaa82}
+body.mode-couple #backup-dl-btn{background:#ff6b8a}
+#backup-ul-label{background:#f5f0ea;color:#7aaa82}
+body.mode-couple #backup-ul-label{background:#fff5f7;color:#ff6b8a}
+body.dark-mode .gtab-btn{background:#232323;border-color:#3a3a3a;color:#999}
+body.dark-mode .gtab-btn.active{background:#3a2830;border-color:#ff6b8a;color:#ff9eb5}
+body.dark-mode .eb-cancel{background:#232323;color:#888}
+body.dark-mode .eb-del{background:#3a2028;color:#ff8fa8}
 .gallery-filter{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
 .gf{background:#fff;border:1.5px solid #ffe0e6;border-radius:14px;padding:5px 12px;font-size:11px;color:#ffb3c1;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit}
 .gf.active{background:#ff6b8a;border-color:#ff6b8a;color:#fff;font-weight:700}
@@ -262,6 +290,110 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
 .cp-cal-day.cp-mood-😐{border-color:#c0c8c0 !important} .cp-cal-day.cp-mood-😐 .mood-ov{background:#e8eee8;opacity:.35}
 .cp-cal-day.cp-mood-😢{border-color:#d0b8ff !important} .cp-cal-day.cp-mood-😢 .mood-ov{background:#ede0ff;opacity:.35}
 .cp-cal-day.cp-mood-😡{border-color:#ffb890 !important} .cp-cal-day.cp-mood-😡 .mood-ov{background:#ffe4d4;opacity:.35}
+
+/* ===== 다크모드 (일기장/커플 다이어리 공통) ===== */
+body.dark-mode{background:#161616}
+body.dark-mode.mode-diary{background:#171b15}
+body.dark-mode.mode-couple{background:#1c1417}
+body.dark-mode.mode-diary .top-bar{background:#4d7255}
+body.dark-mode.mode-couple .top-bar{background:#b5495f}
+body.dark-mode .tab-bar{background:#202020}
+body.dark-mode.mode-diary .tab-bar{border-top-color:#33402e}
+body.dark-mode.mode-couple .tab-bar{border-top-color:#402630}
+body.dark-mode .box{background:#232323;border-color:#3a3a3a;box-shadow:none}
+body.dark-mode .sc{background:#232323;border-color:#3a3a3a}
+body.dark-mode .sc .sl{color:#888}
+body.dark-mode .entry-title-inp,body.dark-mode .entry-body-inp{color:#e8e8e8;border-color:#3a3a3a}
+body.dark-mode .entry-title-inp::placeholder,body.dark-mode .entry-body-inp::placeholder{color:#666}
+body.dark-mode .entry-body-inp{background-image:repeating-linear-gradient(transparent,transparent 27px,#333 27px,#333 28px)}
+body.dark-mode .si,body.dark-mode .fsel{background:#232323;border-color:#3a3a3a;color:#e8e8e8}
+body.dark-mode .ec{background:#232323;border-color:#3a3a3a}
+body.dark-mode .ect{color:#e8e8e8}
+body.dark-mode .ecp{color:#999}
+body.dark-mode .ecd{color:#888}
+body.dark-mode .mli{background:#2a2a2a;border-color:#3a3a3a;color:#a8d8a8}
+body.dark-mode .wsb{background:#333}
+body.dark-mode .bcd,body.dark-mode .bcd.has-e{background:#232323;border-color:#333}
+body.dark-mode .bcd .dn{color:#777}
+body.dark-mode .cp-cal-day{background:#332025;border-color:#432a32}
+body.dark-mode .bcn button{background:#2a2a2a;border-color:#3a3a3a;color:#8fbf94}
+body.dark-mode .cp-cal-nav button{background:#332025;color:#ff9eb5}
+body.dark-mode #couple-profile-row{background:#232323 !important;border-color:#3a3a3a !important}
+body.dark-mode #couple-profile-photo{background:#332025 !important}
+body.dark-mode.mode-diary .diary-card.card-today{background:linear-gradient(135deg,#26301f,#2a3320) !important;border-color:#3a4a32 !important}
+body.dark-mode.mode-diary .diary-card.card-streak{background:linear-gradient(135deg,#2c2a1a,#332f1c) !important;border-color:#4a4530 !important}
+body.dark-mode.mode-diary .diary-card.card-throwback{background:linear-gradient(135deg,#26301f,#212a1e) !important;border-color:#3a4a32 !important}
+body.dark-mode.mode-couple .diary-card.card-today{background:linear-gradient(135deg,#3a2830,#402530) !important;border-color:#5a3540 !important}
+body.dark-mode.mode-couple .diary-card.card-streak{background:linear-gradient(135deg,#332c1c,#3a3018) !important;border-color:#5a4a28 !important}
+body.dark-mode.mode-couple .diary-card.card-throwback{background:linear-gradient(135deg,#242840,#202538) !important;border-color:#3a4060 !important}
+body.dark-mode .diary-card .card-desc{color:#999}
+body.dark-mode .bucket-check{background:#232323;border-color:#4a3038}
+body.dark-mode .bucket-progress-bar{background:#2a2a2a}
+body.dark-mode .bucket-form input,body.dark-mode .anniv-form input,body.dark-mode .dday-set-row input{background:#232323 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark-mode .bd{border-color:#3a3a3a}
+body.dark-mode .bn{border-color:#3a3a3a}
+body.dark-mode [style*="border:1.5px solid #ffc9d4"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1px solid #ffc9d4"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1.5px solid #ffe0e6"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1.5px solid #ddd"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border-top:1px solid #d4e8c4"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1.5px solid #eee"]{border-color:#3a3a3a !important}
+body.dark-mode #cat-new-input,body.dark-mode #promise-memo-input,body.dark-mode #bucket-cat-sel{background:#232323 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
+body.dark-mode .mli{background:#2a2a2a !important;border-color:#3a3a3a !important;color:#a8d8a8 !important}
+body.dark-mode .mli span{color:#a8d8a8 !important}
+body.dark-mode [style*="background:#fff"]{background:#232323 !important}
+body.dark-mode [style*="background:#f5f5f5"]{background:#2a2a2a !important}
+body.dark-mode [style*="background:#eef7e8"]{background:#2a2a2a !important}
+body.dark-mode [style*="background:#ffeef1"]{background:#2a2a2a !important}
+body.dark-mode [style*="linear-gradient(135deg,#fff5f7,#fde2e4)"]{background:linear-gradient(135deg,#3a2830,#402530) !important}
+body.dark-mode [style*="linear-gradient(135deg,#fff0f5,#ffe0eb)"]{background:linear-gradient(135deg,#2f2228,#38252c) !important}
+body.dark-mode [style*="linear-gradient(135deg,#ffe0eb,#ffc9d4)"]{background:linear-gradient(135deg,#3a2028,#402530) !important}
+body.dark-mode [style*="color:#333"]{color:#e8e8e8 !important}
+body.dark-mode [style*="color:#444"]{color:#e8e8e8 !important}
+body.dark-mode [style*="color:#555"]{color:#ccc !important}
+body.dark-mode [style*="color:#5a3a1a"]{color:#e8e8e8 !important}
+body.dark-mode [style*="color:#222"]{color:#eee !important}
+body.dark-mode [onclick="openDiaryBadgeModal()"]{background:#232323 !important;border-color:#3a3a3a !important}
+body.dark-mode [onclick="openCatManageModal()"]{background:#3a2830 !important}
+body.dark-mode #diary-mr-stat-row{background:#232323 !important}
+body.dark-mode #push-banner{background:#232323;border-color:#3a3a3a}
+body.dark-mode #push-banner .push-title{color:#eee}
+body.dark-mode #push-banner .push-desc{color:#999}
+body.dark-mode .entry-sheet{background:#232323}
+body.dark-mode .entry-sheet h3{color:#e8e8e8}
+body.dark-mode .entry-textarea{background:#1c1c1c;border-color:#3a3a3a;color:#e8e8e8}
+body.dark-mode .multi-photo-slot.add-slot{background:#1c1c1c;border-color:#3a3a3a}
+body.dark-mode .bucket-item{border-color:#3a3a3a}
+body.dark-mode .bucket-text{color:#e8e8e8}
+body.dark-mode .anniv-item{border-color:#3a3a3a}
+body.dark-mode .anniv-name{color:#e8e8e8}
+body.dark-mode .gf{background:#232323;border-color:#3a3a3a;color:#999}
+body.dark-mode .gallery-empty{color:#666}
+body.dark-mode #diary-prompt-box{background:#202820;border-color:#3a4a35}
+body.dark-mode #diary-prompt-box span{color:#8fbf94}
+body.dark-mode #cp-badge-preview::-webkit-scrollbar,body.dark-mode #diary-badge-preview::-webkit-scrollbar{height:6px}
+body.dark-mode #cp-badge-preview::-webkit-scrollbar-thumb,body.dark-mode #diary-badge-preview::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:3px}
+body.dark-mode #cp-badge-preview::-webkit-scrollbar-track,body.dark-mode #diary-badge-preview::-webkit-scrollbar-track{background:transparent}
+body.dark-mode .bcd.mood-😄{background:#3d3820 !important}
+body.dark-mode .bcd.mood-😊{background:#3a3422 !important}
+body.dark-mode .bcd.mood-🥰{background:#3a2830 !important}
+body.dark-mode .bcd.mood-😐{background:#2a3228 !important}
+body.dark-mode .bcd.mood-😔{background:#26303c !important}
+body.dark-mode .bcd.mood-😢{background:#2e2838 !important}
+body.dark-mode .bcd.mood-😡{background:#3a2c22 !important}
+body.dark-mode .bcd.mood-😴{background:#2e2e2e !important}
+body.dark-mode .bcd-photo-bg{opacity:.4}
+body.dark-mode #backup-ul-label{background:#232323;color:#a8d8a8}
+body.dark-mode.mode-couple #backup-ul-label{color:#ff9eb5}
+body.dark-mode #dark-sch-start,body.dark-mode #dark-sch-end{background:#232323;color:#e8e8e8;border-color:#3a3a3a}
+#diary-preview-photos{display:flex;gap:6px}
+#diary-preview-photos img{flex:1;min-width:0;height:180px;object-fit:cover;border-radius:12px;cursor:zoom-in}
+#photo-lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:99999;align-items:center;justify-content:center;touch-action:none}
+#photo-lightbox.open{display:flex}
+#photo-lightbox img{max-width:100%;max-height:100%;border-radius:8px;transform-origin:center center;transition:transform .1s;user-select:none;pointer-events:none}
+#photo-lightbox-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,.18);border:none;color:#fff;font-size:22px;width:38px;height:38px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+body.dark-mode #diary-preview-divider-gray{border-color:#3a3a3a}
+body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
 </style>
 </head>
 <body class="mode-diary">
@@ -269,11 +401,11 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
 <!-- 상단바 -->
 <div class="top-bar">
   <span class="ttl" id="top-title">🍀</span>
+  <button class="backup-btn" id="dark-toggle-btn" onclick="toggleDarkMode()" title="다크모드">☀️</button>
   <input type="number" class="inp-year" id="g-year" min="2000" max="2099" value="2026" onchange="onYMChange()">
   <span class="sep">년</span>
   <input type="number" class="inp-month" id="g-month" min="1" max="12" value="6" onchange="onYMChange()">
   <span class="sep">월</span>
-  <button class="backup-btn" onclick="openBackupModal()">💾</button>
   <label class="mode-switch" title="일기장 ↔ 커플 다이어리">
     <input type="checkbox" id="mode-toggle" onchange="onModeToggle()">
     <span class="mode-switch-track"><span class="knob"></span></span>
@@ -284,9 +416,9 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
 <div id="backup-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%">
     <h3 style="font-size:15px;margin-bottom:14px;color:#5a3a1a" id="backup-modal-title">💾 백업 / 복원</h3>
-    <p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6">현재 켜져 있는 모드(<span id="backup-mode-label">일기장</span>)의 데이터만 백업/복원돼요.</p>
-    <button onclick="downloadBackup()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;margin-bottom:8px;font-family:inherit" id="backup-dl-btn">⬇️ 백업 파일 다운로드</button>
-    <label style="display:block;width:100%;background:#f5f0ea;color:#7aaa82;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;text-align:center;margin-bottom:8px;box-sizing:border-box" id="backup-ul-label">
+    <p style="font-size:12px;color:#888;margin-bottom:14px;line-height:1.6">일기장과 커플 다이어리 데이터를 한 파일에 모두 백업/복원해요.</p>
+    <button onclick="downloadBackup()" style="width:100%;border:none;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;margin-bottom:8px;font-family:inherit;color:#fff" id="backup-dl-btn">⬇️ 백업 파일 다운로드</button>
+    <label style="display:block;width:100%;border-radius:8px;padding:11px;font-size:13px;cursor:pointer;text-align:center;margin-bottom:8px;box-sizing:border-box" id="backup-ul-label">
       ⬆️ 백업 파일 불러오기
       <input type="file" accept=".json" onchange="restoreBackup(event)" style="display:none">
     </label>
@@ -351,9 +483,22 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
         <button class="emj-btn" id="m-7" onclick="setM('😡')">😡</button>
         <button class="emj-btn" id="m-8" onclick="setM('😴')">😴</button>
       </div>
+      <div id="diary-prompt-box" style="display:none;background:#f4f9ef;border:1px dashed #c5d4b5;border-radius:10px;padding:9px 12px;margin-bottom:10px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+          <span style="font-size:12px;color:#5a8a62;line-height:1.5" id="diary-prompt-text">오늘 가장 감사했던 순간은?</span>
+          <button onclick="shufflePrompt()" style="background:none;border:none;color:#9dc4a0;font-size:14px;cursor:pointer;flex-shrink:0;padding:0" title="다른 질문">🔀</button>
+        </div>
+      </div>
       <input type="text" class="entry-title-inp" id="e-title" placeholder="제목을 입력하세요..." maxlength="50">
       <textarea class="entry-body-inp" id="e-body" placeholder="오늘 하루는 어땠나요?&#10;&#10;여기에 일기를 작성해보세요..." oninput="updCC()"></textarea>
-      <div class="ef">
+      <div style="border-top:1px solid #d4e8c4;padding-top:10px;margin-top:10px">
+        <div id="diary-photo-toggle" onclick="toggleDiaryPhotoSection()" style="display:flex;align-items:center;gap:4px;font-size:12px;color:#9dc4a0;cursor:pointer;user-select:none">
+          <span id="diary-photo-toggle-label">📷 사진 추가</span>
+          <span id="diary-photo-toggle-arrow">▾</span>
+        </div>
+        <div id="diary-photo-grid" class="multi-photo-grid" style="margin-top:8px;display:none"></div>
+      </div>
+      <div class="ef" style="border-top:none;padding-top:0;margin-top:8px">
         <span class="cc" id="cc">0자</span>
         <div class="btn-row">
           <button class="bd" onclick="delEntry()">삭제</button>
@@ -425,6 +570,18 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
       </div>
       <div id="diary-badge-preview" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px"></div>
       <button onclick="openDiaryBadgeModal()" style="width:100%;background:#f4f9ef;border:1.5px solid #d4e8c4;color:#7aaa82;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">전체 뱃지 보기</button>
+    </div>
+    <div class="box">
+      <div class="box-title" onclick="toggleSettingsSection()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center">
+        <span>⚙️ 설정</span>
+        <span id="settings-arrow" style="font-size:12px;font-weight:400;color:#bbb">▾</span>
+      </div>
+      <div id="settings-body" style="display:none">
+        <div class="settings-row" onclick="openDarkSettingsModal()"><span>🌗 다크모드</span><span class="settings-arrow">›</span></div>
+        <div class="settings-row" onclick="openBackupModal()"><span>💾 백업 / 복원</span><span class="settings-arrow">›</span></div>
+        <div class="settings-row" onclick="openCardSettingsModal()"><span>🗂 카드 표시</span><span class="settings-arrow">›</span></div>
+        <div class="settings-row" onclick="openPromptSettingsModal()"><span>💡 일기 추천</span><span class="settings-arrow">›</span></div>
+      </div>
     </div>
   </div>
 
@@ -518,8 +675,8 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
     <div class="box">
       <div class="cp-box-title">📸 추억 모아보기</div>
       <div id="gallery-tab-bar" style="display:flex;gap:6px;margin-bottom:10px">
-        <button id="gtab-diary" onclick="setGalleryTab('diary')" style="flex:1;padding:7px;border:1.5px solid #ffc9d4;border-radius:8px;background:#fff5f7;color:#d17a8a;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">💕 일기 앨범</button>
-        <button id="gtab-bucket" onclick="setGalleryTab('bucket')" style="flex:1;padding:7px;border:1.5px solid #eee;border-radius:8px;background:#fff;color:#aaa;font-size:12px;cursor:pointer;font-family:inherit">💝 버킷 앨범</button>
+        <button id="gtab-diary" class="gtab-btn active" onclick="setGalleryTab('diary')">💕 일기 앨범</button>
+        <button id="gtab-bucket" class="gtab-btn" onclick="setGalleryTab('bucket')">💝 버킷 앨범</button>
       </div>
       <div class="gallery-filter" id="gallery-filter"></div>
       <div class="gallery-grid" id="gallery-grid"></div>
@@ -616,13 +773,156 @@ function onModeToggle(){
   localStorage.setItem('diary_app_mode', currentMode);
 }
 
+var DARK_MODE_KEY='diary_dark_mode';
+function isDarkMode(){ return document.body.classList.contains('dark-mode'); }
+function toggleDarkMode(){
+  var on=document.body.classList.toggle('dark-mode');
+  localStorage.setItem(DARK_MODE_KEY, on?'1':'0');
+  var btn=document.getElementById('dark-toggle-btn');
+  if(btn) btn.textContent=on?'🌙':'☀️';
+  if(typeof renderStats==='function') renderStats();
+  if(typeof renderCpMoodStats==='function') renderCpMoodStats();
+  if(typeof renderDarkScheduleUI==='function') renderDarkScheduleUI();
+}
+function restoreDarkMode(){
+  var on=localStorage.getItem(DARK_MODE_KEY)==='1';
+  document.body.classList.toggle('dark-mode', on);
+  var btn=document.getElementById('dark-toggle-btn');
+  if(btn) btn.textContent=on?'🌙':'☀️';
+}
+
+// ===== 다크모드 자동 설정 (시간대 기반) =====
+var DARK_SCHEDULE_KEY='diary_dark_schedule_v1';
+var darkSchedule={mode:'manual',start:'20:00',end:'07:00'};
+function loadDarkSchedule(){
+  try{ darkSchedule=JSON.parse(localStorage.getItem(DARK_SCHEDULE_KEY))||{mode:'manual',start:'20:00',end:'07:00'}; }
+  catch(e){ darkSchedule={mode:'manual',start:'20:00',end:'07:00'}; }
+}
+function saveDarkSchedule(){ localStorage.setItem(DARK_SCHEDULE_KEY, JSON.stringify(darkSchedule)); }
+function timeStrToMinutes(t){ var p=(t||'0:0').split(':'); return (+p[0]||0)*60+(+p[1]||0); }
+function isTimeInRange(nowMin,startMin,endMin){
+  if(startMin===endMin) return false;
+  if(startMin<endMin) return nowMin>=startMin && nowMin<endMin;
+  return nowMin>=startMin || nowMin<endMin; // 자정을 넘어가는 범위 (예: 20:00~07:00)
+}
+function applyAutoDarkSchedule(){
+  loadDarkSchedule();
+  if(darkSchedule.mode!=='auto') return;
+  var now=new Date();
+  var nowMin=now.getHours()*60+now.getMinutes();
+  var shouldBeDark=isTimeInRange(nowMin,timeStrToMinutes(darkSchedule.start),timeStrToMinutes(darkSchedule.end));
+  var isDark=document.body.classList.contains('dark-mode');
+  if(shouldBeDark===isDark) return;
+  document.body.classList.toggle('dark-mode', shouldBeDark);
+  localStorage.setItem(DARK_MODE_KEY, shouldBeDark?'1':'0');
+  var btn=document.getElementById('dark-toggle-btn');
+  if(btn) btn.textContent=shouldBeDark?'🌙':'☀️';
+  if(typeof renderStats==='function') renderStats();
+  if(typeof renderCpMoodStats==='function') renderCpMoodStats();
+  if(typeof renderDarkScheduleUI==='function') renderDarkScheduleUI();
+}
+function renderDarkScheduleUI(){
+  loadDarkSchedule();
+  var manualBtn=document.getElementById('dark-sch-manual-btn');
+  var autoBtn=document.getElementById('dark-sch-auto-btn');
+  var timeRow=document.getElementById('dark-sch-time-row');
+  if(!manualBtn||!autoBtn||!timeRow) return;
+  var isAuto=darkSchedule.mode==='auto';
+  manualBtn.classList.toggle('active', !isAuto);
+  autoBtn.classList.toggle('active', isAuto);
+  timeRow.style.display=isAuto?'flex':'none';
+  document.getElementById('dark-sch-start').value=darkSchedule.start||'20:00';
+  document.getElementById('dark-sch-end').value=darkSchedule.end||'07:00';
+}
+function openDarkSettingsModal(){ renderDarkScheduleUI(); document.getElementById('dark-settings-modal').style.display='flex'; }
+function closeDarkSettingsModal(){ document.getElementById('dark-settings-modal').style.display='none'; }
+
+var settingsSectionOpen=false;
+function toggleSettingsSection(){
+  settingsSectionOpen=!settingsSectionOpen;
+  var body=document.getElementById('settings-body');
+  var arrow=document.getElementById('settings-arrow');
+  if(body) body.style.display=settingsSectionOpen?'block':'none';
+  if(arrow) arrow.textContent=settingsSectionOpen?'▴':'▾';
+}
+
+// ===== 일기장 UI 설정 (카드 표시 / 일기 추천) =====
+var DIARY_SETTINGS_KEY='diary_ui_settings_v1';
+var diarySettings={cardToday:true,cardStreak:true,cardThrowback:true,promptEnabled:true};
+function loadDiarySettings(){
+  var d={cardToday:true,cardStreak:true,cardThrowback:true,promptEnabled:true};
+  try{
+    var saved=JSON.parse(localStorage.getItem(DIARY_SETTINGS_KEY));
+    if(saved){
+      if(typeof saved.cardToday==='boolean') d.cardToday=saved.cardToday;
+      if(typeof saved.cardStreak==='boolean') d.cardStreak=saved.cardStreak;
+      if(typeof saved.cardThrowback==='boolean') d.cardThrowback=saved.cardThrowback;
+      if(typeof saved.promptEnabled==='boolean') d.promptEnabled=saved.promptEnabled;
+    }
+  }catch(e){}
+  diarySettings=d;
+}
+function saveDiarySettings(){ localStorage.setItem(DIARY_SETTINGS_KEY, JSON.stringify(diarySettings)); }
+
+function renderCardSettingsUI(){
+  loadDiarySettings();
+  ['Today','Streak','Throwback'].forEach(function(key){
+    var settingKey='card'+key;
+    var onBtn=document.getElementById('card-set-'+key.toLowerCase()+'-on');
+    var offBtn=document.getElementById('card-set-'+key.toLowerCase()+'-off');
+    if(!onBtn||!offBtn) return;
+    var on=diarySettings[settingKey];
+    onBtn.classList.toggle('active', on);
+    offBtn.classList.toggle('active', !on);
+  });
+}
+function setCardSetting(key,val){
+  loadDiarySettings();
+  diarySettings[key]=val;
+  saveDiarySettings();
+  renderCardSettingsUI();
+  if(typeof renderStatCards==='function') renderStatCards();
+}
+function openCardSettingsModal(){ renderCardSettingsUI(); document.getElementById('card-settings-modal').style.display='flex'; }
+function closeCardSettingsModal(){ document.getElementById('card-settings-modal').style.display='none'; }
+
+function renderPromptSettingsUI(){
+  loadDiarySettings();
+  var onBtn=document.getElementById('prompt-set-on');
+  var offBtn=document.getElementById('prompt-set-off');
+  if(!onBtn||!offBtn) return;
+  onBtn.classList.toggle('active', diarySettings.promptEnabled);
+  offBtn.classList.toggle('active', !diarySettings.promptEnabled);
+}
+function setPromptSetting(val){
+  loadDiarySettings();
+  diarySettings.promptEnabled=val;
+  saveDiarySettings();
+  renderPromptSettingsUI();
+  if(typeof toggleDiaryPromptVisibility==='function') toggleDiaryPromptVisibility();
+}
+function openPromptSettingsModal(){ renderPromptSettingsUI(); document.getElementById('prompt-settings-modal').style.display='flex'; }
+function closePromptSettingsModal(){ document.getElementById('prompt-settings-modal').style.display='none'; }
+function setDarkScheduleMode(mode){
+  loadDarkSchedule();
+  darkSchedule.mode=mode;
+  saveDarkSchedule();
+  renderDarkScheduleUI();
+  applyAutoDarkSchedule();
+  toast(mode==='auto'?'🌗 자동 설정으로 바꿨어요':'🌗 수동 설정으로 바꿨어요');
+}
+function onDarkScheduleTimeChange(){
+  loadDarkSchedule();
+  darkSchedule.start=document.getElementById('dark-sch-start').value||'20:00';
+  darkSchedule.end=document.getElementById('dark-sch-end').value||'07:00';
+  saveDarkSchedule();
+  applyAutoDarkSchedule();
+}
+
 function applyMode(){
   var body=document.body;
   var topTitle=document.getElementById('top-title');
   var topDday=document.getElementById('top-dday');
-  var backupTitle=document.getElementById('backup-mode-label');
-  var dlBtn=document.getElementById('backup-dl-btn');
-  var ulLabel=document.getElementById('backup-ul-label');
 
   document.getElementById('section-diary').classList.toggle('active', currentMode==='diary');
   document.getElementById('section-couple').classList.toggle('active', currentMode==='couple');
@@ -631,20 +931,18 @@ function applyMode(){
     body.classList.remove('mode-diary'); body.classList.add('mode-couple');
     topTitle.textContent='🤍';
     updateTopDday();
-    backupTitle.textContent='커플 다이어리';
-    dlBtn.style.background='#ff6b8a';
-    ulLabel.style.background='#fff5f7'; ulLabel.style.color='#ff6b8a';
     renderCpCal(); renderThrowback(); renderCoupleCards(); renderCoupleProfile(); checkAnnivTodayPopup();
+    checkPushNotifications();
+    checkCoupleEveningReminder();
   } else {
     body.classList.remove('mode-couple'); body.classList.add('mode-diary');
     topTitle.textContent='🍀';
-    backupTitle.textContent='일기장';
-    dlBtn.style.background='#7aaa82';
-    ulLabel.style.background='#f5f0ea'; ulLabel.style.color='#7aaa82';
     renderBC();
     renderDiaryBadges();
     renderDiaryGoalCard();
+    renderDarkScheduleUI();
     checkDiaryMonthlyReport();
+    checkDiaryEveningReminder();
   }
 }
 
@@ -655,18 +953,22 @@ function openBackupModal(){ document.getElementById('backup-modal').style.displa
 function closeBackupModal(){ document.getElementById('backup-modal').style.display='none'; }
 
 function downloadBackup(){
-  if(currentMode==='diary'){
-    var backup={ app:'diary', exportedAt:new Date().toISOString(), data:entries };
-    downloadJSON(backup, 'diary_backup_');
-  } else {
-    var photos={};
-    Object.keys(cpData.entries).forEach(function(k){
-      (cpData.entries[k].photos||[]).forEach(function(p){ if(isPhotoId(p)&&photoCache[p]) photos[p]=photoCache[p]; });
-    });
-    (cpData.bucket||[]).forEach(function(b){ if(isPhotoId(b.photo)&&photoCache[b.photo]) photos[b.photo]=photoCache[b.photo]; });
-    var backup={ app:'couple_diary', exportedAt:new Date().toISOString(), data:cpData, photos:photos };
-    downloadJSON(backup, 'couple_diary_backup_');
-  }
+  var dPhotos={};
+  Object.keys(entries).forEach(function(k){
+    (entries[k].photos||[]).forEach(function(p){ if(isPhotoId(p)&&photoCache[p]) dPhotos[p]=photoCache[p]; });
+  });
+  var cPhotos={};
+  Object.keys(cpData.entries).forEach(function(k){
+    (cpData.entries[k].photos||[]).forEach(function(p){ if(isPhotoId(p)&&photoCache[p]) cPhotos[p]=photoCache[p]; });
+  });
+  (cpData.bucket||[]).forEach(function(b){ if(isPhotoId(b.photo)&&photoCache[b.photo]) cPhotos[b.photo]=photoCache[b.photo]; });
+  var backup={
+    app:'diary_and_couple',
+    exportedAt:new Date().toISOString(),
+    diary:{ data:entries, photos:dPhotos },
+    couple:{ data:cpData, photos:cPhotos }
+  };
+  downloadJSON(backup, 'diary_backup_');
 }
 
 function downloadJSON(obj, prefix){
@@ -686,20 +988,41 @@ function restoreBackup(ev){
   reader.onload=function(e){
     try{
       var backup=JSON.parse(e.target.result);
-      if(!backup.data){ toast('올바른 백업 파일이 아니에요!'); return; }
       if(!confirm('현재 데이터를 백업 파일 내용으로 덮어쓸까요?\n(기존 데이터는 사라져요)')) return;
-      if(currentMode==='diary'){
-        entries=backup.data; saveDiary();
-        renderBC(); renderFL(); renderStats(); renderStatCards();
+
+      if(backup.diary||backup.couple){
+        // 통합 백업 포맷 (일기장 + 커플 다이어리 한 파일)
+        if(backup.diary){
+          entries=backup.diary.data||{}; saveDiary();
+          if(backup.diary.photos){ Object.keys(backup.diary.photos).forEach(function(id){ savePhotoToDB(id, backup.diary.photos[id]); }); }
+        }
+        if(backup.couple){
+          cpData=backup.couple.data||cpData;
+          if(!cpData.anniversaries) cpData.anniversaries=[];
+          if(!cpData.entries) cpData.entries={};
+          if(!cpData.bucket) cpData.bucket=[];
+          if(backup.couple.photos){ Object.keys(backup.couple.photos).forEach(function(id){ savePhotoToDB(id, backup.couple.photos[id]); }); }
+          saveCp();
+        }
+      } else if(backup.data){
+        // 예전 버전 백업 파일 호환 (모드별로 따로 내보내던 구 포맷)
+        if(backup.app==='diary'){
+          entries=backup.data; saveDiary();
+          if(backup.photos){ Object.keys(backup.photos).forEach(function(id){ savePhotoToDB(id, backup.photos[id]); }); }
+        } else {
+          cpData=backup.data;
+          if(!cpData.anniversaries) cpData.anniversaries=[];
+          if(!cpData.entries) cpData.entries={};
+          if(!cpData.bucket) cpData.bucket=[];
+          if(backup.photos){ Object.keys(backup.photos).forEach(function(id){ savePhotoToDB(id, backup.photos[id]); }); }
+          saveCp();
+        }
       } else {
-        cpData=backup.data;
-        if(!cpData.anniversaries) cpData.anniversaries=[];
-        if(!cpData.entries) cpData.entries={};
-        if(!cpData.bucket) cpData.bucket=[];
-        if(backup.photos){ Object.keys(backup.photos).forEach(function(id){ savePhotoToDB(id, backup.photos[id]); }); }
-        saveCp();
-        renderCpCal(); renderThrowback(); renderDday(); updateTopDday();
+        toast('올바른 백업 파일이 아니에요!'); return;
       }
+
+      renderBC(); renderFL(); renderStats(); renderStatCards();
+      renderCpCal(); renderThrowback(); renderDday(); updateTopDday();
       closeBackupModal();
       toast('✅ 복원됐어요!');
     }catch(err){ toast('파일을 읽을 수 없어요!'); }
@@ -707,6 +1030,7 @@ function restoreBackup(ev){
   reader.readAsText(file);
   ev.target.value='';
 }
+
 
 /* =========================================================
    일기장 (diary)
@@ -731,7 +1055,7 @@ function goTabD(id){
   document.getElementById('tbtn-d-'+id).classList.add('active');
   if(id==='cal') renderBC();
   if(id==='list') renderFL();
-  if(id==='stats'){ renderStats(); renderDiaryBadges(); }
+  if(id==='stats'){ renderStats(); renderDiaryBadges(); renderDarkScheduleUI(); }
 }
 
 function onYMChange(){
@@ -741,6 +1065,50 @@ function onYMChange(){
   bcYear=y; bcMonth=m-1;
   if(currentMode==='diary'){ renderBC(); renderStats(); renderStatCards(); renderFL(); }
   else { cpCalYear=y; cpCalMonth=m-1; renderCpCal(); }
+}
+
+// ===== 글감 프롬프트 =====
+var DIARY_PROMPTS=[
+  '오늘 가장 감사했던 순간은?',
+  '오늘 나를 웃게 만든 건 뭐였어?',
+  '요즘 가장 마음이 쓰이는 일은?',
+  '오늘 하루 중 가장 기억에 남는 장면은?',
+  '최근에 누군가에게 고마웠던 순간이 있다면?',
+  '오늘 나 자신을 칭찬한다면 어떤 점?',
+  '요즘 가장 하고 싶은 일은?',
+  '오늘 힘들었던 일이 있다면, 어떻게 넘겼어?',
+  '지금 이 순간 듣고 싶은 노래는?',
+  '오늘 배운 게 있다면 뭐야?',
+  '요즘 자주 떠오르는 사람이 있다면?',
+  '오늘 날씨는 어땠고, 그게 기분에 어떤 영향을 줬어?',
+  '내일의 나에게 하고 싶은 말은?',
+  '요즘 스스로에게 부족하다고 느끼는 부분은?',
+  '오늘 가장 맛있게 먹은 건?',
+  '최근에 새로 시작한 게 있다면?',
+  '오늘 문득 든 생각이 있다면?',
+  '요즘 나를 힘들게 하는 걱정거리는?',
+  '오늘 하루를 색깔로 표현한다면?',
+  '지금 가장 갖고 싶은 건 뭐야?'
+];
+function getRandomPrompt(){ return DIARY_PROMPTS[Math.floor(Math.random()*DIARY_PROMPTS.length)]; }
+function shufflePrompt(){
+  var txt=document.getElementById('diary-prompt-text');
+  if(txt) txt.textContent=getRandomPrompt();
+}
+function toggleDiaryPromptVisibility(){
+  var box=document.getElementById('diary-prompt-box');
+  if(!box) return;
+  loadDiarySettings();
+  if(!diarySettings.promptEnabled){ box.style.display='none'; return; }
+  var body=document.getElementById('e-body').value.trim();
+  box.style.display=body?'none':'block';
+}
+function renderDiaryPrompt(){
+  var box=document.getElementById('diary-prompt-box');
+  var txt=document.getElementById('diary-prompt-text');
+  if(!box||!txt) return;
+  txt.textContent=getRandomPrompt();
+  toggleDiaryPromptVisibility();
 }
 
 function setW(w){
@@ -759,10 +1127,14 @@ function selectDate(ds){
   var e=entries[ds];
   document.getElementById('e-title').value=e?e.title||'':'';
   document.getElementById('e-body').value=e?e.body||'':'';
+  curDiaryPhotos = e&&e.photos ? e.photos.slice() : [];
+  renderDiaryPhotoGrid();
+  toggleDiaryPhotoSection(curDiaryPhotos.length>0);
   selMood=e?e.mood||'':'';
   selWeather=e?e.weather||'':'';
   Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.toggle('on',k===selMood);});
   Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.toggle('on',k===selWeather);});
+  renderDiaryPrompt();
   updCC();
   goTabD('write');
 }
@@ -773,7 +1145,8 @@ function saveEntry(){
   if(!selDate){toast('날짜를 선택해주세요!');return;}
   var body=document.getElementById('e-body').value.trim();
   if(!body){toast('내용을 입력해주세요!');return;}
-  entries[selDate]={title:document.getElementById('e-title').value.trim(),body:body,mood:selMood,weather:selWeather,updatedAt:Date.now()};
+  entries[selDate]={title:document.getElementById('e-title').value.trim(),body:body,mood:selMood,weather:selWeather,photos:persistPhotoList(curDiaryPhotos),updatedAt:Date.now()};
+  curDiaryPhotos=entries[selDate].photos.slice();
   saveDiary(); toast('💾 저장됐어요!'); setTimeout(launchSaveParticles,50);
   renderFL(); renderStatCards();
   checkMoodBalance(); checkDiaryGoalAchieved(); checkDiaryBadges();
@@ -782,9 +1155,11 @@ function saveEntry(){
 function delEntry(){
   if(!selDate||!entries[selDate]){toast('삭제할 일기가 없어요');return;}
   if(!confirm('이 일기를 삭제할까요?')) return;
+  (entries[selDate].photos||[]).forEach(function(p){ if(isPhotoId(p)) deletePhotoFromDB(p); });
   delete entries[selDate]; saveDiary();
   document.getElementById('e-title').value='';
   document.getElementById('e-body').value='';
+  curDiaryPhotos=[]; renderDiaryPhotoGrid(); toggleDiaryPhotoSection(false);
   selMood=''; selWeather='';
   Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.remove('on');});
   Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.remove('on');});
@@ -793,7 +1168,72 @@ function delEntry(){
   checkDiaryBadges();
 }
 
-function updCC(){document.getElementById('cc').textContent=document.getElementById('e-body').value.length.toLocaleString()+'자';}
+var DIARY_MAX_PHOTOS=2;
+var curDiaryPhotos=[];
+var diaryPhotoSectionOpen=false;
+function toggleDiaryPhotoSection(force){
+  diaryPhotoSectionOpen = (typeof force==='boolean') ? force : !diaryPhotoSectionOpen;
+  var grid=document.getElementById('diary-photo-grid');
+  var arrow=document.getElementById('diary-photo-toggle-arrow');
+  if(grid) grid.style.display=diaryPhotoSectionOpen?'grid':'none';
+  if(arrow) arrow.textContent=diaryPhotoSectionOpen?'▴':'▾';
+}
+function updateDiaryPhotoToggleLabel(){
+  var label=document.getElementById('diary-photo-toggle-label');
+  if(!label) return;
+  label.textContent=curDiaryPhotos.length?'📷 사진 ('+curDiaryPhotos.length+'/'+DIARY_MAX_PHOTOS+')':'📷 사진 추가';
+}
+function renderDiaryPhotoGrid(){
+  var grid=document.getElementById('diary-photo-grid');
+  if(!grid) return;
+  var html='';
+  curDiaryPhotos.forEach(function(p,i){
+    html+='<div class="multi-photo-slot"><img src="'+resolvePhotoSrc(p)+'" onclick="openLightbox(this.src)"><button class="mp-del" onclick="removeDiaryPhoto('+i+')">✕</button></div>';
+  });
+  if(curDiaryPhotos.length<DIARY_MAX_PHOTOS){
+    html+='<div class="multi-photo-slot add-slot" onclick="document.getElementById(\'diary-photo-file-inp\').click()"><div class="api">📷+</div></div>';
+  }
+  grid.innerHTML=html;
+  updateDiaryPhotoToggleLabel();
+  if(!document.getElementById('diary-photo-file-inp')){
+    var inp=document.createElement('input');
+    inp.type='file'; inp.accept='image/*'; inp.id='diary-photo-file-inp'; inp.style.display='none';
+    inp.onchange=handleDiaryPhoto;
+    document.body.appendChild(inp);
+  }
+}
+function handleDiaryPhoto(ev){
+  var file=ev.target.files[0]; if(!file) return;
+  if(curDiaryPhotos.length>=DIARY_MAX_PHOTOS){ toast('사진은 최대 '+DIARY_MAX_PHOTOS+'장까지예요!'); return; }
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var MAX=500, w=img.width, h=img.height;
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX;}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX;}}
+      var canvas=document.createElement('canvas');
+      canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      var dataUrl=canvas.toDataURL('image/jpeg',0.75);
+      curDiaryPhotos.push(dataUrl);
+      renderDiaryPhotoGrid();
+      var kb=Math.round(dataUrl.length*0.75/1024);
+      toast('📷 사진 추가됨 ('+kb+'KB)');
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+  ev.target.value='';
+}
+function removeDiaryPhoto(idx){
+  var p=curDiaryPhotos[idx];
+  if(isPhotoId(p)) deletePhotoFromDB(p);
+  curDiaryPhotos.splice(idx,1);
+  renderDiaryPhotoGrid();
+}
+
+function updCC(){document.getElementById('cc').textContent=document.getElementById('e-body').value.length.toLocaleString()+'자';toggleDiaryPromptVisibility();}
+
 
 /* ===== 글쓰기 목표 ===== */
 var DIARY_GOAL_KEY='diary_goal_v1';
@@ -1062,12 +1502,13 @@ function renderStatCards(){
 function renderDiaryCards(streak){
   var area=document.getElementById('diary-cards-area');
   if(!area) return;
+  loadDiarySettings();
   var today=fmt(new Date());
   var html='';
 
   // ① 오늘 기록 유도 카드
   var dismissed1=sessionStorage.getItem('card_today_dismiss');
-  if(!entries[today] && !dismissed1){
+  if(diarySettings.cardToday && !entries[today] && !dismissed1){
     html+='<div class="diary-card card-today">'
       +'<span class="card-icon">✍️</span>'
       +'<div class="card-body">'
@@ -1079,7 +1520,7 @@ function renderDiaryCards(streak){
   }
 
   // ② 스트릭 카드 (3일 이상)
-  if(streak>=3){
+  if(diarySettings.cardStreak && streak>=3){
     var milestones=[7,14,30,50,100];
     var nextMile=milestones.find(function(m){return m>streak;})||streak+1;
     var remain=nextMile-streak;
@@ -1098,10 +1539,11 @@ function renderDiaryCards(streak){
   lastYear.setFullYear(lastYear.getFullYear()-1);
   var lyds=fmt(lastYear);
   var lyEntry=entries[lyds];
-  if(lyEntry&&(lyEntry.text||lyEntry.title)){
+  if(diarySettings.cardThrowback && lyEntry&&(lyEntry.body||lyEntry.title)){
     var lyMonth=lastYear.getMonth()+1, lyDate=lastYear.getDate();
-    var preview=(lyEntry.title||lyEntry.text||'').slice(0,30)+(lyEntry.title||lyEntry.text||'').length>30?'…':'';
-    html+='<div class="diary-card card-throwback" data-lyds="'+lyds+'">';
+    var lyRaw=lyEntry.title||lyEntry.body||'';
+    var preview=lyRaw.slice(0,30)+(lyRaw.length>30?'…':'');
+    html+='<div class="diary-card card-throwback" data-lyds="'+lyds+'">'
       +'<span class="card-icon">💌</span>'
       +'<div class="card-body">'
       +'<div class="card-title">1년 전 오늘 ('+lyMonth+'/'+lyDate+')</div>'
@@ -1143,7 +1585,12 @@ function renderBC(){
     var dow=(first+d-1)%7;
     var moodCls=e&&e.mood?' mood-'+e.mood:'';
     var cls='bcd'+(dow===0?' sun':dow===6?' sat':'')+(ds===today?' today':'')+(e?' has-e':'')+moodCls;
-    html+='<div class="'+cls+'" onclick="selectDate(\''+ds+'\')">'
+    var photoBg='';
+    if(e&&e.photos&&e.photos.length){
+      var src=resolvePhotoSrc(e.photos[0]);
+      if(src) photoBg='<div class="bcd-photo-bg" style="background-image:url(\''+src+'\')"></div>';
+    }
+    html+='<div class="'+cls+'" onclick="selectDate(\''+ds+'\')">'+photoBg
       +'<span class="dn">'+d+'</span>'
       +(e&&e.mood?'<span class="dm">'+e.mood+'</span>':'<span class="dm" style="opacity:.1">·</span>')
       +(e&&e.weather?'<span class="dw">'+e.weather+'</span>':'')
@@ -1159,6 +1606,35 @@ function bcMove(dir){
   document.getElementById('g-year').value=bcYear;
   document.getElementById('g-month').value=bcMonth+1;
   renderBC();
+}
+
+function openDiaryPreview(ds){
+  var e=entries[ds]; if(!e) return;
+  var d=parseDate(ds);
+  document.getElementById('diary-preview-date').textContent=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
+  document.getElementById('diary-preview-weather').textContent=e.weather||'';
+  document.getElementById('diary-preview-mood').textContent=e.mood||'';
+  document.getElementById('diary-preview-title').textContent=e.title||'(제목 없음)';
+  document.getElementById('diary-preview-body').textContent=e.body||'';
+  var photoWrap=document.getElementById('diary-preview-photos');
+  var photoDivider=document.getElementById('diary-preview-divider-gray');
+  if(e.photos&&e.photos.length){
+    photoWrap.style.display='flex';
+    photoDivider.style.display='block';
+    photoWrap.innerHTML=e.photos.map(function(p){var s=resolvePhotoSrc(p);return '<img src="'+s+'" onclick="openLightbox(this.src)">';}).join('');
+  } else {
+    photoWrap.style.display='none';
+    photoDivider.style.display='none';
+    photoWrap.innerHTML='';
+  }
+  document.getElementById('diary-preview-modal').dataset.ds=ds;
+  document.getElementById('diary-preview-modal').style.display='flex';
+}
+function closeDiaryPreview(){ document.getElementById('diary-preview-modal').style.display='none'; }
+function editFromPreview(){
+  var ds=document.getElementById('diary-preview-modal').dataset.ds;
+  closeDiaryPreview();
+  if(ds) selectDate(ds);
 }
 
 function renderFL(){
@@ -1188,8 +1664,8 @@ function renderFL(){
     groups[ym2].forEach(function(k){
       var e=entries[k],d=parseDate(k);
       var ds=(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
-      html+='<div class="ec" onclick="selectDate(\''+k+'\')">'
-        +'<div class="ech"><span class="ecd">'+ds+'</span><span class="eci">'+(e.weather||'')+' '+(e.mood||'')+'</span></div>'
+      html+='<div class="ec" onclick="openDiaryPreview(\''+k+'\')">'
+        +'<div class="ech"><span class="ecd">'+ds+'</span><span class="eci">'+(e.weather||'')+' '+(e.mood||'')+(e.photos&&e.photos.length?' 📷':'')+'</span></div>'
         +'<div class="ect">'+(e.title||'(제목 없음)')+'</div>'
         +'<div class="ecp">'+(e.body||'').replace(/\n/g,' ')+'</div>'
         +'</div>';
@@ -1208,7 +1684,7 @@ function renderStats(){
   if(mk.length>0){
     moodChart=new Chart(document.getElementById('mood-chart'),{
       type:'doughnut',
-      data:{labels:mk.map(function(m){return m+' '+MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return MOOD_COLORS[m]||'#e8c4a0';}),borderWidth:2,borderColor:'#fdf6ee'}]},
+      data:{labels:mk.map(function(m){return m+' '+MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return MOOD_COLORS[m]||'#e8c4a0';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fdf6ee'}]},
       options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/mKeys.length*100)+'%)';}}}}}
     });
     document.getElementById('mood-leg').innerHTML=mk.map(function(m){
@@ -1493,7 +1969,7 @@ function renderCpMoodStats(){
       if(cpMoodChart){ cpMoodChart.destroy(); cpMoodChart=null; }
       cpMoodChart=new Chart(canvas,{
         type:'doughnut',
-        data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'#ffb3c1';}),borderWidth:2,borderColor:'#fff'}]},
+        data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'#ffb3c1';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fff'}]},
         options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/totalMoodDays*100)+'%)';}}}}}
       });
     }catch(e){ /* Chart.js 로드 실패해도 아래 범례/퍼센트는 계속 보여줌 */ }
@@ -1773,7 +2249,7 @@ function renderPhotoGrid(){
   var grid=document.getElementById('multi-photo-grid');
   var html='';
   curEntryPhotos.forEach(function(p,i){
-    html+='<div class="multi-photo-slot"><img src="'+resolvePhotoSrc(p)+'"><button class="mp-del" onclick="removeEntryPhoto('+i+')">✕</button></div>';
+    html+='<div class="multi-photo-slot"><img src="'+resolvePhotoSrc(p)+'" onclick="openLightbox(this.src)"><button class="mp-del" onclick="removeEntryPhoto('+i+')">✕</button></div>';
   });
   if(curEntryPhotos.length<MAX_PHOTOS){
     html+='<div class="multi-photo-slot add-slot" onclick="document.getElementById(\'photo-file-inp\').click()"><div class="api">📷+</div></div>';
@@ -1857,15 +2333,9 @@ function setGalleryTab(tab){
   var b=document.getElementById('gtab-bucket');
   var filter=document.getElementById('gallery-filter');
   if(d&&b){
-    if(tab==='diary'){
-      d.style.background='#fff5f7';d.style.borderColor='#ffc9d4';d.style.color='#d17a8a';d.style.fontWeight='600';
-      b.style.background='#fff';b.style.borderColor='#eee';b.style.color='#aaa';b.style.fontWeight='400';
-      if(filter) filter.style.display='flex';
-    } else {
-      b.style.background='#fff5f7';b.style.borderColor='#ffc9d4';b.style.color='#d17a8a';b.style.fontWeight='600';
-      d.style.background='#fff';d.style.borderColor='#eee';d.style.color='#aaa';d.style.fontWeight='400';
-      if(filter) filter.style.display='none';
-    }
+    d.classList.toggle('active', tab==='diary');
+    b.classList.toggle('active', tab==='bucket');
+    if(filter) filter.style.display = tab==='diary' ? 'flex' : 'none';
   }
   renderGallery();
 }
@@ -1934,8 +2404,9 @@ function renderGallery(){
   });
   grid.innerHTML=items.map(function(it){
     var d=new Date(it.date+'T00:00:00');
+    var src=resolvePhotoSrc(it.photo);
     return '<div class="gallery-item de-item" data-date="'+it.date+'" title="'+(d.getMonth()+1)+'/'+d.getDate()+'">'
-      +'<img src="'+resolvePhotoSrc(it.photo)+'">'
+      +'<img src="'+src+'" onclick="openLightbox(this.src)" style="cursor:zoom-in">'
       +(it.mood?'<span class="gmood">'+it.mood+'</span>':'')
       +'</div>';
   }).join('');
@@ -2034,7 +2505,7 @@ function renderBucket(){
   if(doneList.length>0){
     var doneOpen=document.getElementById('bucket-done-section-open');
     var isOpen=doneOpen?doneOpen.dataset.open!=='false':true;
-    html+='<div id="bucket-done-section-open" data-open="'+isOpen+'" onclick="toggleDoneSection()" style="display:flex;align-items:center;justify-content:space-between;padding:10px 4px;margin-top:8px;border-top:1.5px dashed #fde2e4;cursor:pointer">';
+    html+='<div id="bucket-done-section-open" data-open="'+isOpen+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 4px;margin-top:8px;border-top:1.5px dashed #fde2e4;cursor:pointer">';
     html+='<span style="font-size:12px;font-weight:700;color:#d17a8a">✅ 완료 '+doneList.length+'개</span>';
     html+='<span style="font-size:11px;color:#d17a8a">'+(isOpen?'▲':'▼')+'</span>';
     html+='</div>';
@@ -2101,6 +2572,10 @@ function toggleDoneSection(){
 ========================================================= */
 loadDiary();
 loadCp();
+loadDiarySettings();
+restoreDarkMode();
+loadDarkSchedule();
+applyAutoDarkSchedule();
 
 var now=new Date();
 bcYear=now.getFullYear(); bcMonth=now.getMonth();
@@ -2125,6 +2600,16 @@ openPhotoDB().then(loadAllPhotosToCache).then(function(){
   }
   applyMode();
 });
+
+// 20~24시 사이에 앱을 계속 켜놓고 있는 경우도 놓치지 않도록 30분마다 재확인
+setInterval(function(){
+  if(currentMode==='diary') checkDiaryEveningReminder();
+  else checkCoupleEveningReminder();
+}, 30*60*1000);
+
+// 다크모드 자동 설정이 켜져 있으면 5분마다 시간대를 재확인해서 전환
+setInterval(applyAutoDarkSchedule, 5*60*1000);
+
 
 // ===== 버킷 카테고리 관리 =====
 function renderBucketCatSel(){
@@ -2462,17 +2947,12 @@ function updatePromiseBtn(){
   var p=ds&&cpData.promises&&cpData.promises[ds];
   var memoRow=document.getElementById('promise-memo-row');
   var memoInp=document.getElementById('promise-memo-input');
+  btn.classList.toggle('active', !!p);
   if(p){
-    btn.style.background='#ff6b8a';
-    btn.style.borderColor='#ff6b8a';
-    btn.style.color='#fff';
     btn.textContent='약속 ✓';
     if(memoRow) memoRow.style.display='block';
     if(memoInp) memoInp.value=p.memo||'';
   } else {
-    btn.style.background='#fff';
-    btn.style.borderColor='#ffc9d4';
-    btn.style.color='#ffb3c1';
     btn.textContent='약속';
     if(memoRow) memoRow.style.display='none';
     if(memoInp) memoInp.value='';
@@ -2531,50 +3011,70 @@ function closePushBanner(){
   if(el) el.classList.remove('show');
 }
 
+// 기념일 푸시를 하루에 한 번만 보여주기 위한 표시 기록
+var PUSH_ANNIV_SHOWN_PREFIX='push_anniv_shown_';
+
 function checkPushNotifications(){
   if(!cpData) return;
   var today=new Date(); today.setHours(0,0,0,0);
   var todayStr=fmt(today);
 
-  // 1. D-day 기념일 알림 (7일 이내)
+  // 기념일 D-day 알림 (D-3 ~ 당일). 약속은 캘린더 탭 카드(renderCoupleCards)에서
+  // 이미 동일한 범위로 보여주고 있어서 배너로 다시 알리면 중복이라 여기선 제외함.
   if(cpData.anniversaries){
     cpData.anniversaries.forEach(function(a){
       var thisYear=today.getFullYear();
-      var annivDate=new Date(thisYear+'-'+a.date.slice(5));
-      annivDate.setHours(0,0,0,0);
+      var annivDate=new Date(thisYear+'-'+a.date.slice(5)+'T00:00:00');
       var diff=Math.round((annivDate-today)/86400000);
+      if(diff<0||diff>3) return;
+
+      var shownKey=PUSH_ANNIV_SHOWN_PREFIX+a.id+'_'+todayStr;
+      if(localStorage.getItem(shownKey)) return; // 오늘 이미 봤으면 다시 안 띄움
+      localStorage.setItem(shownKey,'1');
+
       if(diff===0){
         setTimeout(function(){showPush('🎉','오늘은 '+a.name+'이에요!','축하해요 💕',5000);},800);
-      } else if(diff>0&&diff<=3){
+      } else {
         setTimeout(function(){showPush('📅',a.name+' D-'+diff,'놓치지 마세요 💕',4000);},800);
       }
     });
   }
+}
 
-  // 2. 약속 알림 (D-7까지)
-  if(cpData.promises){
-    var keys=Object.keys(cpData.promises).sort();
-    for(var i=0;i<keys.length;i++){
-      var ds=keys[i];
-      var d=new Date(ds+'T00:00:00'); d.setHours(0,0,0,0);
-      var diff2=Math.round((d-today)/86400000);
-      var memo=cpData.promises[ds]&&cpData.promises[ds].memo?cpData.promises[ds].memo:'';
-      var memoStr=memo?memo:'약속';
-      if(diff2<0) continue; // 지난 약속 스킵
-      if(diff2===0){
-        setTimeout(function(m){showPush('📅','오늘 약속 있어요!',m,5000);}(memoStr),1200);
-        break;
-      } else if(diff2===1){
-        setTimeout(function(m){showPush('📅','내일 약속 있어요 D-1',m,4000);}(memoStr),1400);
-        break;
-      } else if(diff2<=7){
-        setTimeout(function(m,d2){showPush('📅','D-'+d2+' 약속이 있어요',m,4000);}(memoStr,diff2),1400);
-        break;
-      }
-    }
+// ===== 저녁 시간대(20시~24시) 미작성 알림 =====
+var PUSH_DIARY_REMINDER_PREFIX='push_diary_reminder_shown_';
+var PUSH_CP_REMINDER_PREFIX='push_cp_reminder_shown_';
+
+function checkDiaryEveningReminder(){
+  var now=new Date();
+  if(now.getHours()<20) return; // 20시 이전이면 대상 아님
+  var todayStr=fmt(now);
+  if(entries[todayStr]) return; // 이미 오늘 썼으면 패스
+
+  var shownKey=PUSH_DIARY_REMINDER_PREFIX+todayStr;
+  if(localStorage.getItem(shownKey)) return; // 오늘 이미 띄웠으면 다시 안 띄움
+  localStorage.setItem(shownKey,'1');
+
+  var streak=getDiaryStreak();
+  if(streak>=1){
+    setTimeout(function(){showPush('🔥','오늘 아직 기록 전이에요',streak+'일 연속 기록 중, 오늘 안에 써야 안 끊겨요',5000);},800);
+  } else {
+    setTimeout(function(){showPush('✍️','오늘 하루 어땠나요?','자기 전에 짧게라도 남겨보세요',4000);},800);
   }
+}
 
-  // 기록 유도는 카드로 처리
+function checkCoupleEveningReminder(){
+  var now=new Date();
+  if(now.getHours()<20) return;
+  var todayStr=fmt(now);
+  if(cpData.entries[todayStr]) return;
+
+  var shownKey=PUSH_CP_REMINDER_PREFIX+todayStr;
+  if(localStorage.getItem(shownKey)) return;
+  localStorage.setItem(shownKey,'1');
+
+  var pname=getPartnerName();
+  setTimeout(function(){showPush('💌','오늘 아직 기록이 없어요',pname+'이와 오늘 하루 짧게라도 남겨보세요',4000);},800);
 }
 
 
@@ -2588,6 +3088,52 @@ function savePartnerNameFromInput2(){
   toast(name+'으로 설정됐어요 💕');
 }
 
+
+/* ===== 사진 라이트박스 + 핀치줌 ===== */
+function openLightbox(src){
+  var lb=document.getElementById('photo-lightbox');
+  var img=document.getElementById('photo-lightbox-img');
+  img.src=src;
+  img.style.transform='scale(1)';
+  lb.classList.add('open');
+  _lbScale=1; _lbLastDist=null;
+}
+function closeLightbox(){
+  document.getElementById('photo-lightbox').classList.remove('open');
+}
+var _lbScale=1, _lbLastDist=null;
+(function(){
+  function dist(a,b){ return Math.hypot(a[0].clientX-b[0].clientX, a[0].clientY-b[0].clientY); }
+  document.addEventListener('DOMContentLoaded', function(){
+    var lb=document.getElementById('photo-lightbox');
+    var img=document.getElementById('photo-lightbox-img');
+    lb.addEventListener('touchmove', function(e){
+      if(e.touches.length===2){
+        e.preventDefault();
+        var d=dist(e.touches, e.touches);
+        // 두 손가락 거리
+        var t0=e.touches[0], t1=e.touches[1];
+        var nd=Math.hypot(t0.clientX-t1.clientX, t0.clientY-t1.clientY);
+        if(_lbLastDist){
+          _lbScale*=nd/_lbLastDist;
+          _lbScale=Math.min(Math.max(_lbScale,0.5),5);
+          img.style.transform='scale('+_lbScale+')';
+        }
+        _lbLastDist=nd;
+      }
+    },{passive:false});
+    lb.addEventListener('touchend', function(e){ if(e.touches.length<2) _lbLastDist=null; });
+    // 배경 탭으로 닫기
+    lb.addEventListener('click', function(e){ if(e.target===lb) closeLightbox(); });
+    // 더블탭 리셋
+    var lastTap=0;
+    img.addEventListener('touchend', function(){
+      var now=Date.now();
+      if(now-lastTap<300){ _lbScale=1; img.style.transform='scale(1)'; }
+      lastTap=now;
+    });
+  });
+})();
 </script>
 
 <!-- 버킷 파티클 캔버스 -->
@@ -2657,6 +3203,87 @@ function savePartnerNameFromInput2(){
 
 <!-- ===== 일기장 모드 팝업/모달 ===== -->
 
+<!-- 일기 목록 미리보기 레이어 -->
+<div id="diary-preview-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:flex-end;justify-content:center">
+  <div style="background:#fff;border-radius:20px 20px 0 0;padding:20px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;box-sizing:border-box">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+      <span id="diary-preview-date" style="font-size:15px;font-weight:700;color:#5a3a1a"></span>
+      <span id="diary-preview-weather" style="font-size:17px"></span>
+      <span id="diary-preview-mood" style="font-size:17px"></span>
+      <button onclick="closeDiaryPreview()" style="margin-left:auto;background:none;border:none;font-size:18px;color:#bbb;cursor:pointer">✕</button>
+    </div>
+    <div id="diary-preview-divider-green" style="border-top:2px solid #7aaa82;margin-bottom:14px"></div>
+    <div id="diary-preview-title" style="font-size:16px;font-weight:700;color:#5a3a1a;margin-bottom:10px"></div>
+    <div id="diary-preview-body" style="font-size:14px;color:#5a3a1a;line-height:1.8;white-space:pre-wrap;margin-bottom:14px"></div>
+    <div id="diary-preview-divider-gray" style="display:none;border-top:1px solid #ddd;margin-bottom:14px"></div>
+    <div id="diary-preview-photos" style="display:none;gap:6px;margin-bottom:18px"></div>
+    <button onclick="editFromPreview()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">✏️ 수정하기</button>
+  </div>
+</div>
+
+
+<!-- 다크모드 설정 모달 -->
+<div id="dark-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box">
+    <h3 style="font-size:15px;margin-bottom:14px;color:#333">🌗 다크모드 설정</h3>
+    <div style="display:flex;gap:6px;margin-bottom:10px">
+      <button id="dark-sch-manual-btn" class="settings-toggle-btn" onclick="setDarkScheduleMode('manual')">수동 설정</button>
+      <button id="dark-sch-auto-btn" class="settings-toggle-btn" onclick="setDarkScheduleMode('auto')">자동 설정</button>
+    </div>
+    <div id="dark-sch-time-row" style="display:none;align-items:center;flex-wrap:wrap;gap:6px;font-size:12px;color:#888;margin-bottom:14px">
+      <span>매일</span>
+      <input type="time" id="dark-sch-start" onchange="onDarkScheduleTimeChange()" value="20:00" style="border:1.5px solid #d4e8c4;border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit">
+      <span>부터</span>
+      <input type="time" id="dark-sch-end" onchange="onDarkScheduleTimeChange()" value="07:00" style="border:1.5px solid #d4e8c4;border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit">
+      <span>까지 다크모드</span>
+    </div>
+    <button onclick="closeDarkSettingsModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">닫기</button>
+  </div>
+</div>
+
+<!-- 카드 표시 설정 모달 -->
+<div id="card-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box">
+    <h3 style="font-size:15px;margin-bottom:4px;color:#333">🗂 카드 표시</h3>
+    <p style="font-size:11px;color:#aaa;margin-bottom:16px;line-height:1.6">일기 탭 상단에 뜨는 카드를 각각 켜고 끌 수 있어요</p>
+    <div style="margin-bottom:12px">
+      <div style="font-size:12px;color:#5a3a1a;margin-bottom:6px">오늘 기록 유도 카드</div>
+      <div style="display:flex;gap:6px">
+        <button id="card-set-today-on" class="settings-toggle-btn" onclick="setCardSetting('cardToday',true)">켜짐</button>
+        <button id="card-set-today-off" class="settings-toggle-btn" onclick="setCardSetting('cardToday',false)">꺼짐</button>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <div style="font-size:12px;color:#5a3a1a;margin-bottom:6px">연속 기록 카드</div>
+      <div style="display:flex;gap:6px">
+        <button id="card-set-streak-on" class="settings-toggle-btn" onclick="setCardSetting('cardStreak',true)">켜짐</button>
+        <button id="card-set-streak-off" class="settings-toggle-btn" onclick="setCardSetting('cardStreak',false)">꺼짐</button>
+      </div>
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:12px;color:#5a3a1a;margin-bottom:6px">1년 전 오늘 카드</div>
+      <div style="display:flex;gap:6px">
+        <button id="card-set-throwback-on" class="settings-toggle-btn" onclick="setCardSetting('cardThrowback',true)">켜짐</button>
+        <button id="card-set-throwback-off" class="settings-toggle-btn" onclick="setCardSetting('cardThrowback',false)">꺼짐</button>
+      </div>
+    </div>
+    <button onclick="closeCardSettingsModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">닫기</button>
+  </div>
+</div>
+
+<!-- 일기 추천(글감 프롬프트) 설정 모달 -->
+<div id="prompt-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box">
+    <h3 style="font-size:15px;margin-bottom:4px;color:#333">💡 일기 추천</h3>
+    <p style="font-size:11px;color:#aaa;margin-bottom:16px;line-height:1.6">빈 일기를 쓸 때 글감 질문을 보여줄지 정해요</p>
+    <div style="display:flex;gap:6px">
+      <button id="prompt-set-on" class="settings-toggle-btn" onclick="setPromptSetting(true)">켜짐</button>
+      <button id="prompt-set-off" class="settings-toggle-btn" onclick="setPromptSetting(false)">꺼짐</button>
+    </div>
+    <button onclick="closePromptSettingsModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit;margin-top:16px">닫기</button>
+  </div>
+</div>
+
 <!-- 글쓰기 목표 설정 모달 -->
 <div id="diary-goal-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box">
@@ -2668,6 +3295,7 @@ function savePartnerNameFromInput2(){
     <button onclick="closeDiaryGoalModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">취소</button>
   </div>
 </div>
+
 
 <!-- 글쓰기 목표 달성 팝업 -->
 <div id="diary-goal-achieved-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
@@ -2719,7 +3347,7 @@ function savePartnerNameFromInput2(){
   <div style="background:#fff;border-radius:20px;padding:26px 22px;max-width:320px;width:100%;text-align:center;box-sizing:border-box">
     <div style="font-size:44px;margin-bottom:8px">📅</div>
     <h3 id="diary-mr-title" style="font-size:17px;font-weight:800;color:#5a8a62;margin-bottom:14px"></h3>
-    <div style="display:flex;justify-content:space-between;background:#f4f9ef;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px"><span>총 작성</span><b id="diary-mr-total" style="color:#5a8a62;font-size:14px"></b></div>
+    <div id="diary-mr-stat-row" style="display:flex;justify-content:space-between;background:#f4f9ef;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px"><span>총 작성</span><b id="diary-mr-total" style="color:#5a8a62;font-size:14px"></b></div>
     <div id="diary-mr-mood-wrap" style="margin:10px 0 18px;text-align:left"></div>
     <button onclick="closeDiaryMonthlyReport()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">이번달도 잘 써볼게요 🌿</button>
   </div>
@@ -2768,5 +3396,10 @@ function savePartnerNameFromInput2(){
   <button class="push-close" onclick="closePushBanner()">✕</button>
 </div>
 
+<!-- 사진 라이트박스 -->
+<div id="photo-lightbox">
+  <button id="photo-lightbox-close" onclick="closeLightbox()">✕</button>
+  <img id="photo-lightbox-img" src="">
+</div>
 </body>
 </html>
