@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>미니홈피</title>
+<style>
+:root{
+  --skin-bg1:#8fb8de; --skin-bg2:#6b98c9;
+  --accent:#3d6a99; --accent2:#5a89b8; --accent-lt:#eef4fa;
+  --border:#cfdce9; --paper:#fff; --text:#333; --text-sub:#7a92a8;
+  --deco:'❄'; --radius:4px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Malgun Gothic','맑은 고딕',Dotum,돋움,sans-serif;background:linear-gradient(180deg,var(--skin-bg1) 0%,var(--skin-bg2) 100%);background-attachment:fixed;color:var(--text);font-size:12px;line-height:1.6;min-height:100vh;padding:18px 10px;transition:background .3s}
+
+/* ===== 미니홈피 프레임 (책 느낌) ===== */
+.minihome{max-width:900px;margin:0 auto;position:relative;background:var(--paper);border-radius:var(--radius);box-shadow:0 6px 26px rgba(0,0,0,.25);overflow:hidden}
+.mh-frame{border:7px solid rgba(255,255,255,.55);border-radius:var(--radius);position:relative}
+
+/* 상단 타이틀바 */
+.mh-top{background:linear-gradient(180deg,var(--accent2) 0%,var(--accent) 100%);color:#fff;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.mh-title{font-size:13.5px;font-weight:700;letter-spacing:-.5px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.mh-actions{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
+.mh-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:3px;padding:4px 8px;font-size:10.5px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
+.mh-btn:hover{background:rgba(255,255,255,.34)}
+.mh-btn.on{background:#fff;color:var(--accent);font-weight:700}
+
+/* 본체 */
+.mh-body{display:grid;grid-template-columns:214px 1fr;min-height:530px;transition:grid-template-columns .22s ease;position:relative}
+.mh-body.side-closed{grid-template-columns:0 1fr}
+.mh-body.side-closed .mh-left{padding-left:0;padding-right:0;overflow:hidden;opacity:0;pointer-events:none}
+.side-ov{display:none;position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:45}
+
+/* ===== 좌측 ===== */
+.mh-left{background:var(--accent-lt);border-right:1px solid var(--border);padding:12px 11px;transition:opacity .18s,padding .22s;position:relative}
+.mh-left::before{content:'';position:absolute;top:0;bottom:0;right:-1px;width:1px;background:repeating-linear-gradient(180deg,var(--border) 0 4px,transparent 4px 9px)}
+.ring{position:absolute;right:-6px;width:11px;height:11px;border-radius:50%;background:#e8e8e8;border:1px solid #c8c8c8;z-index:8}
+.ring1{top:64px} .ring2{top:50%} .ring3{bottom:64px}
+
+/* 프로필 사진 - 세로 직사각형 */
+.pf-photo{width:100%;aspect-ratio:3/4;background:linear-gradient(160deg,#f5f0e4 0%,#e6dcc8 100%);border:1px solid var(--border);border-radius:2px;overflow:hidden;position:relative;cursor:pointer;margin-bottom:9px}
+.pf-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.pf-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;color:var(--text-sub);font-size:10px}
+.pf-ph .ic{font-size:30px;opacity:.5}
+.pf-photo:hover .pf-hint{opacity:1}
+.pf-hint{position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,.45);color:#fff;font-size:9px;text-align:center;padding:3px;opacity:0;transition:opacity .15s}
+
+/* 프로필 텍스트 */
+.pf-box{margin-bottom:11px;padding:0 2px}
+.pf-name{font-size:12px;font-weight:700;color:var(--accent);margin-bottom:3px;cursor:pointer}
+.pf-mood{font-size:10px;color:var(--text-sub);font-style:italic;line-height:1.5;cursor:pointer;min-height:15px}
+.pf-stat{display:flex;justify-content:space-between;margin-top:7px;padding-top:6px;border-top:1px dotted var(--border);color:var(--text-sub);font-size:10px}
+
+/* 메뉴 */
+.menu-title{background:linear-gradient(180deg,var(--accent2) 0%,var(--accent) 100%);color:#fff;font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:2px 2px 0 0;letter-spacing:-.2px;display:flex;align-items:center;gap:4px}
+.menu-box{background:var(--paper);border:1px solid var(--border);border-top:none;border-radius:0 0 2px 2px;padding:4px;margin-bottom:10px}
+.menu-item{display:flex;justify-content:space-between;align-items:center;padding:4px 6px;font-size:11px;cursor:pointer;border-radius:2px;transition:all .1s}
+.menu-item:hover{background:var(--accent-lt)}
+.menu-item.on{background:var(--accent);color:#fff;font-weight:700}
+.menu-cnt{font-size:9.5px;opacity:.6}
+
+.tag-wrap{display:flex;flex-wrap:wrap;gap:3px;padding:3px}
+.tagc{font-size:9.5px;background:var(--accent-lt);color:var(--accent);border:1px solid var(--border);border-radius:2px;padding:2px 6px;cursor:pointer;font-family:inherit}
+.tagc:hover,.tagc.on{background:var(--accent);color:#fff}
+
+.mini-link{font-size:10px;color:var(--text-sub);cursor:pointer;padding:3px 6px;display:block;text-align:center;border:1px solid var(--border);border-radius:2px;background:var(--paper);margin-bottom:5px}
+.mini-link:hover{color:var(--accent)}
+
+#spotify-wrap iframe{border-radius:3px;display:block;width:100%}
+.bgm-empty{text-align:center;padding:11px 5px;background:var(--accent-lt);border:1px dashed var(--border);border-radius:2px}
+
+/* ===== 우측 ===== */
+.mh-right{padding:13px 15px 20px;background:var(--paper)}
+.sec-head{border-bottom:2px solid var(--accent);padding-bottom:5px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sec-title{font-size:13px;font-weight:700;color:var(--accent);letter-spacing:-.4px;display:flex;align-items:center;gap:4px}
+.search-mini{border:1px solid var(--border);border-radius:2px;padding:3px 7px;font-size:10.5px;outline:none;font-family:inherit;width:110px;background:var(--paper);color:inherit}
+.search-mini:focus{border-color:var(--accent)}
+
+/* 자기소개 */
+.intro{background:var(--accent-lt);border:1px solid var(--border);border-radius:3px;padding:11px 13px;margin-bottom:14px;position:relative}
+.intro-t{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:5px;display:flex;align-items:center;gap:4px}
+.intro-b{font-size:11.5px;line-height:1.75;white-space:pre-wrap;color:var(--text)}
+
+/* 고정글 */
+.pinned{margin-bottom:14px}
+.pin-head{font-size:11.5px;font-weight:700;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.pin-card{border:1px solid var(--accent);border-radius:3px;padding:9px 11px;cursor:pointer;background:var(--accent-lt);transition:all .14s;margin-bottom:6px}
+.pin-card:hover{filter:brightness(.97)}
+.pin-title{font-size:12px;font-weight:700;margin-bottom:3px;display:flex;align-items:center;gap:5px}
+.pin-exc{font-size:10.5px;color:var(--text-sub);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pin-ico{font-size:11px}
+
+/* 홈설정 모달 */
+.hs-sec{margin-bottom:14px}
+.hs-title{font-size:10.5px;font-weight:700;color:var(--accent);margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid var(--border)}
+.hs-opts{display:flex;gap:6px;flex-wrap:wrap}
+.hs-opt{border:2px solid var(--border);border-radius:3px;padding:6px 4px;cursor:pointer;text-align:center;flex:1;min-width:56px;transition:all .14s;background:var(--paper)}
+.hs-opt.on{border-color:var(--accent);background:var(--accent-lt)}
+.hs-opt-ico{font-size:16px;line-height:1;margin-bottom:3px;display:block}
+.hs-opt-lb{font-size:9px;color:var(--text-sub)}
+.hs-opt.on .hs-opt-lb{color:var(--accent);font-weight:700}
+.hs-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:11px;border-bottom:1px dotted var(--border)}
+.hs-row:last-child{border-bottom:none}
+.hs-tog{width:34px;height:19px;border-radius:10px;background:var(--border);position:relative;cursor:pointer;transition:background .15s;flex-shrink:0}
+.hs-tog.on{background:var(--accent)}
+.hs-tog::after{content:'';position:absolute;top:2px;left:2px;width:15px;height:15px;border-radius:50%;background:#fff;transition:transform .15s}
+.hs-tog.on::after{transform:translateX(15px)}
+.pin-pick{max-height:150px;overflow-y:auto;border:1px solid var(--border);border-radius:2px;padding:3px}
+.pin-row{display:flex;align-items:center;gap:6px;padding:4px 6px;font-size:10.5px;cursor:pointer;border-radius:2px}
+.pin-row:hover{background:var(--accent-lt)}
+.pin-row.on{background:var(--accent);color:#fff}
+.pin-row span:first-child{flex-shrink:0}
+.pin-row-t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 포토 스토리 (상단 갤러리) */
+.photo-story{margin-bottom:16px}
+.ps-head{font-size:11.5px;font-weight:700;color:var(--accent);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.ps-grid{display:grid;grid-template-columns:repeat(var(--ps-cols,3),1fr);gap:6px}
+.ps-item{position:relative;aspect-ratio:1;border:1px solid var(--border);border-radius:2px;overflow:hidden;cursor:pointer;background:var(--accent-lt)}
+.ps-item img{width:100%;height:100%;object-fit:cover;transition:transform .25s}
+.ps-item:hover img{transform:scale(1.06)}
+.ps-cap{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.65));color:#fff;font-size:9.5px;padding:9px 5px 4px;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* 글 카드 그리드 */
+.post-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.pcard{border:1px solid var(--border);border-radius:3px;overflow:hidden;cursor:pointer;background:var(--paper);transition:all .16s}
+.pcard:hover{border-color:var(--accent);box-shadow:0 3px 10px rgba(0,0,0,.09);transform:translateY(-1px)}
+.pc-img{width:100%;height:104px;object-fit:cover;display:block;background:var(--accent-lt)}
+.pc-noimg{width:100%;height:104px;background:linear-gradient(135deg,var(--accent-lt) 0%,var(--paper) 100%);display:flex;align-items:center;justify-content:center;font-size:26px;opacity:.4}
+.pc-body{padding:8px 9px 9px}
+.pc-top{display:flex;align-items:center;gap:4px;margin-bottom:4px;flex-wrap:wrap}
+.pc-cat{font-size:9px;background:var(--accent-lt);color:var(--accent);border:1px solid var(--border);border-radius:8px;padding:1px 6px}
+.pc-title{font-size:12px;font-weight:700;letter-spacing:-.3px;line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.pc-exc{font-size:10.5px;color:var(--text-sub);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:5px}
+.pc-meta{font-size:9.5px;color:var(--text-sub);display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.src-b{font-size:8.5px;background:#f3e6f7;color:#8659a5;border:1px solid #e5d0ec;border-radius:8px;padding:1px 5px}
+.src-b.cp{background:#fce8ef;color:#c2456f;border-color:#f2d0dc}
+
+/* 글 보기 */
+.view-h{border-bottom:1px dotted var(--border);padding-bottom:10px;margin-bottom:14px}
+.view-t{font-size:16px;font-weight:700;letter-spacing:-.5px;margin:5px 0 6px;line-height:1.4}
+.view-b{font-size:12.5px;line-height:1.9;white-space:pre-wrap;word-break:break-word;margin-bottom:18px}
+.view-b img{max-width:100%;border:1px solid var(--border);border-radius:2px;margin:8px 0;display:block}
+.pr-meta{font-size:10px;color:var(--text-sub);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pr-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:5px}
+.pr-tag{font-size:9.5px;color:var(--text-sub)}
+
+/* 방명록 */
+.gb{border-top:2px solid var(--accent);margin-top:20px;padding-top:11px}
+.gb-h{font-size:11.5px;font-weight:700;color:var(--accent);margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.gb-item{background:var(--accent-lt);border:1px solid var(--border);border-radius:2px;padding:7px 9px;margin-bottom:5px;display:flex;gap:7px}
+.gb-av{width:26px;height:26px;border-radius:2px;background:var(--paper);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.gb-name{font-size:10.5px;font-weight:700;color:var(--accent);margin-bottom:2px;display:flex;align-items:center;gap:4px}
+.gb-ai{font-size:8.5px;background:var(--accent);color:#fff;border-radius:2px;padding:0 4px}
+.gb-txt{font-size:11px;line-height:1.65}
+.gb-time{font-size:9.5px;color:var(--text-sub);margin-top:3px}
+.gb-form{display:flex;gap:5px;margin-top:8px}
+.gb-form input{flex:1;border:1px solid var(--border);border-radius:2px;padding:6px 8px;font-size:11px;outline:none;font-family:inherit;background:var(--paper);color:inherit}
+.gb-form input:focus{border-color:var(--accent)}
+
+/* 에디터 */
+.ed-row{margin-bottom:9px}
+.ed-lb{font-size:10.5px;font-weight:700;color:var(--accent);margin-bottom:3px;display:block}
+.ed-in,.ed-sel{width:100%;border:1px solid var(--border);border-radius:2px;padding:6px 8px;font-size:11.5px;outline:none;font-family:inherit;background:var(--paper);color:inherit}
+.ed-in:focus,.ed-sel:focus{border-color:var(--accent)}
+.ed-ta{width:100%;border:1px solid var(--border);border-radius:2px;padding:8px;font-size:12px;line-height:1.8;outline:none;font-family:inherit;min-height:260px;resize:vertical;background:var(--paper);color:inherit}
+.ed-ta:focus{border-color:var(--accent)}
+.ed-act{display:flex;gap:5px;justify-content:flex-end;margin-top:11px}
+.imgs{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}
+.imgt{position:relative;width:58px;height:58px;border:1px solid var(--border);border-radius:2px;overflow:hidden}
+.imgt img{width:100%;height:100%;object-fit:cover}
+.imgx{position:absolute;top:1px;right:1px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:2px;width:14px;height:14px;font-size:9px;cursor:pointer;line-height:1}
+
+/* 버튼 */
+.b{border:1px solid var(--border);border-radius:2px;padding:5px 11px;font-size:11px;cursor:pointer;font-family:inherit;background:var(--accent-lt);color:var(--accent);transition:all .12s}
+.b:hover{filter:brightness(.96)}
+.b-pri{background:linear-gradient(180deg,var(--accent2) 0%,var(--accent) 100%);color:#fff;border-color:var(--accent);font-weight:700}
+
+.empty{text-align:center;padding:45px 18px;color:var(--text-sub);font-size:11.5px}
+
+/* 모달 */
+.mbg{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:900}
+.modal{display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--paper);border:1px solid var(--accent);border-radius:3px;width:calc(100% - 36px);max-width:340px;z-index:901;overflow:hidden}
+.modal.wide{max-width:400px}
+.m-head{background:linear-gradient(180deg,var(--accent2) 0%,var(--accent) 100%);color:#fff;padding:7px 11px;font-size:11.5px;font-weight:700;display:flex;justify-content:space-between;align-items:center}
+.m-body{padding:11px;max-height:58vh;overflow-y:auto}
+.m-foot{padding:9px 11px;border-top:1px solid var(--border);display:flex;gap:5px;justify-content:flex-end}
+.ce-row{display:flex;gap:5px;padding:4px 0;border-bottom:1px dotted var(--border)}
+.ce-row input{flex:1;border:1px solid var(--border);border-radius:2px;padding:4px 7px;font-size:11px;outline:none;font-family:inherit;background:var(--paper);color:inherit}
+.xb{background:none;border:none;color:var(--text-sub);font-size:14px;cursor:pointer;padding:0 4px}
+.xb:hover{color:#e05555}
+.bgm-hint{font-size:9.5px;color:var(--text-sub);line-height:1.6;background:var(--accent-lt);border:1px solid var(--border);border-radius:2px;padding:7px;margin-bottom:7px}
+
+/* 스킨 선택 */
+.skin-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-bottom:12px}
+.skin-card{border:2px solid var(--border);border-radius:3px;overflow:hidden;cursor:pointer;transition:all .14s}
+.skin-card.on{border-color:var(--accent);box-shadow:0 0 0 2px rgba(61,106,153,.15)}
+.skin-prev{height:44px;display:flex}
+.skin-prev i{flex:1}
+.skin-name{font-size:9.5px;text-align:center;padding:3px;background:var(--paper);color:var(--text)}
+.color-row{display:flex;align-items:center;gap:7px;padding:5px 0;font-size:10.5px}
+.color-row label{flex:1;color:var(--text-sub)}
+.color-row input[type=color]{width:36px;height:24px;border:1px solid var(--border);border-radius:2px;cursor:pointer;padding:0;background:none}
+
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(70px);background:var(--accent);color:#fff;padding:8px 18px;border-radius:3px;font-size:11px;z-index:999;opacity:0;transition:all .28s}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+.side-toggle{font-size:12px!important;padding:3px 7px!important;line-height:1}
+
+@media(max-width:760px){
+  body{padding:6px 5px}
+  .mh-frame{border-width:4px}
+  .mh-top{padding:7px 9px}
+  .mh-title{font-size:12px}
+  .mh-btn{padding:3px 6px;font-size:9.5px}
+  .mh-body{grid-template-columns:1fr;min-height:auto}
+  .mh-body.side-closed{grid-template-columns:1fr}
+  .mh-left{position:absolute;top:0;left:0;bottom:0;width:172px;z-index:50;padding:9px 8px;box-shadow:3px 0 12px rgba(0,0,0,.2);overflow-y:auto;transition:transform .22s ease,opacity .18s}
+  .mh-body.side-closed .mh-left{transform:translateX(-100%);opacity:0}
+  .mh-left::before,.ring{display:none}
+  .mh-right{grid-column:1;padding:10px 9px 16px}
+  .ps-grid{grid-template-columns:repeat(3,1fr);gap:4px}
+  .ps-cap{font-size:8.5px}
+  .post-grid{grid-template-columns:1fr;gap:8px}
+  .pc-img,.pc-noimg{height:120px}
+  .search-mini{width:80px;font-size:9.5px}
+  .sec-title{font-size:12px}
+  .view-t{font-size:14.5px}
+  .ed-ta{min-height:190px}
+  .modal{width:calc(100% - 24px)}
+}
+</style>
+</head>
+<body>
+
+<div class="minihome">
+ <div class="mh-frame">
+  <div class="mh-top">
+    <div style="display:flex;align-items:center;gap:6px">
+      <button class="mh-btn side-toggle" onclick="toggleSide()" id="side-btn">☰</button>
+      <div class="mh-title" onclick="goList()"><span id="deco-ico">🏠</span><span id="home-title">MY 미니홈피</span></div>
+    </div>
+    <div class="mh-actions">
+      <button class="mh-btn" onclick="openHomeModal()">⚙ 홈설정</button>
+      <button class="mh-btn" onclick="openSkinModal()">🎨 스킨</button>
+      <button class="mh-btn" onclick="syncDiary()">일기</button>
+      <button class="mh-btn on" onclick="goEdit()">글쓰기</button>
+    </div>
+  </div>
+
+  <div class="side-ov" id="side-ov" onclick="toggleSide()"></div>
+  <div class="mh-body">
+    <div class="ring ring1"></div><div class="ring ring2"></div><div class="ring ring3"></div>
+
+    <div class="mh-left">
+      <div class="pf-photo" onclick="pickAvatar()">
+        <div class="pf-ph" id="pf-ph"><span class="ic">📷</span><span>프로필 사진</span></div>
+        <div class="pf-hint">사진 변경</div>
+      </div>
+      <input type="file" id="avatar-input" accept="image/*" style="display:none" onchange="setAvatar(this)">
+
+      <div class="pf-box">
+        <div class="pf-name" id="pf-name" onclick="editProfile()">나의 기록장</div>
+        <div class="pf-mood" id="pf-mood" onclick="editProfile()">"오늘도 한 줄 남기기"</div>
+        <div class="pf-stat"><span>TODAY <b id="s-today">0</b></span><span>TOTAL <b id="s-total">0</b></span></div>
+      </div>
+
+      <div class="menu-title">♪ BGM</div>
+      <div class="menu-box" style="padding:6px">
+        <div id="spotify-wrap"></div>
+        <div class="bgm-empty" id="bgm-empty">
+          <div style="font-size:17px;margin-bottom:3px">🎧</div>
+          <div style="font-size:9.5px;color:var(--text-sub);line-height:1.4">스포티파이 링크로<br>BGM 설정</div>
+        </div>
+        <button class="b" style="width:100%;margin-top:5px;font-size:9.5px;padding:3px" onclick="openBgmModal()">BGM 설정</button>
+      </div>
+
+      <div class="menu-title">📁 CATEGORY</div>
+      <div class="menu-box" id="cats"></div>
+
+      <div id="tag-sec">
+        <div class="menu-title">🏷 TAG</div>
+        <div class="menu-box"><div class="tag-wrap" id="tags"></div></div>
+      </div>
+
+      <span class="mini-link" onclick="openCatModal()">✎ 카테고리 관리</span>
+    </div>
+
+    <div class="mh-right">
+      <div id="intro-box"></div>
+      <div id="pinned-box"></div>
+      <div id="photo-story" class="photo-story"></div>
+      <div class="sec-head">
+        <div class="sec-title" id="sec-title">다이어리</div>
+        <input class="search-mini" id="q" placeholder="검색" oninput="onSearch(this.value)">
+      </div>
+      <div id="main"></div>
+    </div>
+  </div>
+ </div>
+</div>
+
+<div class="mbg" id="mbg" onclick="closeAll()"></div>
+
+<div class="modal" id="cat-modal">
+  <div class="m-head"><span>카테고리 관리</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
+  <div class="m-body" id="cat-edit-list"></div>
+  <div class="m-foot"><button class="b" onclick="addCat()">추가</button><button class="b b-pri" onclick="saveCats()">저장</button></div>
+</div>
+
+<div class="modal" id="bgm-modal">
+  <div class="m-head"><span>♪ BGM 설정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
+  <div class="m-body">
+    <div class="bgm-hint">스포티파이에서 <b>공유 → 링크 복사</b> 후 붙여넣으세요.<br>무료 계정은 30초 미리듣기로 재생돼요.</div>
+    <input class="ed-in" id="bgm-url" placeholder="https://open.spotify.com/track/...">
+  </div>
+  <div class="m-foot"><button class="b" onclick="document.getElementById('bgm-url').value=''">지우기</button><button class="b b-pri" onclick="saveBgm()">적용</button></div>
+</div>
+
+<div class="modal wide" id="skin-modal">
+  <div class="m-head"><span>🎨 스킨 설정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
+  <div class="m-body">
+    <div style="font-size:10.5px;font-weight:700;color:var(--accent);margin-bottom:6px">스킨 선택</div>
+    <div class="skin-grid" id="skin-grid"></div>
+    <div style="font-size:10.5px;font-weight:700;color:var(--accent);margin:12px 0 4px">색상 직접 설정</div>
+    <div class="color-row"><label>배경 위</label><input type="color" id="c-bg1"></div>
+    <div class="color-row"><label>배경 아래</label><input type="color" id="c-bg2"></div>
+    <div class="color-row"><label>포인트 색</label><input type="color" id="c-accent"></div>
+    <div class="color-row"><label>연한 배경</label><input type="color" id="c-lt"></div>
+    <div class="color-row"><label>본문 배경</label><input type="color" id="c-paper"></div>
+    <div class="color-row"><label>글자색</label><input type="color" id="c-text"></div>
+  </div>
+  <div class="m-foot"><button class="b" onclick="applySkin(curSkin,true)">스킨 기본값</button><button class="b b-pri" onclick="saveColors()">적용</button></div>
+</div>
+
+<div class="modal wide" id="home-modal">
+  <div class="m-head"><span>⚙ 메인 홈 설정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
+  <div class="m-body">
+    <div class="hs-sec">
+      <div class="hs-title">포토 스토리 사진 개수</div>
+      <div class="hs-opts" id="hs-cols"></div>
+    </div>
+    <div class="hs-sec">
+      <div class="hs-title">글 목록 형태</div>
+      <div class="hs-opts" id="hs-layout"></div>
+    </div>
+    <div class="hs-sec">
+      <div class="hs-title">메인에 표시할 항목</div>
+      <div class="hs-row"><span>📷 포토 스토리</span><div class="hs-tog" id="tg-photo" onclick="tgOpt('photo')"></div></div>
+      <div class="hs-row"><span>💬 자기소개</span><div class="hs-tog" id="tg-intro" onclick="tgOpt('intro')"></div></div>
+      <div class="hs-row"><span>📌 고정글</span><div class="hs-tog" id="tg-pin" onclick="tgOpt('pin')"></div></div>
+    </div>
+    <div class="hs-sec">
+      <div class="hs-title">자기소개 글</div>
+      <textarea class="ed-ta" id="hs-intro-txt" style="min-height:80px;font-size:11.5px" placeholder="메인에 보여줄 소개글을 적어보세요"></textarea>
+    </div>
+    <div class="hs-sec">
+      <div class="hs-title">메인에 고정할 글 (최대 3개)</div>
+      <div class="pin-pick" id="hs-pin-list"></div>
+    </div>
+  </div>
+  <div class="m-foot"><button class="b b-pri" onclick="saveHome()">저장</button></div>
+</div>
+
+<div class="modal" id="pf-modal">
+  <div class="m-head"><span>프로필 수정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
+  <div class="m-body">
+    <div class="ed-row"><label class="ed-lb">홈피 제목</label><input class="ed-in" id="pf-i-home" placeholder="MY 미니홈피"></div>
+    <div class="ed-row"><label class="ed-lb">이름</label><input class="ed-in" id="pf-i-name" placeholder="나의 기록장"></div>
+    <div class="ed-row"><label class="ed-lb">한 줄 소개</label><input class="ed-in" id="pf-i-mood" placeholder="오늘도 한 줄 남기기"></div>
+  </div>
+  <div class="m-foot"><button class="b b-pri" onclick="saveProfile()">저장</button></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var PK='blog_posts_v1',CK='blog_cats_v1',MK='blog_comments_v1',BGM_KEY='blog_spotify_v1',AVATAR_KEY='blog_avatar',PF_KEY='blog_profile_v1',SKIN_KEY='blog_skin_v1',COLOR_KEY='blog_colors_v1';
+var posts=[],cats=[],comments={},curCat='all',curTag='',q='',view='list',viewId=null,editImgs=[],curSkin='sky';
+
+var SKINS={
+  sky:{name:'하늘 미니홈피',bg1:'#8fb8de',bg2:'#6b98c9',accent:'#3d6a99',accent2:'#5a89b8',lt:'#eef4fa',border:'#cfdce9',paper:'#ffffff',text:'#333333',sub:'#7a92a8',ico:'🏠'},
+  pink:{name:'핑크 러블리',bg1:'#f7c8d8',bg2:'#eda8c0',accent:'#c2456f',accent2:'#dd6f92',lt:'#fdf0f4',border:'#f2d5df',paper:'#ffffff',text:'#3d2830',sub:'#b08296',ico:'🎀'},
+  mint:{name:'민트 상큼',bg1:'#a8dcd0',bg2:'#7cc4b4',accent:'#2f8574',accent2:'#48a693',lt:'#eefaf7',border:'#c9e8e0',paper:'#ffffff',text:'#26362f',sub:'#7fa89c',ico:'🌿'},
+  cream:{name:'크림 빈티지',bg1:'#e8d9bc',bg2:'#d4bf98',accent:'#8a6d3b',accent2:'#a9884f',lt:'#faf5ea',border:'#e2d5bd',paper:'#fffdf8',text:'#3a3226',sub:'#a89478',ico:'☕'},
+  night:{name:'밤하늘',bg1:'#3a4a63',bg2:'#242e42',accent:'#6b8cba',accent2:'#7fa0cc',lt:'#252c38',border:'#3a4552',paper:'#1e242c',text:'#d8dde3',sub:'#8896a6',ico:'🌙'},
+  lilac:{name:'라일락',bg1:'#ceb8e8',bg2:'#ad92d4',accent:'#7a55a8',accent2:'#9370bd',lt:'#f6f0fc',border:'#ddd0ee',paper:'#ffffff',text:'#332b3d',sub:'#9d8bb5',ico:'💜'}
+};
+
+function lp(){try{posts=JSON.parse(localStorage.getItem(PK))||[];}catch(e){posts=[];}}
+function sp(){localStorage.setItem(PK,JSON.stringify(posts));}
+function lc(){try{cats=JSON.parse(localStorage.getItem(CK))||['일상','생각','기록'];}catch(e){cats=['일상','생각','기록'];}}
+function sc(){localStorage.setItem(CK,JSON.stringify(cats));}
+function lm(){try{comments=JSON.parse(localStorage.getItem(MK))||{};}catch(e){comments={};}}
+function sm(){localStorage.setItem(MK,JSON.stringify(comments));}
+
+function toast(t){var el=document.getElementById('toast');el.textContent=t;el.classList.add('show');setTimeout(function(){el.classList.remove('show');},1800);}
+function fdate(ts){var d=new Date(ts),n=new Date(),diff=(n-d)/86400000;
+  if(diff<1&&d.getDate()===n.getDate())return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+  if(diff<2)return '어제';
+  return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0');}
+function esc(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+
+// ===== 스킨 =====
+function applySkin(key,reset){
+  curSkin=key;
+  var s=SKINS[key];
+  var r=document.documentElement.style;
+  r.setProperty('--skin-bg1',s.bg1); r.setProperty('--skin-bg2',s.bg2);
+  r.setProperty('--accent',s.accent); r.setProperty('--accent2',s.accent2);
+  r.setProperty('--accent-lt',s.lt); r.setProperty('--border',s.border);
+  r.setProperty('--paper',s.paper); r.setProperty('--text',s.text); r.setProperty('--text-sub',s.sub);
+  document.getElementById('deco-ico').textContent=s.ico;
+  localStorage.setItem(SKIN_KEY,key);
+  if(reset){ localStorage.removeItem(COLOR_KEY); syncColorInputs(); renderSkinGrid(); toast('스킨 기본값으로 되돌렸어요'); }
+}
+function applyColors(){
+  var cs=null;
+  try{cs=JSON.parse(localStorage.getItem(COLOR_KEY));}catch(e){}
+  if(!cs) return;
+  var r=document.documentElement.style;
+  if(cs.bg1)r.setProperty('--skin-bg1',cs.bg1);
+  if(cs.bg2)r.setProperty('--skin-bg2',cs.bg2);
+  if(cs.accent){r.setProperty('--accent',cs.accent);r.setProperty('--accent2',lighten(cs.accent,18));}
+  if(cs.lt)r.setProperty('--accent-lt',cs.lt);
+  if(cs.paper)r.setProperty('--paper',cs.paper);
+  if(cs.text)r.setProperty('--text',cs.text);
+}
+function lighten(hex,pct){
+  var n=parseInt(hex.slice(1),16);
+  var r=Math.min(255,(n>>16)+pct*2.55|0), g=Math.min(255,((n>>8)&255)+pct*2.55|0), b=Math.min(255,(n&255)+pct*2.55|0);
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function openSkinModal(){
+  renderSkinGrid(); syncColorInputs();
+  document.getElementById('mbg').style.display='block';
+  document.getElementById('skin-modal').style.display='block';
+}
+function renderSkinGrid(){
+  document.getElementById('skin-grid').innerHTML=Object.keys(SKINS).map(function(k){
+    var s=SKINS[k];
+    return '<div class="skin-card'+(curSkin===k?' on':'')+'" data-skin="'+k+'" onclick="pickSkin(this)">'
+      +'<div class="skin-prev"><i style="background:linear-gradient(180deg,'+s.bg1+','+s.bg2+')"></i>'
+      +'<i style="background:'+s.accent+'"></i><i style="background:'+s.lt+'"></i></div>'
+      +'<div class="skin-name">'+s.ico+' '+s.name+'</div></div>';
+  }).join('');
+}
+function pickSkin(el){ applySkin(el.dataset.skin); localStorage.removeItem(COLOR_KEY); syncColorInputs(); renderSkinGrid(); }
+function syncColorInputs(){
+  var g=getComputedStyle(document.documentElement);
+  function v(n){return g.getPropertyValue(n).trim();}
+  var map={'c-bg1':'--skin-bg1','c-bg2':'--skin-bg2','c-accent':'--accent','c-lt':'--accent-lt','c-paper':'--paper','c-text':'--text'};
+  Object.keys(map).forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value=toHex(v(map[id]));
+  });
+}
+function toHex(c){
+  if(!c) return '#000000';
+  if(c[0]==='#') return c.length===4?'#'+c[1]+c[1]+c[2]+c[2]+c[3]+c[3]:c;
+  var m=c.match(/\d+/g);
+  if(!m) return '#000000';
+  return '#'+m.slice(0,3).map(function(x){return ('0'+parseInt(x).toString(16)).slice(-2);}).join('');
+}
+function saveColors(){
+  var cs={bg1:document.getElementById('c-bg1').value,bg2:document.getElementById('c-bg2').value,
+    accent:document.getElementById('c-accent').value,lt:document.getElementById('c-lt').value,
+    paper:document.getElementById('c-paper').value,text:document.getElementById('c-text').value};
+  localStorage.setItem(COLOR_KEY,JSON.stringify(cs));
+  applyColors(); closeAll(); toast('색상을 적용했어요');
+}
+
+// ===== 프로필 =====
+function loadProfile(){
+  var p={};
+  try{p=JSON.parse(localStorage.getItem(PF_KEY))||{};}catch(e){}
+  document.getElementById('home-title').textContent=p.home||'MY 미니홈피';
+  document.getElementById('pf-name').textContent=p.name||'나의 기록장';
+  document.getElementById('pf-mood').textContent='"'+(p.mood||'오늘도 한 줄 남기기')+'"';
+  document.title=(p.home||'미니홈피');
+}
+function editProfile(){
+  var p={};
+  try{p=JSON.parse(localStorage.getItem(PF_KEY))||{};}catch(e){}
+  document.getElementById('pf-i-home').value=p.home||'';
+  document.getElementById('pf-i-name').value=p.name||'';
+  document.getElementById('pf-i-mood').value=p.mood||'';
+  document.getElementById('mbg').style.display='block';
+  document.getElementById('pf-modal').style.display='block';
+}
+function saveProfile(){
+  localStorage.setItem(PF_KEY,JSON.stringify({
+    home:document.getElementById('pf-i-home').value.trim(),
+    name:document.getElementById('pf-i-name').value.trim(),
+    mood:document.getElementById('pf-i-mood').value.trim()
+  }));
+  loadProfile(); closeAll(); toast('저장했어요');
+}
+function renderAvatar(){
+  var src=localStorage.getItem(AVATAR_KEY);
+  var box=document.querySelector('.pf-photo');
+  var ph=document.getElementById('pf-ph');
+  var old=box.querySelector('img'); if(old) old.remove();
+  if(src){ ph.style.display='none'; box.insertAdjacentHTML('afterbegin','<img src="'+src+'" alt="프로필">'); }
+  else ph.style.display='flex';
+}
+function pickAvatar(){document.getElementById('avatar-input').click();}
+function setAvatar(inp){
+  var f=inp.files[0]; if(!f) return;
+  var r=new FileReader();
+  r.onload=function(){
+    try{localStorage.setItem(AVATAR_KEY,r.result);renderAvatar();toast('프로필 사진을 바꿨어요');}
+    catch(e){toast('사진이 너무 커요');}
+  };
+  r.readAsDataURL(f); inp.value='';
+}
+
+// ===== BGM =====
+function renderBgm(){
+  var url=localStorage.getItem(BGM_KEY)||'';
+  var wrap=document.getElementById('spotify-wrap'), empty=document.getElementById('bgm-empty');
+  if(!wrap) return;
+  var embed=url?toEmbed(url):null;
+  if(!embed){ wrap.innerHTML=''; if(empty) empty.style.display='block'; return; }
+  if(empty) empty.style.display='none';
+  var isList=embed.indexOf('/playlist/')>=0||embed.indexOf('/album/')>=0;
+  wrap.innerHTML='<iframe src="'+embed+'" height="'+(isList?232:80)+'" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>';
+}
+function toEmbed(url){
+  url=url.trim();
+  var m=url.match(/spotify\.com\/(intl-[a-z]+\/)?(track|playlist|album|episode|show|artist)\/([a-zA-Z0-9]+)/);
+  if(m) return 'https://open.spotify.com/embed/'+m[2]+'/'+m[3]+'?utm_source=generator';
+  var u=url.match(/^spotify:(track|playlist|album|episode|show|artist):([a-zA-Z0-9]+)$/);
+  if(u) return 'https://open.spotify.com/embed/'+u[1]+'/'+u[2]+'?utm_source=generator';
+  return null;
+}
+function openBgmModal(){
+  document.getElementById('bgm-url').value=localStorage.getItem(BGM_KEY)||'';
+  document.getElementById('mbg').style.display='block';
+  document.getElementById('bgm-modal').style.display='block';
+}
+function saveBgm(){
+  var v=document.getElementById('bgm-url').value.trim();
+  if(v&&!toEmbed(v)){toast('스포티파이 링크가 아니에요');return;}
+  localStorage.setItem(BGM_KEY,v); closeAll(); renderBgm();
+  toast(v?'BGM을 설정했어요':'BGM을 지웠어요');
+}
+
+// ===== 사이드바 =====
+function toggleSide(){
+  var body=document.querySelector('.mh-body');
+  var closed=body.classList.toggle('side-closed');
+  localStorage.setItem('blog_side',closed?'0':'1');
+  document.getElementById('side-btn').textContent=closed?'☰':'✕';
+  var ov=document.getElementById('side-ov');
+  if(ov) ov.style.display=(!closed&&window.innerWidth<=760)?'block':'none';
+}
+function closeSideMobile(){
+  var body=document.querySelector('.mh-body');
+  if(window.innerWidth<=760&&!body.classList.contains('side-closed')){
+    body.classList.add('side-closed');
+    document.getElementById('side-btn').textContent='☰';
+    var ov=document.getElementById('side-ov'); if(ov) ov.style.display='none';
+  }
+}
+function initSide(){
+  var body=document.querySelector('.mh-body'), btn=document.getElementById('side-btn');
+  var saved=localStorage.getItem('blog_side');
+  var open=saved===null?window.innerWidth>760:saved==='1';
+  if(window.innerWidth<=760) open=false;
+  if(!open) body.classList.add('side-closed');
+  btn.textContent=open?'✕':'☰';
+}
+function closeAll(){
+  document.getElementById('mbg').style.display='none';
+  ['cat-modal','bgm-modal','skin-modal','pf-modal','home-modal'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.style.display='none';
+  });
+}
+
+// ===== 다이어리 연동 =====
+var DIARY_KEY='diary_v2', CP_KEY='couple_diary_v1';
+var PHOTO_DB_NAME='diary_photos_db', PHOTO_STORE='photos';
+var diaryPhotoCache={};
+
+function loadDiaryPhotos(cb){
+  if(!window.indexedDB){cb();return;}
+  var req=indexedDB.open(PHOTO_DB_NAME,1);
+  req.onupgradeneeded=function(e){
+    try{ e.target.result.createObjectStore(PHOTO_STORE); }catch(x){}
+  };
+  req.onsuccess=function(e){
+    var db=e.target.result;
+    if(!db.objectStoreNames.contains(PHOTO_STORE)){ cb(); return; }
+    try{
+      var tx=db.transaction(PHOTO_STORE,'readonly');
+      var cur=tx.objectStore(PHOTO_STORE).openCursor();
+      cur.onsuccess=function(ev){
+        var c2=ev.target.result;
+        if(c2){ diaryPhotoCache[c2.key]=c2.value; c2.continue(); }
+        else cb();
+      };
+      cur.onerror=function(){cb();};
+    }catch(x){cb();}
+  };
+  req.onerror=function(){cb();};
+}
+function resolvePhotos(arr){
+  return (arr||[]).map(function(p){
+    if(typeof p==='string'&&p.indexOf('data:')===0) return p;
+    return diaryPhotoCache[p]||null;
+  }).filter(Boolean);
+}
+
+function syncDiary(){
+  toast('일기를 불러오는 중...');
+  loadDiaryPhotos(function(){ doSyncDiary(); });
+}
+function doSyncDiary(){
+  var found=0, updated=0;
+
+  // 개인 일기 (diary_v2) — {날짜: {title, body, mood, weather, photos, updatedAt}}
+  try{
+    var e1=JSON.parse(localStorage.getItem(DIARY_KEY)||'{}');
+    Object.keys(e1).forEach(function(date){
+      var d=e1[date];
+      if(!d||!d.body) return;
+      var id='diary_'+date;
+      var imgs=resolvePhotos(d.photos);
+      var tags=[]; if(d.mood) tags.push(d.mood); if(d.weather) tags.push(d.weather);
+      var exist=posts.find(function(p){return p.id===id;});
+      var obj={id:id,title:d.title||('일기 · '+date),body:d.body,cat:'일기장',
+        tags:tags,imgs:imgs,ts:d.updatedAt||new Date(date+'T12:00:00').getTime(),src:'diary'};
+      if(exist){ Object.assign(exist,obj); updated++; }
+      else { posts.push(obj); found++; }
+    });
+  }catch(e){}
+
+  // 커플 다이어리 (couple_diary_v1) — {entries:{날짜:{...}}, ...}
+  try{
+    var cp=JSON.parse(localStorage.getItem(CP_KEY)||'{}');
+    var e2=cp.entries||{};
+    Object.keys(e2).forEach(function(date){
+      var d=e2[date];
+      if(!d||!d.body) return;
+      var id='couple_'+date;
+      var imgs=resolvePhotos(d.photos);
+      var tags=[]; if(d.mood) tags.push(d.mood); if(d.weather) tags.push(d.weather);
+      var exist=posts.find(function(p){return p.id===id;});
+      var obj={id:id,title:d.title||('커플일기 · '+date),body:d.body,cat:'커플다이어리',
+        tags:tags,imgs:imgs,ts:d.updatedAt||new Date(date+'T12:00:00').getTime(),src:'couple'};
+      if(exist){ Object.assign(exist,obj); updated++; }
+      else { posts.push(obj); found++; }
+    });
+  }catch(e){}
+
+  if(found||updated){
+    if(cats.indexOf('일기장')<0) cats.push('일기장');
+    if(cats.indexOf('커플다이어리')<0) cats.push('커플다이어리');
+    sc(); sp(); render();
+    toast(found?(found+'개를 가져왔어요'+(updated?' ('+updated+'개 갱신)':'')):(updated+'개를 갱신했어요'));
+  } else {
+    toast('가져올 일기가 없어요');
+  }
+}
+
+// ===== AI 방명록 =====
+function aiComment(postId){
+  var p=posts.find(function(x){return x.id===postId;}); if(!p) return;
+  var box=document.getElementById('gb-list');
+  if(box) box.insertAdjacentHTML('beforeend','<div class="gb-item" id="ai-load"><div class="gb-av">✨</div><div><div class="gb-name">일촌이 읽는 중...</div></div></div>');
+  fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,
+      messages:[{role:"user",content:"다음 미니홈피 다이어리 글에 일촌이 남기는 방명록 댓글을 한국어로 하나만 써줘. 친근한 반말, 2문장 이내, 이모티콘 하나 정도. 2000년대 싸이월드 감성으로. 댓글 내용만 출력해.\n\n제목: "+p.title+"\n\n"+p.body.slice(0,1500)}]})
+  }).then(function(r){return r.json();}).then(function(d){
+    var el=document.getElementById('ai-load'); if(el) el.remove();
+    var txt=(d.content||[]).map(function(c){return c.text||'';}).join('').trim();
+    if(!txt) return;
+    if(!comments[postId]) comments[postId]=[];
+    comments[postId].push({name:'일촌',text:txt,ai:true,ts:Date.now()});
+    sm(); renderComments(postId);
+  }).catch(function(){
+    var el=document.getElementById('ai-load'); if(el) el.remove();
+    toast('방명록을 불러오지 못했어요');
+  });
+}
+function addComment(postId){
+  var inp=document.getElementById('gb-inp');
+  var t=inp.value.trim(); if(!t) return;
+  if(!comments[postId]) comments[postId]=[];
+  comments[postId].push({name:'나',text:t,ai:false,ts:Date.now()});
+  sm(); inp.value=''; renderComments(postId);
+}
+function renderComments(postId){
+  var list=comments[postId]||[], box=document.getElementById('gb-list');
+  if(!box) return;
+  box.innerHTML=list.length?list.map(function(c){
+    return '<div class="gb-item"><div class="gb-av">'+(c.ai?'✨':'🙂')+'</div>'
+      +'<div style="flex:1"><div class="gb-name">'+esc(c.name)+(c.ai?'<span class="gb-ai">AI</span>':'')+'</div>'
+      +'<div class="gb-txt">'+esc(c.text)+'</div><div class="gb-time">'+fdate(c.ts)+'</div></div></div>';
+  }).join(''):'<div style="font-size:11px;color:var(--text-sub);padding:6px 0">아직 방명록이 없어요</div>';
+  var cnt=document.getElementById('gb-cnt'); if(cnt) cnt.textContent=list.length;
+}
+
+// ===== 렌더 =====
+function render(){
+  renderCats(); renderTags(); renderStats();
+  renderIntro(); renderPinned();
+  if(view==='list'){ renderPhotoStory(); renderList(); }
+  else { document.getElementById('photo-story').innerHTML=''; if(view==='post') renderPost(); else renderEditor(); }
+}
+function renderStats(){
+  document.getElementById('s-total').textContent=posts.length;
+  var t=new Date().toDateString();
+  document.getElementById('s-today').textContent=posts.filter(function(p){return new Date(p.ts).toDateString()===t;}).length;
+}
+function renderPhotoStory(){
+  var el=document.getElementById('photo-story');
+  if(!homeCfg.photo){ el.innerHTML=''; return; }
+  var withImg=posts.filter(function(p){return p.imgs&&p.imgs.length;}).sort(function(a,b){return b.ts-a.ts;}).slice(0,homeCfg.cols);
+  if(withImg.length<1){ el.innerHTML=''; return; }
+  el.innerHTML='<div class="ps-head">📷 포토 스토리</div><div class="ps-grid">'
+    +withImg.map(function(p){
+      return '<div class="ps-item" data-id="'+p.id+'" onclick="openPost(this)"><img src="'+p.imgs[0]+'" alt="">'
+        +'<div class="ps-cap">'+esc(p.title)+'</div></div>';
+    }).join('')+'</div>';
+}
+function renderCats(){
+  var counts={};
+  posts.forEach(function(p){counts[p.cat]=(counts[p.cat]||0)+1;});
+  var h='<div class="menu-item'+(curCat==='all'?' on':'')+'" data-cat="all" onclick="pickCat(this)"><span>전체</span><span class="menu-cnt">'+posts.length+'</span></div>';
+  cats.forEach(function(c){
+    h+='<div class="menu-item'+(curCat===c?' on':'')+'" data-cat="'+esc(c)+'" onclick="pickCat(this)"><span>'+esc(c)+'</span><span class="menu-cnt">'+(counts[c]||0)+'</span></div>';
+  });
+  document.getElementById('cats').innerHTML=h;
+}
+function pickCat(el){curCat=el.dataset.cat;curTag='';view='list';document.getElementById('sec-title').textContent=curCat==='all'?'다이어리':curCat;render();closeSideMobile();}
+function renderTags(){
+  var all={};
+  posts.forEach(function(p){(p.tags||[]).forEach(function(t){all[t]=(all[t]||0)+1;});});
+  var ks=Object.keys(all).sort(function(a,b){return all[b]-all[a];}).slice(0,16);
+  var sec=document.getElementById('tag-sec');
+  if(!ks.length){sec.style.display='none';return;}
+  sec.style.display='block';
+  document.getElementById('tags').innerHTML=ks.map(function(t){
+    return '<button class="tagc'+(curTag===t?' on':'')+'" data-tag="'+esc(t)+'" onclick="pickTag(this)">'+esc(t)+'</button>';
+  }).join('');
+}
+function pickTag(el){curTag=curTag===el.dataset.tag?'':el.dataset.tag;view='list';render();closeSideMobile();}
+function onSearch(v){q=v.trim().toLowerCase();view='list';renderPhotoStory();renderList();}
+
+function filtered(){
+  return posts.filter(function(p){
+    if(curCat!=='all'&&p.cat!==curCat) return false;
+    if(curTag&&(p.tags||[]).indexOf(curTag)<0) return false;
+    if(q&&(p.title+' '+p.body).toLowerCase().indexOf(q)<0) return false;
+    return true;
+  }).sort(function(a,b){return b.ts-a.ts;});
+}
+function renderList(){
+  var list=filtered(), m=document.getElementById('main');
+  if(!list.length){m.innerHTML='<div class="empty">'+(q?'검색 결과가 없어요':'첫 글을 남겨보세요 ✎')+'</div>';return;}
+  var lay=homeCfg.layout||'grid2';
+  if(lay==='list'){
+    m.innerHTML=list.map(function(p){
+      var badge=p.src==='couple'?'<span class="src-b cp">커플</span>':p.src==='diary'?'<span class="src-b">일기</span>':'';
+      var cn=(comments[p.id]||[]).length;
+      var th=(p.imgs&&p.imgs[0])?'<img src="'+p.imgs[0]+'" style="width:52px;height:52px;object-fit:cover;border:1px solid var(--border);border-radius:2px;flex-shrink:0">':'';
+      return '<div class="pcard" data-id="'+p.id+'" onclick="openPost(this)" style="display:flex;gap:9px;padding:9px;align-items:flex-start">'
+        +th+'<div style="flex:1;min-width:0">'
+        +'<div class="pc-top"><span class="pc-cat">'+esc(p.cat)+'</span>'+badge+'</div>'
+        +'<div class="pc-title" style="-webkit-line-clamp:1">'+esc(p.title)+'</div>'
+        +'<div class="pc-exc" style="-webkit-line-clamp:1">'+esc(p.body.slice(0,60))+'</div>'
+        +'<div class="pc-meta"><span>'+fdate(p.ts)+'</span>'+(cn?'<span>✎ '+cn+'</span>':'')+'</div></div></div>';
+    }).join('');
+    return;
+  }
+  var cols=lay==='grid1'?1:2;
+  m.innerHTML='<div class="post-grid" style="grid-template-columns:repeat('+cols+',1fr)">'+list.map(function(p){
+    var badge=p.src==='couple'?'<span class="src-b cp">커플</span>':p.src==='diary'?'<span class="src-b">일기</span>':'';
+    var img=(p.imgs&&p.imgs[0])?'<img class="pc-img" src="'+p.imgs[0]+'" alt="">':'<div class="pc-noimg">✎</div>';
+    var cn=(comments[p.id]||[]).length;
+    return '<div class="pcard" data-id="'+p.id+'" onclick="openPost(this)">'+img
+      +'<div class="pc-body"><div class="pc-top"><span class="pc-cat">'+esc(p.cat)+'</span>'+badge+'</div>'
+      +'<div class="pc-title">'+esc(p.title)+'</div>'
+      +'<div class="pc-exc">'+esc(p.body.slice(0,70))+'</div>'
+      +'<div class="pc-meta"><span>'+fdate(p.ts)+'</span>'+(cn?'<span>✎ '+cn+'</span>':'')+'</div></div></div>';
+  }).join('')+'</div>';
+}
+function openPost(el){viewId=el.dataset.id;view='post';render();window.scrollTo(0,0);}
+function goList(){view='list';viewId=null;curTag='';q='';document.getElementById('q').value='';document.getElementById('sec-title').textContent='다이어리';render();}
+
+function renderPost(){
+  var p=posts.find(function(x){return x.id===viewId;});
+  if(!p){goList();return;}
+  document.getElementById('sec-title').textContent=p.cat;
+  var imgs=(p.imgs||[]).map(function(s){return '<img src="'+s+'" alt="">';}).join('');
+  var tags=(p.tags||[]).length?'<div class="pr-tags" style="margin-bottom:12px">'+p.tags.map(function(t){return '<span class="pr-tag">#'+esc(t)+'</span>';}).join('')+'</div>':'';
+  document.getElementById('main').innerHTML=
+    '<button class="b" style="margin-bottom:11px" onclick="goList()">← 목록</button>'
+    +'<div class="view-h"><span class="pc-cat">'+esc(p.cat)+'</span>'
+      +'<div class="view-t">'+esc(p.title)+'</div>'
+      +'<div class="pr-meta"><span>'+fdate(p.ts)+'</span>'
+      +(p.src?'':'<span style="cursor:pointer;text-decoration:underline" onclick="editPost()">수정</span><span style="cursor:pointer;text-decoration:underline" onclick="delPost()">삭제</span>')
+      +'</div></div>'
+    +'<div class="view-b">'+esc(p.body)+imgs+'</div>'+tags
+    +'<div class="gb"><div class="gb-h"><span>✎ 방명록 (<span id="gb-cnt">0</span>)</span>'
+      +'<button class="b" style="padding:3px 8px;font-size:10px" onclick="aiComment(\''+p.id+'\')">✨ 일촌 방명록</button></div>'
+      +'<div id="gb-list"></div>'
+      +'<div class="gb-form"><input id="gb-inp" placeholder="방명록 남기기" onkeydown="if(event.key===\'Enter\')addComment(\''+p.id+'\')">'
+      +'<button class="b b-pri" onclick="addComment(\''+p.id+'\')">등록</button></div></div>';
+  renderComments(p.id);
+}
+function delPost(){
+  if(!confirm('이 글을 삭제할까요?'))return;
+  posts=posts.filter(function(p){return p.id!==viewId;});
+  delete comments[viewId];sp();sm();goList();toast('삭제했어요');
+}
+function editPost(){view='edit';render();window.scrollTo(0,0);}
+function goEdit(){viewId=null;editImgs=[];view='edit';render();window.scrollTo(0,0);}
+
+function renderEditor(){
+  var p=viewId?posts.find(function(x){return x.id===viewId;}):null;
+  if(p) editImgs=(p.imgs||[]).slice();
+  document.getElementById('sec-title').textContent=p?'글 수정':'새 글 쓰기';
+  document.getElementById('main').innerHTML=
+    '<div class="ed-row"><label class="ed-lb">제목</label><input class="ed-in" id="e-title" value="'+esc(p?p.title:'')+'" placeholder="제목"></div>'
+    +'<div class="ed-row"><label class="ed-lb">카테고리</label><select class="ed-sel" id="e-cat">'
+      +cats.map(function(c){return '<option'+(p&&p.cat===c?' selected':'')+'>'+esc(c)+'</option>';}).join('')+'</select></div>'
+    +'<div class="ed-row"><label class="ed-lb">태그 (쉼표 구분)</label><input class="ed-in" id="e-tags" value="'+esc(p?(p.tags||[]).join(', '):'')+'" placeholder="일상, 산책"></div>'
+    +'<div class="ed-row"><label class="ed-lb">사진</label><input type="file" accept="image/*" multiple onchange="pickImgs(this)" style="font-size:10.5px"><div class="imgs" id="img-prev"></div></div>'
+    +'<div class="ed-row"><label class="ed-lb">본문</label><textarea class="ed-ta" id="e-body" placeholder="오늘의 이야기를 적어보세요">'+esc(p?p.body:'')+'</textarea></div>'
+    +'<div class="ed-act"><button class="b" onclick="goList()">취소</button>'
+    +'<button class="b b-pri" onclick="savePost()">'+(p?'수정하기':'올리기')+'</button></div>';
+  renderImgPrev();
+}
+function pickImgs(inp){
+  Array.from(inp.files).slice(0,6).forEach(function(f){
+    var r=new FileReader();
+    r.onload=function(){editImgs.push(r.result);renderImgPrev();};
+    r.readAsDataURL(f);
+  });
+}
+function renderImgPrev(){
+  var el=document.getElementById('img-prev'); if(!el)return;
+  el.innerHTML=editImgs.map(function(s,i){
+    return '<div class="imgt"><img src="'+s+'"><button class="imgx" data-i="'+i+'" onclick="delImg(this)">&times;</button></div>';
+  }).join('');
+}
+function delImg(b){editImgs.splice(+b.dataset.i,1);renderImgPrev();}
+function savePost(){
+  var t=document.getElementById('e-title').value.trim();
+  var b=document.getElementById('e-body').value.trim();
+  if(!t||!b){toast('제목과 본문을 입력해주세요');return;}
+  var tags=document.getElementById('e-tags').value.split(',').map(function(x){return x.trim();}).filter(Boolean);
+  var cat=document.getElementById('e-cat').value;
+  if(viewId){
+    var p=posts.find(function(x){return x.id===viewId;});
+    p.title=t;p.body=b;p.cat=cat;p.tags=tags;p.imgs=editImgs.slice();
+    toast('수정했어요');
+  }else{
+    viewId='p'+Date.now();
+    posts.push({id:viewId,title:t,body:b,cat:cat,tags:tags,imgs:editImgs.slice(),ts:Date.now()});
+    toast('올렸어요');
+  }
+  sp();view='post';render();window.scrollTo(0,0);
+}
+
+// ===== 카테고리 =====
+function openCatModal(){
+  renderCatEdit();
+  document.getElementById('mbg').style.display='block';
+  document.getElementById('cat-modal').style.display='block';
+}
+function renderCatEdit(){
+  document.getElementById('cat-edit-list').innerHTML=cats.map(function(c,i){
+    return '<div class="ce-row"><input value="'+esc(c)+'" data-i="'+i+'"><button class="xb" data-i="'+i+'" onclick="rmCat(this)">&times;</button></div>';
+  }).join('');
+}
+function addCat(){cats.push('새 카테고리');renderCatEdit();}
+function rmCat(b){cats.splice(+b.dataset.i,1);renderCatEdit();}
+function saveCats(){
+  var inputs=document.querySelectorAll('#cat-edit-list input');
+  cats=Array.from(inputs).map(function(i){return i.value.trim();}).filter(Boolean);
+  if(!cats.length)cats=['일상'];
+  sc();closeAll();render();toast('저장했어요');
+}
+
+// ===== 메인 홈 설정 =====
+var HOME_KEY='blog_home_v1';
+var homeCfg={cols:3,layout:'grid2',photo:true,intro:false,pin:true,introTxt:'',pins:[]};
+function loadHome(){
+  try{ var s=JSON.parse(localStorage.getItem(HOME_KEY)); if(s) homeCfg=Object.assign(homeCfg,s); }catch(e){}
+  document.documentElement.style.setProperty('--ps-cols',homeCfg.cols);
+}
+function saveHomeCfg(){ localStorage.setItem(HOME_KEY,JSON.stringify(homeCfg)); }
+
+function openHomeModal(){
+  renderHsOpts(); renderPinPick();
+  document.getElementById('hs-intro-txt').value=homeCfg.introTxt||'';
+  ['photo','intro','pin'].forEach(function(k){
+    document.getElementById('tg-'+k).classList.toggle('on',!!homeCfg[k]);
+  });
+  document.getElementById('mbg').style.display='block';
+  document.getElementById('home-modal').style.display='block';
+}
+function renderHsOpts(){
+  var colOpts=[{v:1,i:'▭',l:'1개'},{v:2,i:'▯▯',l:'2개'},{v:3,i:'▫▫▫',l:'3개'},{v:4,i:'▫▫▫▫',l:'4개'}];
+  document.getElementById('hs-cols').innerHTML=colOpts.map(function(o){
+    return '<div class="hs-opt'+(homeCfg.cols===o.v?' on':'')+'" data-cols="'+o.v+'" onclick="pickCols(this)">'
+      +'<span class="hs-opt-ico">'+o.i+'</span><span class="hs-opt-lb">'+o.l+'</span></div>';
+  }).join('');
+  var layOpts=[{v:'grid2',i:'▤',l:'카드 2열'},{v:'grid1',i:'▬',l:'카드 1열'},{v:'list',i:'☰',l:'목록형'}];
+  document.getElementById('hs-layout').innerHTML=layOpts.map(function(o){
+    return '<div class="hs-opt'+(homeCfg.layout===o.v?' on':'')+'" data-lay="'+o.v+'" onclick="pickLayout(this)">'
+      +'<span class="hs-opt-ico">'+o.i+'</span><span class="hs-opt-lb">'+o.l+'</span></div>';
+  }).join('');
+}
+function pickCols(el){homeCfg.cols=+el.dataset.cols;renderHsOpts();}
+function pickLayout(el){homeCfg.layout=el.dataset.lay;renderHsOpts();}
+function tgOpt(k){homeCfg[k]=!homeCfg[k];document.getElementById('tg-'+k).classList.toggle('on',homeCfg[k]);}
+function renderPinPick(){
+  var el=document.getElementById('hs-pin-list');
+  var list=posts.slice().sort(function(a,b){return b.ts-a.ts;}).slice(0,30);
+  if(!list.length){el.innerHTML='<div style="font-size:10.5px;color:var(--text-sub);padding:8px;text-align:center">글이 없어요</div>';return;}
+  el.innerHTML=list.map(function(p){
+    var on=homeCfg.pins.indexOf(p.id)>=0;
+    return '<div class="pin-row'+(on?' on':'')+'" data-id="'+p.id+'" onclick="tgPin(this)">'
+      +'<span>'+(on?'📌':'○')+'</span><span class="pin-row-t">'+esc(p.title)+'</span></div>';
+  }).join('');
+}
+function tgPin(el){
+  var id=el.dataset.id, i=homeCfg.pins.indexOf(id);
+  if(i>=0) homeCfg.pins.splice(i,1);
+  else { if(homeCfg.pins.length>=3){toast('최대 3개까지 고정할 수 있어요');return;} homeCfg.pins.push(id); }
+  renderPinPick();
+}
+function saveHome(){
+  homeCfg.introTxt=document.getElementById('hs-intro-txt').value.trim();
+  saveHomeCfg();
+  document.documentElement.style.setProperty('--ps-cols',homeCfg.cols);
+  closeAll(); render(); toast('홈 설정을 저장했어요');
+}
+function renderIntro(){
+  var el=document.getElementById('intro-box');
+  if(!homeCfg.intro||!homeCfg.introTxt||view!=='list'){el.innerHTML='';return;}
+  el.innerHTML='<div class="intro"><div class="intro-t">💬 소개</div><div class="intro-b">'+esc(homeCfg.introTxt)+'</div></div>';
+}
+function renderPinned(){
+  var el=document.getElementById('pinned-box');
+  if(!homeCfg.pin||!homeCfg.pins.length||view!=='list'||curCat!=='all'||q){el.innerHTML='';return;}
+  var pl=homeCfg.pins.map(function(id){return posts.find(function(p){return p.id===id;});}).filter(Boolean);
+  if(!pl.length){el.innerHTML='';return;}
+  el.innerHTML='<div class="pinned"><div class="pin-head">📌 고정글</div>'
+    +pl.map(function(p){
+      return '<div class="pin-card" data-id="'+p.id+'" onclick="openPost(this)">'
+        +'<div class="pin-title"><span class="pin-ico">📌</span>'+esc(p.title)+'</div>'
+        +'<div class="pin-exc">'+esc(p.body.slice(0,80))+'</div></div>';
+    }).join('')+'</div>';
+}
+
+// ===== 초기화 =====
+lp();lc();lm();loadHome();
+applySkin(localStorage.getItem(SKIN_KEY)||'sky');
+applyColors();
+loadProfile();renderAvatar();renderBgm();initSide();render();
+</script>
+</body>
+</html>
