@@ -15,12 +15,12 @@
 body{font-family:'Malgun Gothic','맑은 고딕',Dotum,돋움,sans-serif;background:linear-gradient(180deg,var(--skin-bg1) 0%,var(--skin-bg2) 100%);background-attachment:fixed;color:var(--text);font-size:12px;line-height:1.6;min-height:100vh;padding:18px 10px;transition:background .3s}
 
 /* ===== 미니홈피 프레임 (책 느낌) ===== */
-.minihome{max-width:900px;margin:0 auto;position:relative;background:var(--paper);border-radius:var(--radius);box-shadow:0 6px 26px rgba(0,0,0,.25);overflow:hidden}
+.minihome{max-width:900px;margin:0 auto;position:relative;background:var(--paper);border-radius:var(--radius);box-shadow:0 6px 26px rgba(0,0,0,.25);overflow:hidden;min-height:calc(100vh - 36px)}
 .mh-frame{border:7px solid rgba(255,255,255,.55);border-radius:var(--radius);position:relative}
 
 /* 상단 타이틀바 */
 .mh-top{background:linear-gradient(180deg,var(--accent2) 0%,var(--accent) 100%);color:#fff;padding:9px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.mh-title{font-size:13.5px;font-weight:700;letter-spacing:-.5px;cursor:pointer;display:flex;align-items:center;gap:5px}
+.mh-title{font-size:13.5px;font-weight:700;letter-spacing:-.5px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;flex-shrink:0}
 .mh-actions{display:flex;gap:4px;align-items:center;flex-wrap:wrap}
 .mh-btn{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.35);color:#fff;border-radius:3px;padding:4px 8px;font-size:10.5px;cursor:pointer;font-family:inherit;transition:all .15s;white-space:nowrap}
 .mh-btn:hover{background:rgba(255,255,255,.34)}
@@ -211,10 +211,13 @@ body{font-family:'Malgun Gothic','맑은 고딕',Dotum,돋움,sans-serif;backgro
 @media(max-width:760px){
   body{padding:6px 5px}
   .mh-frame{border-width:4px}
-  .mh-top{padding:7px 9px}
-  .mh-title{font-size:12px}
+  .mh-top{padding:6px 8px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}
+  .mh-top::-webkit-scrollbar{display:none}
+  .mh-title{font-size:11.5px}
+  .mh-title span:last-child{display:none}
+  .mh-actions{flex-wrap:nowrap}
   .mh-btn{padding:3px 6px;font-size:9.5px}
-  .mh-body{grid-template-columns:1fr;min-height:auto}
+  .mh-body{grid-template-columns:1fr;min-height:calc(100vh - 90px)}
   .mh-body.side-closed{grid-template-columns:1fr}
   .mh-left{position:absolute;top:0;left:0;bottom:0;width:172px;z-index:50;padding:9px 8px;box-shadow:3px 0 12px rgba(0,0,0,.2);overflow-y:auto;transition:transform .22s ease,opacity .18s}
   .mh-body.side-closed .mh-left{transform:translateX(-100%);opacity:0}
@@ -244,7 +247,6 @@ body{font-family:'Malgun Gothic','맑은 고딕',Dotum,돋움,sans-serif;backgro
     <div class="mh-actions">
       <a href="index.html" class="mh-btn" style="text-decoration:none;display:inline-flex;align-items:center" title="다이어리로">📔 다이어리</a>
       <button class="mh-btn" onclick="openHomeModal()">⚙ 홈설정</button>
-      <button class="mh-btn" onclick="openSkinModal()">🎨 스킨</button>
       <button class="mh-btn" onclick="syncDiary()">일기</button>
       <button class="mh-btn on" onclick="goEdit()">글쓰기</button>
     </div>
@@ -319,51 +321,6 @@ body{font-family:'Malgun Gothic','맑은 고딕',Dotum,돋움,sans-serif;backgro
   <div class="m-foot"><button class="b" onclick="document.getElementById('bgm-url').value=''">지우기</button><button class="b b-pri" onclick="saveBgm()">적용</button></div>
 </div>
 
-<div class="modal wide" id="skin-modal">
-  <div class="m-head"><span>🎨 스킨 설정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
-  <div class="m-body">
-    <div style="font-size:10.5px;font-weight:700;color:var(--accent);margin-bottom:6px">스킨 선택</div>
-    <div class="skin-grid" id="skin-grid"></div>
-    <div style="font-size:10.5px;font-weight:700;color:var(--accent);margin:12px 0 4px">색상 직접 설정</div>
-    <div class="color-row"><label>배경 위</label><input type="color" id="c-bg1"></div>
-    <div class="color-row"><label>배경 아래</label><input type="color" id="c-bg2"></div>
-    <div class="color-row"><label>포인트 색</label><input type="color" id="c-accent"></div>
-    <div class="color-row"><label>연한 배경</label><input type="color" id="c-lt"></div>
-    <div class="color-row"><label>본문 배경</label><input type="color" id="c-paper"></div>
-    <div class="color-row"><label>글자색</label><input type="color" id="c-text"></div>
-  </div>
-  <div class="m-foot"><button class="b" onclick="applySkin(curSkin,true)">스킨 기본값</button><button class="b b-pri" onclick="saveColors()">적용</button></div>
-</div>
-
-<div class="modal wide" id="home-modal">
-  <div class="m-head"><span>⚙ 메인 홈 설정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
-  <div class="m-body">
-    <div class="hs-sec">
-      <div class="hs-title">포토 스토리 사진 개수</div>
-      <div class="hs-opts" id="hs-cols"></div>
-    </div>
-    <div class="hs-sec">
-      <div class="hs-title">글 목록 형태</div>
-      <div class="hs-opts" id="hs-layout"></div>
-    </div>
-    <div class="hs-sec">
-      <div class="hs-title">메인에 표시할 항목</div>
-      <div class="hs-row"><span>📷 포토 스토리</span><div class="hs-tog" id="tg-photo" onclick="tgOpt('photo')"></div></div>
-      <div class="hs-row"><span>💬 자기소개</span><div class="hs-tog" id="tg-intro" onclick="tgOpt('intro')"></div></div>
-      <div class="hs-row"><span>📌 고정글</span><div class="hs-tog" id="tg-pin" onclick="tgOpt('pin')"></div></div>
-    </div>
-    <div class="hs-sec">
-      <div class="hs-title">자기소개 글</div>
-      <textarea class="ed-ta" id="hs-intro-txt" style="min-height:80px;font-size:11.5px" placeholder="메인에 보여줄 소개글을 적어보세요"></textarea>
-    </div>
-    <div class="hs-sec">
-      <div class="hs-title">메인에 고정할 글 (최대 3개)</div>
-      <div class="pin-pick" id="hs-pin-list"></div>
-    </div>
-  </div>
-  <div class="m-foot"><button class="b b-pri" onclick="saveHome()">저장</button></div>
-</div>
-
 <div class="modal" id="pf-modal">
   <div class="m-head"><span>프로필 수정</span><button class="xb" style="color:#fff" onclick="closeAll()">&times;</button></div>
   <div class="m-body">
@@ -433,10 +390,11 @@ function lighten(hex,pct){
   var r=Math.min(255,(n>>16)+pct*2.55|0), g=Math.min(255,((n>>8)&255)+pct*2.55|0), b=Math.min(255,(n&255)+pct*2.55|0);
   return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
 }
-function openSkinModal(){
-  renderSkinGrid(); syncColorInputs();
-  document.getElementById('mbg').style.display='block';
-  document.getElementById('skin-modal').style.display='block';
+function toggleColorPanel(){
+  var p=document.getElementById('color-panel');
+  var open=p.style.display==='none';
+  p.style.display=open?'block':'none';
+  document.getElementById('color-toggle-lb').textContent=(open?'▾':'▸')+' 색상 직접 설정';
 }
 function renderSkinGrid(){
   document.getElementById('skin-grid').innerHTML=Object.keys(SKINS).map(function(k){
@@ -468,7 +426,7 @@ function saveColors(){
     accent:document.getElementById('c-accent').value,lt:document.getElementById('c-lt').value,
     paper:document.getElementById('c-paper').value,text:document.getElementById('c-text').value};
   localStorage.setItem(COLOR_KEY,JSON.stringify(cs));
-  applyColors(); closeAll(); toast('색상을 적용했어요');
+  applyColors(); toast('색상을 적용했어요');
 }
 
 // ===== 프로필 =====
@@ -574,7 +532,7 @@ function initSide(){
 }
 function closeAll(){
   document.getElementById('mbg').style.display='none';
-  ['cat-modal','bgm-modal','skin-modal','pf-modal','home-modal'].forEach(function(id){
+  ['cat-modal','bgm-modal','pf-modal','home-modal'].forEach(function(id){
     var el=document.getElementById(id); if(el) el.style.display='none';
   });
 }
@@ -661,7 +619,25 @@ function doSyncDiary(){
     sc(); sp(); render();
     toast(found?(found+'개를 가져왔어요'+(updated?' ('+updated+'개 갱신)':'')):(updated+'개를 갱신했어요'));
   } else {
-    toast('가져올 일기가 없어요');
+    // 진단
+    var hasD=!!localStorage.getItem(DIARY_KEY);
+    var hasC=!!localStorage.getItem(CP_KEY);
+    var keys=Object.keys(localStorage).filter(function(k){return k.indexOf('diary')>=0||k.indexOf('couple')>=0;});
+    var msg='';
+    if(!hasD&&!hasC){
+      msg='다이어리 데이터를 찾을 수 없어요.\n\n'
+        +'현재 주소: '+location.origin+location.pathname+'\n\n'
+        +'블로그와 다이어리가 같은 폴더(같은 주소)에 있어야 해요.\n'
+        +'예) .../diary-main/index.html (다이어리)\n'
+        +'    .../diary-main/blog.html (블로그)\n\n'
+        +(keys.length?'찾은 관련 키: '+keys.join(', '):'관련 키가 하나도 없어요');
+    } else {
+      msg='다이어리 데이터는 있는데 일기 내용이 비어있어요.\n\n'
+        +'diary_v2: '+(hasD?'있음':'없음')+'\n'
+        +'couple_diary_v1: '+(hasC?'있음':'없음')+'\n\n'
+        +'다이어리 앱에서 일기를 먼저 작성해주세요.';
+    }
+    alert(msg);
   }
 }
 
@@ -898,7 +874,7 @@ function loadHome(){
 function saveHomeCfg(){ localStorage.setItem(HOME_KEY,JSON.stringify(homeCfg)); }
 
 function openHomeModal(){
-  renderHsOpts(); renderPinPick();
+  renderHsOpts(); renderPinPick(); renderSkinGrid(); syncColorInputs();
   document.getElementById('hs-intro-txt').value=homeCfg.introTxt||'';
   ['photo','intro','pin'].forEach(function(k){
     document.getElementById('tg-'+k).classList.toggle('on',!!homeCfg[k]);
