@@ -6,6 +6,15 @@
 <title>📔 일기장 / 💑 커플 다이어리</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
+:root{
+  /* 일기장 */
+  --dm:#7aaa82; --dm-d:#5a8a62; --dm-l:#9dc4a0; --dm-lt:#d4e8c4; --dm-lt2:#eaf4e2; --dm-lt3:#f2f8ee;
+  /* 커플 */
+  --cm:#ff6b8a; --cm-d:#d17a8a; --cm-l:#ff9eb5; --cm-lt:#ffc9d4; --cm-lt2:#ffe0e6; --cm-lt3:#fde2e4; --cm-lt4:#ffb3c1;
+  /* 다크 배경 */
+  --dm-bg:#171b15; --dm-card:#26301f; --dm-card2:#2a3320; --dm-bd:#3a4a32; --dm-tb:#33402e;
+  --cm-bg:#1c1417; --cm-card:#3a2830; --cm-card2:#402530; --cm-bd:#5a3540; --cm-tb:#402630;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Georgia',serif;min-height:100vh;padding-bottom:70px;transition:background .3s}
 body.mode-diary{background:#f4f9ef}
@@ -13,8 +22,8 @@ body.mode-couple{background:#fff5f7;font-family:sans-serif}
 
 /* ===== 상단바 (공통 + 테마전환) ===== */
 .top-bar{position:fixed;top:0;left:0;right:0;z-index:200;padding:8px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:background .3s}
-body.mode-diary .top-bar{background:#7aaa82}
-body.mode-couple .top-bar{background:#ff6b8a}
+body.mode-diary .top-bar{background:var(--dm)}
+body.mode-couple .top-bar{background:var(--cm)}
 .top-bar .ttl{font-size:14px;font-weight:bold;letter-spacing:.3px;flex-shrink:0;white-space:nowrap}
 .top-bar input{background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:5px 6px;color:#fff;font-size:14px;font-weight:600;outline:none;text-align:center}
 .top-bar input.inp-year{width:68px}
@@ -27,7 +36,7 @@ body.mode-couple .top-bar{background:#ff6b8a}
 .mode-switch input{opacity:0;width:0;height:0;position:absolute}
 .mode-switch-track{position:absolute;inset:0;background:#e1e4ea;border-radius:28px;cursor:pointer;transition:.25s background;box-shadow:inset 0 1px 3px rgba(0,0,0,.08)}
 .mode-switch-track .knob{position:absolute;top:3px;left:3px;width:22px;height:22px;background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.25s transform;box-shadow:0 1px 4px rgba(0,0,0,.25)}
-.mode-switch input:checked + .mode-switch-track{background:#ff6b8a}
+.mode-switch input:checked + .mode-switch-track{background:var(--cm)}
 .mode-switch input:checked + .mode-switch-track .knob{transform:translateX(22px)}
 .backup-btn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:6px;padding:5px 10px;font-size:11px;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0}
 
@@ -35,12 +44,12 @@ body.mode-couple .top-bar{background:#ff6b8a}
 .tab-bar{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;z-index:100;box-shadow:0 -2px 8px rgba(0,0,0,.08);border-top:1px solid #eee}
 .tb{flex:1;padding:10px 0 8px;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:10px;font-family:inherit}
 .tb .ic{font-size:20px;line-height:1}
-body.mode-diary .tb{color:#9dc4a0}
-body.mode-diary .tb.active{color:#7aaa82;font-weight:bold}
+body.mode-diary .tb{color:var(--dm-l)}
+body.mode-diary .tb.active{color:var(--dm);font-weight:bold}
 body.mode-diary .tab-bar{border-top-color:#c5d4b5}
-body.mode-couple .tb{color:#ffb3c1}
-body.mode-couple .tb.active{color:#ff6b8a;font-weight:700}
-body.mode-couple .tab-bar{border-top-color:#ffe0e6}
+body.mode-couple .tb{color:var(--cm-lt4)}
+body.mode-couple .tb.active{color:var(--cm);font-weight:700}
+body.mode-couple .tab-bar{border-top-color:var(--cm-lt2)}
 
 .tab-content{display:none;padding:68px 16px 80px;max-width:720px;margin:0 auto}
 .tab-content.active{display:block;overflow-x:hidden}
@@ -48,64 +57,77 @@ body.mode-couple .tab-bar{border-top-color:#ffe0e6}
 .mode-section.active{display:block}
 
 .box{border-radius:14px;padding:14px;margin-bottom:14px;border:1px solid;transition:all .2s}
-body.mode-diary .box{background:#fff;border-color:#d4e8c4;box-shadow:0 1px 4px rgba(122,170,130,.06);border-radius:12px}
-body.mode-couple .box{background:#fff;border-color:#ffe0e6;box-shadow:0 1px 4px rgba(255,107,138,.08)}
+body.mode-diary .box{background:#fff;border-color:var(--dm-lt);box-shadow:0 1px 4px rgba(122,170,130,.06);border-radius:12px}
+body.mode-couple .box{background:#fff;border-color:var(--cm-lt2);box-shadow:0 1px 4px rgba(255,107,138,.08)}
 .box-title{font-size:13px;font-weight:700;margin-bottom:10px}
+.sk-tabs{display:flex;background:#f2efe8;border-radius:10px;padding:3px;gap:3px;margin-bottom:12px}
+body.dark-mode .sk-tabs{background:#2a2a2a}
+.sk-tab{flex:1;background:none;border:none;border-radius:8px;padding:6px 0;font-size:12px;cursor:pointer;font-family:inherit;color:#a09888}
+.sk-tab.on{background:#fff;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+body.dark-mode .sk-tab.on{background:#3a3a3a;color:#e8e8e8}
+.sk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.sk-card{border:2px solid #eae6dc;border-radius:11px;overflow:hidden;cursor:pointer;transition:all .14s}
+.sk-card.on{border-color:#888;box-shadow:0 0 0 2px rgba(0,0,0,.06)}
+body.dark-mode .sk-card{border-color:#3a3a3a}
+.sk-prev{height:40px;display:flex}
+.sk-prev i{flex:1}
+.sk-name{font-size:10.5px;text-align:center;padding:5px 2px;background:#fff;color:#666;font-weight:600}
+body.dark-mode .sk-name{background:#2a2a2a;color:#ccc}
 .settings-row{display:flex;align-items:center;justify-content:space-between;padding:12px 2px;border-bottom:1px solid #f0ede4;cursor:pointer;font-size:13px}
 .settings-row:last-child{border-bottom:none}
 .settings-row .settings-arrow{color:#d0b090;font-size:15px}
 body.mode-diary .settings-row{color:#5a3a1a}
 body.mode-couple .settings-row{color:#444;border-bottom-color:#ffeef1}
-body.mode-couple .settings-row .settings-arrow{color:#ffc9d4}
+body.mode-couple .settings-row .settings-arrow{color:var(--cm-lt)}
 body.dark-mode .settings-row{border-bottom-color:#3a3a3a;color:#e8e8e8}
 body.dark-mode .settings-row .settings-arrow{color:#666}
 .settings-toggle-btn{flex:1;padding:8px;border:1.5px solid #e0e0e0;background:#fff;color:#888;border-radius:8px;font-size:12px;cursor:pointer;font-family:inherit}
-.settings-toggle-btn.active{border-color:#7aaa82;background:#f4f9ef;color:#7aaa82;font-weight:600}
+.settings-toggle-btn.active{border-color:var(--dm);background:#f4f9ef;color:var(--dm);font-weight:600}
 body.dark-mode .settings-toggle-btn{background:#232323;border-color:#3a3a3a;color:#999}
-body.dark-mode .settings-toggle-btn.active{background:#2a3320;border-color:#4a5a3a;color:#a8d8a8}
-body.mode-diary .box-title{color:#7aaa82}
-body.mode-couple .box-title{color:#ff6b8a}
+body.dark-mode .settings-toggle-btn.active{background:var(--dm-card2);border-color:var(--dm-bd);color:var(--dm-l)}
+body.mode-diary .box-title{color:var(--dm)}
+body.mode-couple .box-title{color:var(--cm)}
 
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);color:#fff;padding:8px 20px;border-radius:20px;font-size:12px;display:none;z-index:10000;white-space:nowrap}
-body.mode-diary .toast{background:#7aaa82}
-body.mode-couple .toast{background:#ff6b8a}
+body.mode-diary .toast{background:var(--dm)}
+body.mode-couple .toast{background:var(--cm)}
 
 /* ===== 일기장 전용 스타일 ===== */
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.sc{background:#fff;border:1px solid #d4e8c4;border-radius:10px;padding:10px;text-align:center}
-.sc .sv{font-size:20px;font-weight:bold;color:#7aaa82}
-.sc .sl{font-size:10px;color:#9dc4a0;margin-top:2px}
+.sc{background:#fff;border:1px solid var(--dm-lt);border-radius:10px;padding:10px;text-align:center}
+.sc .sv{font-size:20px;font-weight:bold;color:var(--dm)}
+.sc .sl{font-size:10px;color:var(--dm-l);margin-top:2px}
 .meta-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
-.date-lbl{font-size:15px;font-weight:bold;color:#7aaa82;flex-shrink:0}
+.date-lbl{font-size:15px;font-weight:bold;color:var(--dm);flex-shrink:0}
 .emj-btn{font-size:20px;cursor:pointer;padding:2px 3px;border-radius:6px;border:2px solid transparent;background:none;opacity:.5;transition:all .15s;flex-shrink:0}
 .emj-btn.on{opacity:1;border-color:#e8c4a0;background:#eef7e8}
-body.dark-mode .emj-btn.on{border-color:#5a4a30;background:#2a3320}
+body.dark-mode .emj-btn.on{border-color:var(--dm-bd);background:var(--dm-card2)}
 .mood-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
-.entry-title-inp{width:100%;border:none;border-bottom:1.5px solid #d4e8c4;background:transparent;font-size:16px;color:#5a3a1a;padding:6px 0 8px;outline:none;font-family:inherit;margin-bottom:10px}
+.entry-title-inp{width:100%;border:none;border-bottom:1.5px solid var(--dm-lt);background:transparent;font-size:16px;color:#5a3a1a;padding:6px 0 8px;outline:none;font-family:inherit;margin-bottom:10px}
 .entry-title-inp::placeholder{color:#d0b090}
 .entry-body-inp{width:100%;border:none;background:transparent;font-size:14px;color:#5a3a1a;line-height:2;outline:none;resize:none;min-height:260px;font-family:inherit;background-image:repeating-linear-gradient(transparent,transparent 27px,#f0e8de 27px,#f0e8de 28px);background-size:100% 28px}
 .entry-body-inp::placeholder{color:#d0b090}
-.ef{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid #d4e8c4;flex-wrap:wrap;gap:8px;margin-top:10px}
-.cc{font-size:11px;color:#9dc4a0}
+.ef{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--dm-lt);flex-wrap:wrap;gap:8px;margin-top:10px}
+.cc{font-size:11px;color:var(--dm-l)}
 .btn-row{display:flex;gap:8px}
-.bs{background:#7aaa82;color:#fff;border:none;border-radius:8px;padding:7px 18px;font-size:12px;cursor:pointer;font-family:inherit}
-.bd{background:none;border:1.5px solid #e8c4a0;color:#9dc4a0;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
-.bn{background:none;border:1.5px solid #7aaa82;color:#7aaa82;border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
-.si{width:100%;background:#fff;border:1.5px solid #d4e8c4;border-radius:10px;padding:8px 14px;font-size:13px;color:#5a3a1a;outline:none;font-family:inherit;margin-bottom:10px}
+.bs{background:var(--dm);color:#fff;border:none;border-radius:8px;padding:7px 18px;font-size:12px;cursor:pointer;font-family:inherit}
+.bd{background:none;border:1.5px solid #e8c4a0;color:var(--dm-l);border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+.bn{background:none;border:1.5px solid var(--dm);color:var(--dm);border-radius:8px;padding:7px 12px;font-size:12px;cursor:pointer;font-family:inherit}
+.si{width:100%;background:#fff;border:1.5px solid var(--dm-lt);border-radius:10px;padding:8px 14px;font-size:13px;color:#5a3a1a;outline:none;font-family:inherit;margin-bottom:10px}
 .si:focus{border-color:#a8c888}
-.fsel{border:1.5px solid #d4e8c4;border-radius:8px;padding:7px 8px;font-size:12px;color:#5a3a1a;outline:none;background:#fff;font-family:inherit}
-.ec{background:#fff;border:1px solid #d4e8c4;border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s}
+.fsel{border:1.5px solid var(--dm-lt);border-radius:8px;padding:7px 8px;font-size:12px;color:#5a3a1a;outline:none;background:#fff;font-family:inherit}
+.ec{background:#fff;border:1px solid var(--dm-lt);border-radius:12px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all .15s}
 .ec:hover{border-color:#a8c888}
 .ech{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
-.ecd{font-size:11px;color:#9dc4a0}
+.ecd{font-size:11px;color:var(--dm-l)}
 .eci{font-size:14px}
 .ect{font-size:13px;color:#5a3a1a;font-weight:bold;margin-bottom:3px}
 .ecp{font-size:11px;color:#9a7a5a;line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .bcn{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
-.bcn span{font-size:15px;font-weight:bold;color:#7aaa82}
-.bcn button{background:#fff;border:1.5px solid #d4e8c4;border-radius:8px;padding:5px 14px;color:#7aaa82;cursor:pointer;font-size:14px;font-family:inherit}
+.bcn span{font-size:15px;font-weight:bold;color:var(--dm)}
+.bcn button{background:#fff;border:1.5px solid var(--dm-lt);border-radius:8px;padding:5px 14px;color:var(--dm);cursor:pointer;font-size:14px;font-family:inherit}
 .bcg{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.bch{text-align:center;font-size:11px;font-weight:bold;color:#9dc4a0;padding:5px 0}
+.bch{text-align:center;font-size:11px;font-weight:bold;color:var(--dm-l);padding:5px 0}
 .bch:first-child{color:#e87070}
 .bch:last-child{color:#7090e8}
 .bcd{border-radius:8px;background:#fff;border:1px solid #f0e0d0;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;padding:3px 2px}
@@ -113,26 +135,26 @@ body.dark-mode .emj-btn.on{border-color:#5a4a30;background:#2a3320}
 .bcd .dn{z-index:2}
 .bcd .dm,.bcd .dw{position:relative;z-index:1}
 .bcd:hover{border-color:#a8c888}
-.bcd.today{border:2px solid #7aaa82}
+.bcd.today{border:2px solid var(--dm)}
 .bcd.has-e{background:#fdf8f0}
 .bcd.empty{background:transparent;border-color:transparent;cursor:default}
-.bcd .dn{font-size:9px;color:#9dc4a0;position:absolute;top:3px;right:5px}
+.bcd .dn{font-size:9px;color:var(--dm-l);position:absolute;top:3px;right:5px}
 .bcd.sun .dn{color:#e87070}
 .bcd.sat .dn{color:#7090e8}
 .bcd .dm{font-size:20px;line-height:1}
 .bcd .dw{font-size:11px;margin-top:1px}
 .cw{position:relative;width:100%;max-width:260px;height:260px;margin:0 auto 14px}
 .ml{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin-bottom:14px}
-.mli{display:flex;align-items:center;gap:4px;font-size:11px;color:#7aaa82;background:#fff8f0;border-radius:8px;padding:4px 10px;border:1px solid #d4e8c4}
+.mli{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--dm);background:#fff8f0;border-radius:8px;padding:4px 10px;border:1px solid var(--dm-lt)}
 .wsr{display:flex;align-items:center;gap:8px;margin-bottom:7px}
 .wsb{flex:1;height:10px;background:#f0e8de;border-radius:5px;overflow:hidden}
 .wsbf{height:100%;border-radius:5px;background:#e8c4a0}
 .wsl{font-size:13px;width:22px}
-.wsc{font-size:11px;color:#9dc4a0;width:28px;text-align:right}
+.wsc{font-size:11px;color:var(--dm-l);width:28px;text-align:right}
 
 /* ===== 커플 다이어리 전용 스타일 ===== */
-.cp-box-title{font-size:13px;font-weight:700;color:#ff6b8a;margin-bottom:10px}
-.dday-card{background:linear-gradient(135deg,#ff6b8a,#ff9eb5);border-radius:16px;padding:18px;color:#fff;text-align:center;margin-bottom:12px}
+.cp-box-title{font-size:13px;font-weight:700;color:var(--cm);margin-bottom:10px}
+.dday-card{background:linear-gradient(135deg,var(--cm),var(--cm-l));border-radius:16px;padding:18px;color:#fff;text-align:center;margin-bottom:12px}
 .dday-card .start-date{font-size:11px;opacity:.85;margin-bottom:4px}
 .dday-card .dday-num{font-size:28px;font-weight:900;margin-bottom:2px}
 .dday-set-row{display:flex;gap:6px;margin-top:10px}
@@ -143,22 +165,22 @@ body.dark-mode .emj-btn.on{border-color:#5a4a30;background:#2a3320}
 .anniv-item:last-child{border-bottom:none}
 .anniv-name{font-size:13px;color:#444;font-weight:600}
 .anniv-date{font-size:11px;color:#bbb}
-.anniv-dday{font-size:13px;font-weight:700;color:#ff6b8a}
-.anniv-del{background:none;border:none;color:#ffc9d4;cursor:pointer;font-size:14px;margin-left:6px}
+.anniv-dday{font-size:13px;font-weight:700;color:var(--cm)}
+.anniv-del{background:none;border:none;color:var(--cm-lt);cursor:pointer;font-size:14px;margin-left:6px}
 .anniv-form{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:10px}
 .anniv-form input#anniv-name{grid-column:1/3}
-.anniv-form input{border:1.5px solid #ffe0e6;border-radius:8px;padding:7px 10px;font-size:12px;outline:none;font-family:inherit}
-.anniv-form input:focus{border-color:#ff6b8a}
-.anniv-add-btn{background:#ff6b8a;color:#fff;border:none;border-radius:8px;font-size:18px;cursor:pointer;padding:7px 14px;grid-column:2/3}
+.anniv-form input{border:1.5px solid var(--cm-lt2);border-radius:8px;padding:7px 10px;font-size:12px;outline:none;font-family:inherit}
+.anniv-form input:focus{border-color:var(--cm)}
+.anniv-add-btn{background:var(--cm);color:#fff;border:none;border-radius:8px;font-size:18px;cursor:pointer;padding:7px 14px;grid-column:2/3}
 .cp-cal-nav{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
 .cp-cal-nav span{font-size:14px;font-weight:700;color:#444}
-.cp-cal-nav button{background:#fff0f3;border:none;border-radius:8px;padding:5px 14px;color:#ff6b8a;cursor:pointer;font-size:14px}
+.cp-cal-nav button{background:#fff0f3;border:none;border-radius:8px;padding:5px 14px;color:var(--cm);cursor:pointer;font-size:14px}
 .cp-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
-.cp-cal-head{text-align:center;font-size:10px;font-weight:700;color:#ffb3c1;padding:5px 0}
+.cp-cal-head{text-align:center;font-size:10px;font-weight:700;color:var(--cm-lt4);padding:5px 0}
 .cp-cal-day{aspect-ratio:1;border-radius:8px;background:#fde8ec;border:1px solid #f8c8d0;cursor:pointer;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.cp-cal-day:hover{border-color:#ff9eb5}
-.cp-cal-day.today{border:1.5px solid #ff6b8a}
-.cp-cal-day.has-promise{border-color:#ff9eb5 !important;border-width:1.5px !important;background:#ffeef2 !important;}
+.cp-cal-day:hover{border-color:var(--cm-l)}
+.cp-cal-day.today{border:1.5px solid var(--cm)}
+.cp-cal-day.has-promise{border-color:var(--cm-l) !important;border-width:1.5px !important;background:#ffeef2 !important;}
 .cp-cal-day.empty{background:transparent;border-color:transparent;cursor:default}
 .cp-cal-day img{width:100%;height:100%;object-fit:cover}
 .cp-cal-day .dn{position:absolute;top:2px;left:4px;font-size:9px;color:#fff;font-weight:700;text-shadow:0 1px 2px rgba(0,0,0,.5);z-index:2}
@@ -172,41 +194,41 @@ body.dark-mode .emj-btn.on{border-color:#5a4a30;background:#2a3320}
 .mood-row-cp{display:flex;gap:6px;justify-content:center;margin-bottom:12px}
 .mood-btn{font-size:24px;cursor:pointer;padding:4px 6px;border-radius:10px;border:2px solid transparent;opacity:.35;background:none}
 .mood-btn.on{opacity:1;border-color:#ffd0da;background:#fff5f7}
-body.dark-mode .mood-btn.on{border-color:#5a3540;background:#3a2830}
-.entry-textarea{width:100%;border:1.5px solid #ffe0e6;border-radius:10px;padding:10px 12px;font-size:13px;outline:none;resize:none;min-height:90px;font-family:inherit;line-height:1.6}
-.entry-textarea:focus{border-color:#ff6b8a}
+body.dark-mode .mood-btn.on{border-color:var(--cm-bd);background:var(--cm-card)}
+.entry-textarea{width:100%;border:1.5px solid var(--cm-lt2);border-radius:10px;padding:10px 12px;font-size:13px;outline:none;resize:none;min-height:90px;font-family:inherit;line-height:1.6}
+.entry-textarea:focus{border-color:var(--cm)}
 .entry-btns{display:flex;gap:8px;margin-top:12px}
 .eb-cancel{flex:1;background:#f5f5f5;color:#999;border:none;border-radius:10px;padding:12px;font-size:13px;cursor:pointer;font-family:inherit}
-.eb-del{flex:1;background:#ffe0e6;color:#ff6b8a;border:none;border-radius:10px;padding:12px;font-size:13px;cursor:pointer;font-family:inherit}
-.eb-save{flex:2;background:#ff6b8a;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.eb-del{flex:1;background:var(--cm-lt2);color:var(--cm);border:none;border-radius:10px;padding:12px;font-size:13px;cursor:pointer;font-family:inherit}
+.eb-save{flex:2;background:var(--cm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
 .gtab-btn{flex:1;padding:7px;border:1.5px solid #eee;border-radius:8px;background:#fff;color:#aaa;font-size:12px;cursor:pointer;font-family:inherit;font-weight:400}
-.gtab-btn.active{border-color:#ffc9d4;background:#fff5f7;color:#d17a8a;font-weight:600}
-#promise-toggle-btn.active{background:#ff6b8a !important;border-color:#ff6b8a !important;color:#fff !important}
-#backup-dl-btn{background:#7aaa82}
-body.mode-couple #backup-dl-btn{background:#ff6b8a}
-#backup-ul-label{background:#f5f0ea;color:#7aaa82}
-body.mode-couple #backup-ul-label{background:#fff5f7;color:#ff6b8a}
+.gtab-btn.active{border-color:var(--cm-lt);background:#fff5f7;color:var(--cm-d);font-weight:600}
+#promise-toggle-btn.active{background:var(--cm) !important;border-color:var(--cm) !important;color:#fff !important}
+#backup-dl-btn{background:var(--dm)}
+body.mode-couple #backup-dl-btn{background:var(--cm)}
+#backup-ul-label{background:#f5f0ea;color:var(--dm)}
+body.mode-couple #backup-ul-label{background:#fff5f7;color:var(--cm)}
 body.dark-mode .gtab-btn{background:#232323;border-color:#3a3a3a;color:#999}
-body.dark-mode .gtab-btn.active{background:#3a2830;border-color:#ff6b8a;color:#ff9eb5}
+body.dark-mode .gtab-btn.active{background:var(--cm-card);border-color:var(--cm);color:var(--cm-l)}
 body.dark-mode .eb-cancel{background:#232323;color:#888}
-body.dark-mode .eb-del{background:#3a2028;color:#ff8fa8}
+body.dark-mode .eb-del{background:var(--cm-card);color:var(--cm-l)}
 .gallery-filter{display:flex;gap:6px;margin-bottom:12px;overflow-x:auto}
-.gf{background:#fff;border:1.5px solid #ffe0e6;border-radius:14px;padding:5px 12px;font-size:11px;color:#ffb3c1;cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit}
-.gf.active{background:#ff6b8a;border-color:#ff6b8a;color:#fff;font-weight:700}
+.gf{background:#fff;border:1.5px solid var(--cm-lt2);border-radius:14px;padding:5px 12px;font-size:11px;color:var(--cm-lt4);cursor:pointer;white-space:nowrap;flex-shrink:0;font-family:inherit}
+.gf.active{background:var(--cm);border-color:var(--cm);color:#fff;font-weight:700}
 .gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
 .gallery-item{aspect-ratio:1;border-radius:10px;overflow:hidden;cursor:pointer;position:relative}
 .gallery-item img{width:100%;height:100%;object-fit:cover}
 .gallery-item .gmood{position:absolute;bottom:3px;right:3px;font-size:14px}
-.gallery-empty{text-align:center;color:#ffc9d4;padding:40px 20px;font-size:13px}
+.gallery-empty{text-align:center;color:var(--cm-lt);padding:40px 20px;font-size:13px}
 .multi-photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
 .multi-photo-slot{aspect-ratio:1;border-radius:10px;position:relative;overflow:hidden}
 .multi-photo-slot img{width:100%;height:100%;object-fit:cover}
 .multi-photo-slot .mp-del{position:absolute;top:3px;right:3px;background:rgba(0,0,0,.5);color:#fff;border:none;border-radius:50%;width:20px;height:20px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.multi-photo-slot.add-slot{border:2px dashed #ffe0e6;display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff8fa}
-.multi-photo-slot.add-slot:hover{border-color:#ff6b8a}
-.multi-photo-slot.add-slot .api{font-size:22px;color:#ffc9d4}
-.throwback-card{background:linear-gradient(135deg,#ffd6e0,#ffe9ee);border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid #ffc9d4}
-.throwback-title{font-size:12px;font-weight:700;color:#ff6b8a;margin-bottom:8px;display:flex;align-items:center;gap:4px}
+.multi-photo-slot.add-slot{border:2px dashed var(--cm-lt2);display:flex;align-items:center;justify-content:center;cursor:pointer;background:#fff8fa}
+.multi-photo-slot.add-slot:hover{border-color:var(--cm)}
+.multi-photo-slot.add-slot .api{font-size:22px;color:var(--cm-lt)}
+.throwback-card{background:linear-gradient(135deg,#ffd6e0,#ffe9ee);border-radius:14px;padding:14px;margin-bottom:12px;border:1px solid var(--cm-lt)}
+.throwback-title{font-size:12px;font-weight:700;color:var(--cm);margin-bottom:8px;display:flex;align-items:center;gap:4px}
 .throwback-content{display:flex;gap:10px;align-items:center}
 .throwback-photos{display:flex;gap:4px;flex-shrink:0}
 .throwback-photos img{width:50px;height:50px;border-radius:8px;object-fit:cover}
@@ -214,43 +236,43 @@ body.dark-mode .eb-del{background:#3a2028;color:#ff8fa8}
 .throwback-mood{font-size:16px}
 .bucket-item{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid #ffeef1}
 .bucket-item:last-child{border-bottom:none}
-.bucket-item.done .bucket-text{color:#ffc9d4;text-decoration:line-through}
+.bucket-item.done .bucket-text{color:var(--cm-lt);text-decoration:line-through}
 .bucket-check{width:26px;height:26px;border-radius:50%;border:2px solid #ffd0da;background:#fff;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
-.bucket-check.checked{background:#ff6b8a;border-color:#ff6b8a;color:#fff}
+.bucket-check.checked{background:var(--cm);border-color:var(--cm);color:#fff}
 .bucket-text{flex:1;font-size:13px;color:#444;outline:none;font-family:inherit}
-.bucket-date{font-size:10px;color:#ffb3c1;flex-shrink:0}
+.bucket-date{font-size:10px;color:var(--cm-lt4);flex-shrink:0}
 .bucket-del{background:none;border:none;color:#ffd0da;cursor:pointer;font-size:15px;flex-shrink:0}
 .bucket-form{display:flex;gap:6px;margin-top:10px}
-.bucket-form input{flex:1;min-width:0;border:1.5px solid #ffe0e6;border-radius:8px;padding:8px 10px;font-size:13px;outline:none;font-family:inherit}
-.bucket-form input:focus{border-color:#ff6b8a}
-.bucket-form button{background:#ff6b8a;color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:18px;cursor:pointer}
+.bucket-form input{flex:1;min-width:0;border:1.5px solid var(--cm-lt2);border-radius:8px;padding:8px 10px;font-size:13px;outline:none;font-family:inherit}
+.bucket-form input:focus{border-color:var(--cm)}
+.bucket-form button{background:var(--cm);color:#fff;border:none;border-radius:8px;padding:0 16px;font-size:18px;cursor:pointer}
 .bucket-progress{margin-bottom:12px}
 .bucket-progress-bar{height:8px;background:#ffeef1;border-radius:4px;overflow:hidden}
-.bucket-progress-fill{height:100%;background:linear-gradient(90deg,#ff6b8a,#ff9eb5);border-radius:4px;transition:width .4s}
-.bucket-progress-text{font-size:11px;color:#ffb3c1;margin-top:4px;text-align:right}
+.bucket-progress-fill{height:100%;background:linear-gradient(90deg,var(--cm),var(--cm-l));border-radius:4px;transition:width .4s}
+.bucket-progress-text{font-size:11px;color:var(--cm-lt4);margin-top:4px;text-align:right}
 
 /* ===== 다이어리 카드 ===== */
 .diary-card{border-radius:14px;padding:13px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;cursor:default;animation:cardIn .3s ease}
 @keyframes cardIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
-.diary-card.card-today{background:linear-gradient(135deg,#fff5f7,#fde2e4);border:1px solid #ffc9d4}
+.diary-card.card-today{background:linear-gradient(135deg,#fff5f7,var(--cm-lt3));border:1px solid var(--cm-lt)}
 .diary-card.card-streak{background:linear-gradient(135deg,#fff8e1,#ffecc0);border:1px solid #ffd98a}
 .diary-card.card-throwback{background:linear-gradient(135deg,#f0f4ff,#e8edff);border:1px solid #c5d0f5;cursor:pointer}
 .diary-card .card-icon{font-size:26px;flex-shrink:0}
 .diary-card .card-body{}
 .diary-card .card-title{font-size:12px;font-weight:700;margin-bottom:2px}
-.diary-card.card-today .card-title{color:#d17a8a}
+.diary-card.card-today .card-title{color:var(--cm-d)}
 .diary-card.card-streak .card-title{color:#c07a00}
 .diary-card.card-throwback .card-title{color:#5a6abf}
 .diary-card .card-desc{font-size:11px;color:#888;line-height:1.5}
 .diary-card .card-dismiss{margin-left:auto;background:none;border:none;font-size:14px;color:#ccc;cursor:pointer;flex-shrink:0;padding:0 2px}
 
 /* 일기 모드 카드 - 아이보리그린 */
-body.mode-diary .diary-card.card-today{background:linear-gradient(135deg,#faf7ee,#f0ead8);border:1px solid #d4e8c4}
-body.mode-diary .diary-card.card-today .card-title{color:#7aaa82}
+body.mode-diary .diary-card.card-today{background:linear-gradient(135deg,#faf7ee,#f0ead8);border:1px solid var(--dm-lt)}
+body.mode-diary .diary-card.card-today .card-title{color:var(--dm)}
 body.mode-diary .diary-card.card-streak{background:linear-gradient(135deg,#f4f9ef,#dde8cc);border:1px solid #c5d4b5}
-body.mode-diary .diary-card.card-streak .card-title{color:#5a8a62}
+body.mode-diary .diary-card.card-streak .card-title{color:var(--dm-d)}
 body.mode-diary .diary-card.card-throwback{background:linear-gradient(135deg,#faf7ee,#eef7e8);border:1px solid #c5d4b5}
-body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
+body.mode-diary .diary-card.card-throwback .card-title{color:var(--dm)}
 
 /* ===== 푸시 알림 배너 ===== */
 #push-banner{
@@ -293,13 +315,13 @@ body.mode-diary .diary-card.card-throwback .card-title{color:#7aaa82}
 
 /* ===== 다크모드 (일기장/커플 다이어리 공통) ===== */
 body.dark-mode{background:#161616}
-body.dark-mode.mode-diary{background:#171b15}
-body.dark-mode.mode-couple{background:#1c1417}
-body.dark-mode.mode-diary .top-bar{background:#4d7255}
-body.dark-mode.mode-couple .top-bar{background:#b5495f}
+body.dark-mode.mode-diary{background:var(--dm-bg)}
+body.dark-mode.mode-couple{background:var(--cm-bg)}
+body.dark-mode.mode-diary .top-bar{background:var(--dm-d)}
+body.dark-mode.mode-couple .top-bar{background:var(--cm-d)}
 body.dark-mode .tab-bar{background:#202020}
-body.dark-mode.mode-diary .tab-bar{border-top-color:#33402e}
-body.dark-mode.mode-couple .tab-bar{border-top-color:#402630}
+body.dark-mode.mode-diary .tab-bar{border-top-color:var(--dm-tb)}
+body.dark-mode.mode-couple .tab-bar{border-top-color:var(--cm-tb)}
 body.dark-mode .box{background:#232323;border-color:#3a3a3a;box-shadow:none}
 body.dark-mode .sc{background:#232323;border-color:#3a3a3a}
 body.dark-mode .sc .sl{color:#888}
@@ -315,15 +337,15 @@ body.dark-mode .mli{background:#2a2a2a;border-color:#3a3a3a;color:#a8d8a8}
 body.dark-mode .wsb{background:#333}
 body.dark-mode .bcd,body.dark-mode .bcd.has-e{background:#232323;border-color:#333}
 body.dark-mode .bcd .dn{color:#777}
-body.dark-mode .cp-cal-day{background:#332025;border-color:#432a32}
+body.dark-mode .cp-cal-day{background:var(--cm-card);border-color:var(--cm-bd)}
 body.dark-mode .bcn button{background:#2a2a2a;border-color:#3a3a3a;color:#8fbf94}
-body.dark-mode .cp-cal-nav button{background:#332025;color:#ff9eb5}
+body.dark-mode .cp-cal-nav button{background:var(--cm-card);color:var(--cm-l)}
 body.dark-mode #couple-profile-row{background:#232323 !important;border-color:#3a3a3a !important}
-body.dark-mode #couple-profile-photo{background:#332025 !important}
-body.dark-mode.mode-diary .diary-card.card-today{background:linear-gradient(135deg,#26301f,#2a3320) !important;border-color:#3a4a32 !important}
+body.dark-mode #couple-profile-photo{background:var(--cm-card) !important}
+body.dark-mode.mode-diary .diary-card.card-today{background:linear-gradient(135deg,var(--dm-card),var(--dm-card2)) !important;border-color:var(--dm-bd) !important}
 body.dark-mode.mode-diary .diary-card.card-streak{background:linear-gradient(135deg,#2c2a1a,#332f1c) !important;border-color:#4a4530 !important}
-body.dark-mode.mode-diary .diary-card.card-throwback{background:linear-gradient(135deg,#26301f,#212a1e) !important;border-color:#3a4a32 !important}
-body.dark-mode.mode-couple .diary-card.card-today{background:linear-gradient(135deg,#3a2830,#402530) !important;border-color:#5a3540 !important}
+body.dark-mode.mode-diary .diary-card.card-throwback{background:linear-gradient(135deg,var(--dm-card),var(--dm-bg)) !important;border-color:var(--dm-bd) !important}
+body.dark-mode.mode-couple .diary-card.card-today{background:linear-gradient(135deg,var(--cm-card),var(--cm-card2)) !important;border-color:var(--cm-bd) !important}
 body.dark-mode.mode-couple .diary-card.card-streak{background:linear-gradient(135deg,#332c1c,#3a3018) !important;border-color:#5a4a28 !important}
 body.dark-mode.mode-couple .diary-card.card-throwback{background:linear-gradient(135deg,#242840,#202538) !important;border-color:#3a4060 !important}
 body.dark-mode .diary-card .card-desc{color:#999}
@@ -332,31 +354,31 @@ body.dark-mode .bucket-progress-bar{background:#2a2a2a}
 body.dark-mode .bucket-form input,body.dark-mode .anniv-form input,body.dark-mode .dday-set-row input{background:#232323 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
 body.dark-mode .bd{border-color:#3a3a3a}
 body.dark-mode .bn{border-color:#3a3a3a}
-body.dark-mode [style*="border:1.5px solid #ffc9d4"]{border-color:#3a3a3a !important}
-body.dark-mode [style*="border:1px solid #ffc9d4"]{border-color:#3a3a3a !important}
-body.dark-mode [style*="border:1.5px solid #ffe0e6"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1.5px solid var(--cm-lt)"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1px solid var(--cm-lt)"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border:1.5px solid var(--cm-lt2)"]{border-color:#3a3a3a !important}
 body.dark-mode [style*="border:1.5px solid #ddd"]{border-color:#3a3a3a !important}
-body.dark-mode [style*="border-top:1px solid #d4e8c4"]{border-color:#3a3a3a !important}
+body.dark-mode [style*="border-top:1px solid var(--dm-lt)"]{border-color:#3a3a3a !important}
 body.dark-mode [style*="border:1.5px solid #eee"]{border-color:#3a3a3a !important}
 body.dark-mode #cat-new-input,body.dark-mode #promise-memo-input,body.dark-mode #bucket-cat-sel{background:#232323 !important;color:#e8e8e8 !important;border-color:#3a3a3a !important}
-body.dark-mode.mode-diary .mli{background:#2a2a2a !important;border-color:#3a3a3a !important;color:#a8d8a8 !important}
+body.dark-mode.mode-diary .mli{background:var(--dm-card) !important;border-color:var(--dm-bd) !important;color:var(--dm-l) !important}
 body.dark-mode.mode-diary .mli span{color:#a8d8a8 !important}
-body.dark-mode.mode-couple .mli{background:#3a2830 !important;border-color:#4a3038 !important;color:#ff9eba !important}
-body.dark-mode.mode-couple .mli span{color:#ff9eba !important}
+body.dark-mode.mode-couple .mli{background:var(--cm-card) !important;border-color:var(--cm-bd) !important;color:var(--cm-l) !important}
+body.dark-mode.mode-couple .mli span{color:var(--cm-l) !important}
 body.dark-mode [style*="background:#fff"]{background:#232323 !important}
 body.dark-mode [style*="background:#f5f5f5"]{background:#2a2a2a !important}
 body.dark-mode [style*="background:#eef7e8"]{background:#2a2a2a !important}
 body.dark-mode [style*="background:#ffeef1"]{background:#2a2a2a !important}
-body.dark-mode [style*="linear-gradient(135deg,#fff5f7,#fde2e4)"]{background:linear-gradient(135deg,#3a2830,#402530) !important}
-body.dark-mode [style*="linear-gradient(135deg,#fff0f5,#ffe0eb)"]{background:linear-gradient(135deg,#2f2228,#38252c) !important}
-body.dark-mode [style*="linear-gradient(135deg,#ffe0eb,#ffc9d4)"]{background:linear-gradient(135deg,#3a2028,#402530) !important}
+body.dark-mode [style*="linear-gradient(135deg,#fff5f7,var(--cm-lt3))"]{background:linear-gradient(135deg,var(--cm-card),var(--cm-card2)) !important}
+body.dark-mode [style*="linear-gradient(135deg,#fff0f5,#ffe0eb)"]{background:linear-gradient(135deg,var(--cm-bg),var(--cm-card)) !important}
+body.dark-mode [style*="linear-gradient(135deg,#ffe0eb,var(--cm-lt))"]{background:linear-gradient(135deg,var(--cm-card),var(--cm-card2)) !important}
 body.dark-mode [style*="color:#333"]{color:#e8e8e8 !important}
 body.dark-mode [style*="color:#444"]{color:#e8e8e8 !important}
 body.dark-mode [style*="color:#555"]{color:#ccc !important}
 body.dark-mode [style*="color:#5a3a1a"]{color:#e8e8e8 !important}
 body.dark-mode [style*="color:#222"]{color:#eee !important}
 body.dark-mode [onclick="openDiaryBadgeModal()"]{background:#232323 !important;border-color:#3a3a3a !important}
-body.dark-mode [onclick="openCatManageModal()"]{background:#3a2830 !important}
+body.dark-mode [onclick="openCatManageModal()"]{background:var(--cm-card) !important}
 body.dark-mode #diary-mr-stat-row{background:#232323 !important}
 body.dark-mode #push-banner{background:#232323;border-color:#3a3a3a}
 body.dark-mode #push-banner .push-title{color:#eee}
@@ -371,7 +393,7 @@ body.dark-mode .anniv-item{border-color:#3a3a3a}
 body.dark-mode .anniv-name{color:#e8e8e8}
 body.dark-mode .gf{background:#232323;border-color:#3a3a3a;color:#999}
 body.dark-mode .gallery-empty{color:#666}
-body.dark-mode #diary-prompt-box{background:#202820;border-color:#3a4a35}
+body.dark-mode #diary-prompt-box{background:var(--dm-card);border-color:var(--dm-bd)}
 body.dark-mode #diary-prompt-box span{color:#8fbf94}
 body.dark-mode #cp-badge-preview::-webkit-scrollbar,body.dark-mode #diary-badge-preview::-webkit-scrollbar{height:6px}
 body.dark-mode #cp-badge-preview::-webkit-scrollbar-thumb,body.dark-mode #diary-badge-preview::-webkit-scrollbar-thumb{background:#3a3a3a;border-radius:3px}
@@ -386,12 +408,83 @@ body.dark-mode .bcd.mood-😡{background:#3a2c22 !important}
 body.dark-mode .bcd.mood-😴{background:#2e2e2e !important}
 body.dark-mode .bcd-photo-bg{opacity:.4}
 body.dark-mode #backup-ul-label{background:#232323;color:#a8d8a8}
-body.dark-mode.mode-couple #backup-ul-label{color:#ff9eb5}
+body.dark-mode.mode-couple #backup-ul-label{color:var(--cm-l)}
 body.dark-mode #dark-sch-start,body.dark-mode #dark-sch-end{background:#232323;color:#e8e8e8;border-color:#3a3a3a}
 #diary-preview-photos{display:flex;gap:6px}
 #diary-preview-photos img{flex:1;min-width:0;height:180px;object-fit:cover;border-radius:12px}
 body.dark-mode #diary-preview-divider-gray{border-color:#3a3a3a}
 body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
+
+/* 태그 */
+.tag-inp-wrap{display:flex;flex-wrap:wrap;gap:5px;align-items:center;border:1px solid #e8e4dc;border-radius:10px;padding:7px 9px;background:#fff;margin-bottom:8px}
+body.dark .tag-inp-wrap{background:#252525;border-color:#3a3a3a}
+.tag-chip{display:inline-flex;align-items:center;gap:4px;background:#f0ece2;color:#8a7a5c;font-size:11px;border-radius:12px;padding:3px 8px}
+body.dark .tag-chip{background:#3a3428;color:#c4b590}
+.tag-chip button{background:none;border:none;color:inherit;opacity:.55;cursor:pointer;font-size:12px;padding:0;line-height:1}
+.tag-chip button:hover{opacity:1}
+.tag-inp{border:none;outline:none;flex:1;min-width:80px;font-size:12px;background:transparent;color:inherit;font-family:inherit}
+.tag-sugg{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.tag-sugg button{background:#f7f5f0;border:1px solid #e8e4dc;color:#9a8a70;font-size:10.5px;border-radius:10px;padding:2px 8px;cursor:pointer;font-family:inherit}
+body.dark .tag-sugg button{background:#2a2a2a;border-color:#3a3a3a;color:#8a8070}
+.entry-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.entry-tag{font-size:10px;color:#a09070;background:#f5f2ea;border-radius:8px;padding:1px 7px}
+body.dark .entry-tag{background:#33302a;color:#a89870}
+
+/* 임시저장 */
+.draft-bar{display:none;background:#fff8e6;border:1px solid #f0dfae;border-radius:10px;padding:8px 11px;margin-bottom:8px;font-size:11.5px;color:#8a7530;align-items:center;justify-content:space-between;gap:8px}
+.draft-bar.on{display:flex}
+body.dark .draft-bar{background:#332c18;border-color:#4a4020;color:#c9b070}
+.draft-bar button{background:#e8c96a;border:none;color:#5a4a10;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;font-weight:600;white-space:nowrap}
+.draft-hint{font-size:10.5px;color:#b0a898;text-align:right;margin-top:-4px;margin-bottom:6px;min-height:14px}
+
+/* 이 날의 기록 */
+.tb-card{background:linear-gradient(135deg,#fdf6ec 0%,#f8eeda 100%);border:1px solid #eddfc4;border-radius:14px;padding:11px 13px;margin-bottom:10px;cursor:pointer}
+body.dark .tb-card{background:linear-gradient(135deg,#332c1e 0%,#2a251a 100%);border-color:#4a4026}
+.tb-title{font-size:11.5px;font-weight:700;color:#a08850;margin-bottom:6px;display:flex;align-items:center;gap:5px}
+body.dark .tb-title{color:#c4a870}
+.tb-item{display:flex;gap:9px;align-items:flex-start;padding:6px 0;border-top:1px dashed #e5d8bc}
+.tb-item:first-of-type{border-top:none}
+body.dark .tb-item{border-top-color:#43391f}
+.tb-thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex-shrink:0}
+.tb-txt{flex:1;min-width:0}
+.tb-date{font-size:10px;color:#b09860;margin-bottom:2px}
+.tb-body{font-size:11.5px;color:#6a5f4a;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+body.dark .tb-body{color:#a89880}
+
+.lv-switch{display:flex;background:#f2efe8;border-radius:9px;padding:2px;gap:2px}
+body.dark .lv-switch{background:#2a2a2a}
+.lv-btn{background:none;border:none;border-radius:7px;padding:4px 10px;font-size:11px;cursor:pointer;font-family:inherit;color:#a09888;white-space:nowrap}
+.lv-btn.on{background:#fff;color:#7a9a7c;font-weight:700;box-shadow:0 1px 2px rgba(0,0,0,.07)}
+body.dark .lv-btn.on{background:#3a3a3a;color:var(--dm-l)}
+
+/* 사진 타임라인 */
+.pt-month{font-size:12px;font-weight:700;color:#8a7a5c;margin:14px 0 7px;padding-bottom:4px;border-bottom:1px solid #ece6da}
+body.dark .pt-month{color:#c4b590;border-bottom-color:#3a3a3a}
+.pt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.pt-cell{position:relative;aspect-ratio:1;border-radius:9px;overflow:hidden;cursor:pointer;background:#f0ece2}
+body.dark .pt-cell{background:#2a2a2a}
+.pt-cell img{width:100%;height:100%;object-fit:cover;transition:transform .22s}
+.pt-cell:active img{transform:scale(1.05)}
+.pt-day{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,transparent,rgba(0,0,0,.55));color:#fff;font-size:9.5px;padding:10px 5px 3px;text-align:center}
+.pt-badge{position:absolute;top:4px;right:4px;background:rgba(0,0,0,.45);color:#fff;font-size:9px;border-radius:6px;padding:1px 5px}
+
+/* 라이트박스 */
+.lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:3000;align-items:center;justify-content:center;flex-direction:column}
+.lb.on{display:flex}
+.lb img{max-width:100%;max-height:78vh;object-fit:contain;border-radius:6px}
+.lb-top{position:absolute;top:0;left:0;right:0;padding:14px 16px;display:flex;justify-content:space-between;align-items:center;color:#fff;font-size:13px;background:linear-gradient(180deg,rgba(0,0,0,.6),transparent)}
+.lb-x{background:rgba(255,255,255,.16);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:17px;cursor:pointer;line-height:1}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.14);border:none;color:#fff;width:40px;height:40px;border-radius:50%;font-size:19px;cursor:pointer;line-height:1}
+.lb-prev{left:12px} .lb-next{right:12px}
+.lb-info{position:absolute;bottom:0;left:0;right:0;padding:14px 18px 20px;color:#fff;background:linear-gradient(0deg,rgba(0,0,0,.72),transparent)}
+.lb-date{font-size:12.5px;font-weight:700;margin-bottom:3px}
+.lb-body{font-size:11.5px;opacity:.85;line-height:1.55;max-height:60px;overflow-y:auto}
+.lb-open{background:rgba(255,255,255,.18);border:none;color:#fff;border-radius:8px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:inherit;margin-top:7px}
+
+/* 검색 확장 */
+.srch-row{display:flex;gap:6px;margin-bottom:8px}
+.srch-row input[type=date]{flex:1;border:1px solid #e8e4dc;border-radius:9px;padding:6px 9px;font-size:11.5px;background:#fff;color:inherit;font-family:inherit;outline:none}
+body.dark .srch-row input[type=date]{background:#252525;border-color:#3a3a3a;color:#ddd}
 </style>
 </head>
 <body class="mode-diary">
@@ -400,7 +493,6 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
 <div class="top-bar">
   <span class="ttl" id="top-title">🍀</span>
   <button class="backup-btn" id="dark-toggle-btn" onclick="toggleDarkMode()" title="다크모드">☀️</button>
-  <a href="blog.html" class="backup-btn" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center" title="미니홈피">🏠</a>
   <input type="number" class="inp-year" id="g-year" min="2000" max="2099" value="2026" onchange="onYMChange()">
   <span class="sep">년</span>
   <input type="number" class="inp-month" id="g-month" min="1" max="12" value="6" onchange="onYMChange()">
@@ -421,7 +513,7 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
       ⬆️ 백업 파일 불러오기
       <input type="file" accept=".json" onchange="restoreBackup(event)" style="display:none">
     </label>
-    <button onclick="closeBackupModal()" style="width:100%;background:none;border:1.5px solid #d4e8c4;color:#999;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">닫기</button>
+    <button onclick="closeBackupModal()" style="width:100%;background:none;border:1.5px solid var(--dm-lt);color:#999;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">닫기</button>
   </div>
 </div>
 
@@ -430,6 +522,7 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
 
   <!-- 탭1: 일기 -->
   <div class="tab-content active" id="tab-d-write">
+    <div id="d-throwback"></div>
     <div class="stats-row">
       <div class="sc"><div class="sv" id="s-total">0</div><div class="sl">총 일기</div></div>
       <div class="sc"><div class="sv" id="s-streak">0</div><div class="sl">연속 작성</div></div>
@@ -441,20 +534,20 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
         <span id="diary-goal-title" style="font-size:13px;font-weight:700;color:#444"></span>
         <span style="display:flex;align-items:center;gap:8px">
-          <span id="diary-goal-pct" style="font-size:13px;font-weight:700;color:#7aaa82"></span>
+          <span id="diary-goal-pct" style="font-size:13px;font-weight:700;color:var(--dm)"></span>
           <button onclick="openDiaryGoalModal()" style="background:none;border:none;color:#bbb;font-size:12px;cursor:pointer;padding:0" title="목표 수정">✎</button>
         </span>
       </div>
       <div style="height:9px;background:#eee;border-radius:5px;overflow:hidden;margin-bottom:6px"><div id="diary-goal-bar" style="height:100%;background:linear-gradient(90deg,#a8d8a8,#5a9a62);border-radius:5px;transition:width .5s cubic-bezier(.34,1.2,.64,1);width:0%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#9dc4a0">
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--dm-l)">
         <span id="diary-goal-cur"></span>
         <span id="diary-goal-max"></span>
       </div>
     </div>
     <div class="box" id="diary-goal-empty">
       <div style="display:flex;justify-content:space-between;align-items:center">
-        <span style="font-size:12px;color:#9dc4a0">✍️ 이번달 글쓰기 목표를 정해보세요</span>
-        <button onclick="openDiaryGoalModal()" style="background:#7aaa82;color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:inherit">설정</button>
+        <span style="font-size:12px;color:var(--dm-l)">✍️ 이번달 글쓰기 목표를 정해보세요</span>
+        <button onclick="openDiaryGoalModal()" style="background:var(--dm);color:#fff;border:none;border-radius:6px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:inherit">설정</button>
       </div>
     </div>
 
@@ -484,14 +577,26 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
       </div>
       <div id="diary-prompt-box" style="display:none;background:#f4f9ef;border:1px dashed #c5d4b5;border-radius:10px;padding:9px 12px;margin-bottom:10px;">
         <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
-          <span style="font-size:12px;color:#5a8a62;line-height:1.5" id="diary-prompt-text">오늘 가장 감사했던 순간은?</span>
-          <button onclick="shufflePrompt()" style="background:none;border:none;color:#9dc4a0;font-size:14px;cursor:pointer;flex-shrink:0;padding:0" title="다른 질문">🔀</button>
+          <span style="font-size:12px;color:var(--dm-d);line-height:1.5" id="diary-prompt-text">오늘 가장 감사했던 순간은?</span>
+          <button onclick="shufflePrompt()" style="background:none;border:none;color:var(--dm-l);font-size:14px;cursor:pointer;flex-shrink:0;padding:0" title="다른 질문">🔀</button>
         </div>
       </div>
       <input type="text" class="entry-title-inp" id="e-title" placeholder="제목을 입력하세요..." maxlength="50">
-      <textarea class="entry-body-inp" id="e-body" placeholder="오늘 하루는 어땠나요?&#10;&#10;여기에 일기를 작성해보세요..." oninput="updCC()"></textarea>
-      <div style="border-top:1px solid #d4e8c4;padding-top:10px;margin-top:10px">
-        <div id="diary-photo-toggle" onclick="toggleDiaryPhotoSection()" style="display:flex;align-items:center;gap:4px;font-size:12px;color:#9dc4a0;cursor:pointer;user-select:none">
+      <div class="draft-bar" id="draft-bar">
+        <span id="draft-msg">작성 중이던 글이 있어요</span>
+        <span style="display:flex;gap:5px">
+          <button onclick="restoreDraft()">불러오기</button>
+          <button onclick="discardDraft()" style="background:#e8e4dc;color:#8a8070">버리기</button>
+        </span>
+      </div>
+      <textarea class="entry-body-inp" id="e-body" placeholder="오늘 하루는 어땠나요?&#10;&#10;여기에 일기를 작성해보세요..." oninput="updCC();scheduleDraft()"></textarea>
+      <div class="draft-hint" id="draft-hint"></div>
+      <div class="tag-inp-wrap" id="tag-wrap">
+        <input class="tag-inp" id="tag-inp" placeholder="#태그 입력 후 Enter" onkeydown="tagKey(event)">
+      </div>
+      <div class="tag-sugg" id="tag-sugg"></div>
+      <div style="border-top:1px solid var(--dm-lt);padding-top:10px;margin-top:10px">
+        <div id="diary-photo-toggle" onclick="toggleDiaryPhotoSection()" style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--dm-l);cursor:pointer;user-select:none">
           <span id="diary-photo-toggle-label">📷 사진 추가</span>
           <span id="diary-photo-toggle-arrow">▾</span>
         </div>
@@ -523,7 +628,12 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
   <!-- 탭3: 목록 -->
   <div class="tab-content" id="tab-d-list">
     <div class="box" style="padding:10px 14px">
-      <input type="text" class="si" id="s-input" placeholder="🔍 제목/내용 검색..." oninput="renderFL()">
+      <input type="text" class="si" id="s-input" placeholder="🔍 제목·내용·#태그 검색..." oninput="renderFL()">
+      <div class="srch-row">
+        <input type="date" id="s-from" onchange="renderFL()" title="시작일">
+        <input type="date" id="s-to" onchange="renderFL()" title="종료일">
+        <button class="fsel" style="cursor:pointer;white-space:nowrap" onclick="clearSearch()">초기화</button>
+      </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
         <select class="fsel" id="f-mood" onchange="renderFL()">
           <option value="">기분 전체</option>
@@ -542,9 +652,16 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
           <option value="all">전체</option>
         </select>
       </div>
-      <div style="font-size:11px;color:#9dc4a0" id="list-count"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div style="font-size:11px;color:var(--dm-l)" id="list-count"></div>
+        <div class="lv-switch">
+          <button class="lv-btn on" id="lv-list" onclick="setListView('list')">📋 목록</button>
+          <button class="lv-btn" id="lv-photo" onclick="setListView('photo')">📸 사진</button>
+        </div>
+      </div>
     </div>
     <div id="fl-list"></div>
+    <div id="pt-list" style="display:none"></div>
   </div>
 
   <!-- 탭4: 통계 -->
@@ -565,10 +682,10 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
     <div class="box">
       <div class="box-title" style="display:flex;justify-content:space-between;align-items:center">
         <span>🏅 뱃지 컬렉션</span>
-        <span id="diary-badge-count" style="font-size:12px;color:#7aaa82;font-weight:700">0/16</span>
+        <span id="diary-badge-count" style="font-size:12px;color:var(--dm);font-weight:700">0/16</span>
       </div>
       <div id="diary-badge-preview" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px"></div>
-      <button onclick="openDiaryBadgeModal()" style="width:100%;background:#f4f9ef;border:1.5px solid #d4e8c4;color:#7aaa82;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">전체 뱃지 보기</button>
+      <button onclick="openDiaryBadgeModal()" style="width:100%;background:#f4f9ef;border:1.5px solid var(--dm-lt);color:var(--dm);border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">전체 뱃지 보기</button>
     </div>
     <div class="box">
       <div class="box-title" onclick="toggleSettingsSection()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center">
@@ -576,6 +693,7 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
         <span id="settings-arrow" style="font-size:12px;font-weight:400;color:#bbb">▾</span>
       </div>
       <div id="settings-body" style="display:none">
+        <div class="settings-row" onclick="openSkinModal()"><span>🎨 테마 색상</span><span class="settings-arrow">›</span></div>
         <div class="settings-row" onclick="openDarkSettingsModal()"><span>🌗 다크모드</span><span class="settings-arrow">›</span></div>
         <div class="settings-row" onclick="openBackupModal()"><span>💾 백업 / 복원</span><span class="settings-arrow">›</span></div>
         <div class="settings-row" onclick="openCardSettingsModal()"><span>🗂 카드 표시</span><span class="settings-arrow">›</span></div>
@@ -597,11 +715,11 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
 
   <!-- 탭1: 캘린더 -->
   <div class="tab-content active" id="tab-c-cal">
-    <div id="couple-profile-row" style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:10px 12px;background:#fff;border-radius:14px;border:1px solid #ffe0e6">
-      <div id="couple-profile-photo" onclick="document.getElementById('couple-profile-file').click()" style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;background:#fff0f3;display:flex;align-items:center;justify-content:center;font-size:20px;color:#ffc9d4;border:2px solid #ffd6e0">💑</div>
+    <div id="couple-profile-row" style="display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:10px 12px;background:#fff;border-radius:14px;border:1px solid var(--cm-lt2)">
+      <div id="couple-profile-photo" onclick="document.getElementById('couple-profile-file').click()" style="width:52px;height:52px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;background:#fff0f3;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--cm-lt);border:2px solid #ffd6e0">💑</div>
       <div style="flex:1;min-width:0">
-        <div style="font-size:12px;font-weight:600;color:#ff6b8a">우리 대표 사진</div>
-        <div style="font-size:10px;color:#ffb3c1">탭해서 바꾸기</div>
+        <div style="font-size:12px;font-weight:600;color:var(--cm)">우리 대표 사진</div>
+        <div style="font-size:10px;color:var(--cm-lt4)">탭해서 바꾸기</div>
       </div>
       <input type="file" id="couple-profile-file" accept="image/*" style="display:none" onchange="handleCoupleProfilePhoto(event)">
     </div>
@@ -640,7 +758,7 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
     <div class="box">
       <div class="cp-box-title" style="display:flex;justify-content:space-between;align-items:center">
         <span>💝 버킷리스트</span>
-        <button onclick="openCatManageModal()" style="background:#fde2e4;border:none;border-radius:6px;padding:4px 10px;font-size:11px;color:#d17a8a;cursor:pointer;font-family:inherit">🏷️ 카테고리</button>
+        <button onclick="openCatManageModal()" style="background:var(--cm-lt3);border:none;border-radius:6px;padding:4px 10px;font-size:11px;color:var(--cm-d);cursor:pointer;font-family:inherit">🏷️ 카테고리</button>
       </div>
       <div class="bucket-progress">
         <div class="bucket-progress-bar"><div class="bucket-progress-fill" id="bucket-prog-fill" style="width:0%"></div></div>
@@ -652,7 +770,7 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
           <input type="text" id="bucket-input" placeholder="버킷리스트 추가..." onkeydown="if(event.key==='Enter')addBucket()" style="flex:1">
           <button onclick="addBucket()">+</button>
         </div>
-        <select id="bucket-cat-sel" style="width:100%;border:1.5px solid #fde2e4;border-radius:8px;padding:6px 10px;font-size:12px;outline:none;font-family:inherit;color:#888;background:#fff">
+        <select id="bucket-cat-sel" style="width:100%;border:1.5px solid var(--cm-lt3);border-radius:8px;padding:6px 10px;font-size:12px;outline:none;font-family:inherit;color:#888;background:#fff">
           <option value="">카테고리 선택 (선택사항)</option>
         </select>
       </div>
@@ -660,10 +778,10 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
     <!-- 사귄 날 설정 -->
     <div class="box" style="padding:10px 14px">
       <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:12px;color:#ff6b8a;font-weight:600;flex-shrink:0;white-space:nowrap">📅 사귄 날 설정</span>
+        <span style="font-size:12px;color:var(--cm);font-weight:600;flex-shrink:0;white-space:nowrap">📅 사귄 날 설정</span>
         <div class="dday-set-row" style="margin:0;flex:1">
-          <input type="date" id="start-date-inp" style="border:1.5px solid #ffe0e6">
-          <button onclick="setStartDate()" style="background:#ff6b8a;color:#fff">설정</button>
+          <input type="date" id="start-date-inp" style="border:1.5px solid var(--cm-lt2)">
+          <button onclick="setStartDate()" style="background:var(--cm);color:#fff">설정</button>
         </div>
       </div>
     </div>
@@ -686,7 +804,7 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
   <div class="tab-content" id="tab-c-bucket">
     <!-- 기분 통계 -->
     <div class="box">
-      <div class="cp-box-title">😊 기분 통계 <span id="cp-mood-stat-period" style="font-size:11px;color:#ffb3c1;font-weight:400"></span></div>
+      <div class="cp-box-title">😊 기분 통계 <span id="cp-mood-stat-period" style="font-size:11px;color:var(--cm-lt4);font-weight:400"></span></div>
       <div class="cw"><canvas id="cp-mood-chart"></canvas></div>
       <div class="ml" id="cp-mood-leg"></div>
     </div>
@@ -694,19 +812,19 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
     <div class="box">
       <div class="cp-box-title" style="display:flex;justify-content:space-between;align-items:center">
         <span>🏅 뱃지 컬렉션</span>
-        <span id="cp-badge-count" style="font-size:12px;color:#ff6b8a;font-weight:700">0/16</span>
+        <span id="cp-badge-count" style="font-size:12px;color:var(--cm);font-weight:700">0/16</span>
       </div>
       <div id="cp-badge-preview" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px"></div>
-      <button onclick="openCpBadgeModal()" style="width:100%;background:#fff0f3;border:1.5px solid #ffc9d4;color:#ff6b8a;border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">전체 뱃지 보기</button>
+      <button onclick="openCpBadgeModal()" style="width:100%;background:#fff0f3;border:1.5px solid var(--cm-lt);color:var(--cm);border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">전체 뱃지 보기</button>
     </div>
     <!-- 이름 설정 -->
     <div class="box" style="padding:10px 14px">
       <div style="display:flex;align-items:center;gap:8px">
-        <span style="font-size:12px;color:#ff6b8a;font-weight:600;flex-shrink:0;white-space:nowrap">🐻‍❄️ 상대방 이름</span>
-        <div style="flex:1;display:flex;align-items:center;border:1.5px solid #ffe0e6;border-radius:8px;overflow:hidden;min-width:0">
-          <span style="padding:6px 3px 6px 10px;font-size:13px;font-weight:700;color:#ff6b8a;flex-shrink:0">@</span>
+        <span style="font-size:12px;color:var(--cm);font-weight:600;flex-shrink:0;white-space:nowrap">🐻‍❄️ 상대방 이름</span>
+        <div style="flex:1;display:flex;align-items:center;border:1.5px solid var(--cm-lt2);border-radius:8px;overflow:hidden;min-width:0">
+          <span style="padding:6px 3px 6px 10px;font-size:13px;font-weight:700;color:var(--cm);flex-shrink:0">@</span>
           <input id="partner-name-input-2" type="text" placeholder="이름" maxlength="10" onblur="savePartnerNameFromInput2()"
-            style="flex:1;min-width:0;border:none;padding:6px 10px 6px 0;font-size:13px;outline:none;font-family:inherit;color:#ff6b8a;font-weight:700;background:transparent">
+            style="flex:1;min-width:0;border:none;padding:6px 10px 6px 0;font-size:13px;outline:none;font-family:inherit;color:var(--cm);font-weight:700;background:transparent">
         </div>
       </div>
     </div>
@@ -717,11 +835,11 @@ body.dark-mode #diary-preview-divider-green{border-color:#4a5a3a}
     <div class="entry-sheet">
       <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:12px">
         <h3 id="modal-date-title" style="margin:0;font-size:15px;font-weight:700;color:#444"></h3>
-        <button id="promise-toggle-btn" onclick="toggleEntryPromise()" style="background:#fff;border:1.5px solid #ffc9d4;border-radius:12px;padding:3px 11px;font-size:11px;color:#ffb3c1;cursor:pointer;font-family:inherit;font-weight:600;transition:all .2s;flex-shrink:0">약속</button>
+        <button id="promise-toggle-btn" onclick="toggleEntryPromise()" style="background:#fff;border:1.5px solid var(--cm-lt);border-radius:12px;padding:3px 11px;font-size:11px;color:var(--cm-lt4);cursor:pointer;font-family:inherit;font-weight:600;transition:all .2s;flex-shrink:0">약속</button>
       </div>
       <div id="promise-memo-row" style="display:none;margin-bottom:10px">
         <input id="promise-memo-input" type="text" placeholder="약속 메모 (예: 이케아 🛋️)" maxlength="30" onblur="savePromiseMemo()"
-          style="width:100%;border:1.5px solid #ffc9d4;border-radius:10px;padding:7px 12px;font-size:12px;outline:none;font-family:inherit;color:#ff6b8a;box-sizing:border-box">
+          style="width:100%;border:1.5px solid var(--cm-lt);border-radius:10px;padding:7px 12px;font-size:12px;outline:none;font-family:inherit;color:var(--cm);box-sizing:border-box">
       </div>
       <div id="photo-area">
         <div class="multi-photo-grid" id="multi-photo-grid"></div>
@@ -833,6 +951,96 @@ function renderDarkScheduleUI(){
   document.getElementById('dark-sch-start').value=darkSchedule.start||'20:00';
   document.getElementById('dark-sch-end').value=darkSchedule.end||'07:00';
 }
+/* ===== 스킨 ===== */
+var D_SKIN_KEY='diary_skin_v1', C_SKIN_KEY='couple_skin_v1';
+var skinTab='diary';
+
+var D_SKINS={
+  green:{n:'연두',m:'#7aaa82',d:'#5a8a62',l:'#9dc4a0',lt:'#d4e8c4',lt2:'#eaf4e2',lt3:'#f2f8ee',
+    bg:'#171b15',card:'#26301f',card2:'#2a3320',bd:'#3a4a32',tb:'#33402e'},
+  lemon:{n:'레몬',m:'#d4b854',d:'#a89040',l:'#e0cc80',lt:'#f2e6b8',lt2:'#faf3dc',lt3:'#fdfaf0',
+    bg:'#1b1a13',card:'#302c1c',card2:'#332f1e',bd:'#4a4530',tb:'#3e3a28'},
+  mint:{n:'민트',m:'#6fb5a8',d:'#4f9084',l:'#94ccc0',lt:'#c4e8e0',lt2:'#e2f4f0',lt3:'#f0faf8',
+    bg:'#141a19',card:'#1e2e2b',card2:'#22322f',bd:'#32473f',tb:'#2c3e3a'},
+  sky:{n:'하늘',m:'#7ab0cc',d:'#5589a5',l:'#a0c8dc',lt:'#c8e4f0',lt2:'#e4f2f8',lt3:'#f2f9fc',
+    bg:'#14191d',card:'#1e2b33',card2:'#223038',bd:'#32444f',tb:'#2c3c46'},
+  blue:{n:'블루',m:'#7a92cc',d:'#5a70a8',l:'#a0b0dc',lt:'#c8d4f0',lt2:'#e4eaf8',lt3:'#f2f5fc',
+    bg:'#15171f',card:'#1f2536',card2:'#232a3c',bd:'#343e58',tb:'#2e364c'},
+  forest:{n:'포레스트',m:'#5f9470',d:'#437054',l:'#88b494',lt:'#c0dcc8',lt2:'#e0efe4',lt3:'#f0f7f2',
+    bg:'#141a16',card:'#1e2c22',card2:'#223026',bd:'#324434',tb:'#2c3c30'}
+};
+var C_SKINS={
+  pink:{n:'핑크',m:'#ff6b8a',d:'#d17a8a',l:'#ff9eb5',lt:'#ffc9d4',lt2:'#ffe0e6',lt3:'#fde2e4',lt4:'#ffb3c1',
+    bg:'#1c1417',card:'#3a2830',card2:'#402530',bd:'#5a3540',tb:'#402630'},
+  coral:{n:'다홍',m:'#f0705e',d:'#c45a4a',l:'#f79c8e',lt:'#fcc8bf',lt2:'#fde4de',lt3:'#fdeae6',lt4:'#f9b3a6',
+    bg:'#1c1513',card:'#382622',card2:'#3e2824',bd:'#563430',tb:'#3e2824'},
+  rosy:{n:'연분홍',m:'#f096ac',d:'#c9758c',l:'#f7bac8',lt:'#fbd8e0',lt2:'#fdecf0',lt3:'#fdeff2',lt4:'#f8c8d4',
+    bg:'#1c1518',card:'#382730',card2:'#3e2a34',bd:'#563844',tb:'#3e2a34'},
+  lilac:{n:'연보라',m:'#b08ccc',d:'#8c68a8',l:'#c8aadc',lt:'#e0cef0',lt2:'#f0e6f8',lt3:'#f5eefa',lt4:'#d4bce8',
+    bg:'#18141c',card:'#2e2638',card2:'#332a3e',bd:'#463a56',tb:'#332a3e'},
+  lavender:{n:'라벤더',m:'#9a96cc',d:'#7570a8',l:'#b8b4dc',lt:'#d6d4f0',lt2:'#eae8f8',lt3:'#f0effc',lt4:'#c4c0e8',
+    bg:'#15151c',card:'#282738',card2:'#2c2b3e',bd:'#3c3a56',tb:'#2c2b3e'},
+  peach:{n:'피치',m:'#f0918a',d:'#c4706a',l:'#f7b4ae',lt:'#fcd4d0',lt2:'#fdeae8',lt3:'#fdf0ee',lt4:'#f9c4be',
+    bg:'#1c1514',card:'#382826',card2:'#3e2b28',bd:'#563a36',tb:'#3e2b28'}
+};
+
+function getDSkin(){ return localStorage.getItem(D_SKIN_KEY)||'green'; }
+function getCSkin(){ return localStorage.getItem(C_SKIN_KEY)||'pink'; }
+
+function applyDSkin(k){
+  var s=D_SKINS[k]||D_SKINS.green, r=document.documentElement.style;
+  r.setProperty('--dm',s.m); r.setProperty('--dm-d',s.d); r.setProperty('--dm-l',s.l);
+  r.setProperty('--dm-lt',s.lt); r.setProperty('--dm-lt2',s.lt2); r.setProperty('--dm-lt3',s.lt3);
+  r.setProperty('--dm-bg',s.bg); r.setProperty('--dm-card',s.card); r.setProperty('--dm-card2',s.card2);
+  r.setProperty('--dm-bd',s.bd); r.setProperty('--dm-tb',s.tb);
+  localStorage.setItem(D_SKIN_KEY,k);
+  updateThemeMeta();
+}
+function applyCSkin(k){
+  var s=C_SKINS[k]||C_SKINS.pink, r=document.documentElement.style;
+  r.setProperty('--cm',s.m); r.setProperty('--cm-d',s.d); r.setProperty('--cm-l',s.l);
+  r.setProperty('--cm-lt',s.lt); r.setProperty('--cm-lt2',s.lt2);
+  r.setProperty('--cm-lt3',s.lt3); r.setProperty('--cm-lt4',s.lt4);
+  r.setProperty('--cm-bg',s.bg); r.setProperty('--cm-card',s.card); r.setProperty('--cm-card2',s.card2);
+  r.setProperty('--cm-bd',s.bd); r.setProperty('--cm-tb',s.tb);
+  localStorage.setItem(C_SKIN_KEY,k);
+  updateThemeMeta();
+}
+function updateThemeMeta(){
+  var mt=document.querySelector('meta[name="theme-color"]');
+  if(!mt) return;
+  var isCp=document.body.classList.contains('mode-couple');
+  mt.content=isCp?(C_SKINS[getCSkin()]||C_SKINS.pink).m:(D_SKINS[getDSkin()]||D_SKINS.green).m;
+}
+function openSkinModal(){
+  skinTab=document.body.classList.contains('mode-couple')?'couple':'diary';
+  setSkinTab(skinTab);
+  document.getElementById('skin-modal').style.display='flex';
+}
+function closeSkinModal(){ document.getElementById('skin-modal').style.display='none'; }
+function setSkinTab(t){
+  skinTab=t;
+  document.getElementById('sktab-d').classList.toggle('on',t==='diary');
+  document.getElementById('sktab-c').classList.toggle('on',t==='couple');
+  renderSkinGrid();
+}
+function renderSkinGrid(){
+  var set=skinTab==='diary'?D_SKINS:C_SKINS;
+  var cur=skinTab==='diary'?getDSkin():getCSkin();
+  document.getElementById('skin-grid').innerHTML=Object.keys(set).map(function(k){
+    var s=set[k];
+    return '<div class="sk-card'+(cur===k?' on':'')+'" data-k="'+k+'" onclick="pickSkin(this)">'
+      +'<div class="sk-prev"><i style="background:'+s.m+'"></i><i style="background:'+s.l+'"></i><i style="background:'+s.lt+'"></i></div>'
+      +'<div class="sk-name">'+s.n+'</div></div>';
+  }).join('');
+}
+function pickSkin(el){
+  var k=el.dataset.k;
+  if(skinTab==='diary') applyDSkin(k); else applyCSkin(k);
+  renderSkinGrid();
+  if(typeof toast==='function') toast('테마를 바꿨어요');
+}
+
 function openDarkSettingsModal(){ renderDarkScheduleUI(); document.getElementById('dark-settings-modal').style.display='flex'; }
 function closeDarkSettingsModal(){ document.getElementById('dark-settings-modal').style.display='none'; }
 
@@ -919,6 +1127,7 @@ function onDarkScheduleTimeChange(){
 }
 
 function applyMode(){
+  setTimeout(function(){if(typeof updateThemeMeta==='function')updateThemeMeta();},10);
   var body=document.body;
   var topTitle=document.getElementById('top-title');
   var topDday=document.getElementById('top-dday');
@@ -1047,6 +1256,253 @@ var MOOD_IDS={'😄':'m-1','😊':'m-2','🥰':'m-3','😐':'m-4','😔':'m-5','
 function loadDiary(){try{entries=JSON.parse(localStorage.getItem(DIARY_KEY))||{};}catch(e){entries={};}}
 function saveDiary(){localStorage.setItem(DIARY_KEY,JSON.stringify(entries));}
 
+
+/* ========== 태그 · 임시저장 · 회고 · 사진타임라인 ========== */
+var curTags=[];
+var DRAFT_KEY='diary_draft_v1';
+var draftTimer=null;
+
+/* --- 태그 --- */
+function renderTags(){
+  var w=document.getElementById('tag-wrap'); if(!w) return;
+  var inp=document.getElementById('tag-inp');
+  w.querySelectorAll('.tag-chip').forEach(function(e){e.remove();});
+  curTags.forEach(function(t,i){
+    var el=document.createElement('span');
+    el.className='tag-chip';
+    el.innerHTML='#'+t+' <button onclick="rmTag('+i+')">&times;</button>';
+    w.insertBefore(el,inp);
+  });
+  renderTagSugg();
+}
+function renderTagSugg(){
+  var box=document.getElementById('tag-sugg'); if(!box) return;
+  var freq={};
+  Object.keys(entries).forEach(function(d){
+    (entries[d].tags||[]).forEach(function(t){freq[t]=(freq[t]||0)+1;});
+  });
+  var top=Object.keys(freq).filter(function(t){return curTags.indexOf(t)<0;})
+    .sort(function(a,b){return freq[b]-freq[a];}).slice(0,8);
+  box.innerHTML=top.map(function(t){
+    return '<button onclick="addTagQuick(\''+t.replace(/'/g,"\\'")+'\')">#'+t+'</button>';
+  }).join('');
+}
+function addTagQuick(t){ if(curTags.indexOf(t)<0){curTags.push(t);renderTags();} }
+function rmTag(i){ curTags.splice(i,1); renderTags(); }
+function tagKey(e){
+  if(e.key==='Enter'||e.key===','){
+    e.preventDefault();
+    var v=e.target.value.trim().replace(/^#/,'');
+    if(v&&curTags.indexOf(v)<0&&curTags.length<8){curTags.push(v);renderTags();}
+    e.target.value='';
+  } else if(e.key==='Backspace'&&!e.target.value&&curTags.length){
+    curTags.pop(); renderTags();
+  }
+}
+
+/* --- 임시저장 --- */
+function scheduleDraft(){
+  clearTimeout(draftTimer);
+  draftTimer=setTimeout(saveDraft,3000);
+  var h=document.getElementById('draft-hint');
+  if(h) h.textContent='작성 중...';
+}
+function saveDraft(){
+  var b=document.getElementById('e-body'); if(!b) return;
+  var body=b.value;
+  if(!body.trim()){ localStorage.removeItem(DRAFT_KEY); return; }
+  try{
+    localStorage.setItem(DRAFT_KEY,JSON.stringify({
+      date:selDate, title:(document.getElementById('e-title')||{}).value||'',
+      body:body, mood:selMood, weather:selWeather, tags:curTags.slice(), ts:Date.now()
+    }));
+    var h=document.getElementById('draft-hint');
+    if(h){
+      var n=new Date();
+      h.textContent='임시저장됨 '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+    }
+  }catch(e){}
+}
+function checkDraft(){
+  var bar=document.getElementById('draft-bar'); if(!bar) return;
+  var d=null;
+  try{ d=JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch(e){}
+  var cur=(document.getElementById('e-body')||{}).value||'';
+  if(d&&d.body&&d.body.trim()&&d.body!==cur){
+    var dt=new Date(d.ts);
+    document.getElementById('draft-msg').textContent=
+      (d.date||'')+' 작성 중이던 글 ('+String(dt.getMonth()+1)+'/'+dt.getDate()+' '+String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0')+')';
+    bar.classList.add('on');
+  } else bar.classList.remove('on');
+}
+function restoreDraft(){
+  var d=null;
+  try{ d=JSON.parse(localStorage.getItem(DRAFT_KEY)); }catch(e){}
+  if(!d) return;
+  if(d.date&&d.date!==selDate&&typeof selectDate==='function') selectDate(d.date);
+  setTimeout(function(){
+    var t=document.getElementById('e-title'); if(t) t.value=d.title||'';
+    var b=document.getElementById('e-body'); if(b) b.value=d.body||'';
+    if(d.mood&&typeof setM==='function') setM(d.mood);
+    if(d.weather&&typeof setW==='function') setW(d.weather);
+    curTags=(d.tags||[]).slice(); renderTags();
+    if(typeof updCC==='function') updCC();
+    document.getElementById('draft-bar').classList.remove('on');
+    toast('불러왔어요');
+  },60);
+}
+function discardDraft(){
+  localStorage.removeItem(DRAFT_KEY);
+  document.getElementById('draft-bar').classList.remove('on');
+  var h=document.getElementById('draft-hint'); if(h) h.textContent='';
+}
+
+/* --- 이 날의 기록 --- */
+function renderDiaryThrowback(){
+  var area=document.getElementById('d-throwback'); if(!area) return;
+  var t=new Date(), items=[];
+  for(var y=1;y<=5;y++){
+    var d=new Date(t.getFullYear()-y,t.getMonth(),t.getDate());
+    var ds=fmt(d), e=entries[ds];
+    if(e&&(e.body||(e.photos&&e.photos.length))) items.push({y:y,ds:ds,e:e});
+    if(items.length>=3) break;
+  }
+  if(!items.length){ area.innerHTML=''; return; }
+  area.innerHTML='<div class="tb-card" onclick="event.stopPropagation()">'
+    +'<div class="tb-title">📆 이 날의 기록</div>'
+    +items.map(function(it){
+      var th=(it.e.photos&&it.e.photos.length)?'<img class="tb-thumb" src="'+resolvePhotoSrc(it.e.photos[0])+'">':'';
+      var mo=it.e.mood?it.e.mood+' ':'';
+      return '<div class="tb-item" onclick="selectDate(\''+it.ds+'\')" style="cursor:pointer">'+th
+        +'<div class="tb-txt"><div class="tb-date">'+it.y+'년 전 · '+it.ds+'</div>'
+        +'<div class="tb-body">'+mo+(it.e.title?'<b>'+it.e.title+'</b> ':'')+(it.e.body||'').slice(0,70)+'</div></div></div>';
+    }).join('')+'</div>';
+}
+
+/* --- 목록/사진 전환 --- */
+var listView='list';
+function setListView(v){
+  listView=v;
+  document.getElementById('lv-list').classList.toggle('on',v==='list');
+  document.getElementById('lv-photo').classList.toggle('on',v==='photo');
+  document.getElementById('fl-list').style.display=v==='list'?'block':'none';
+  document.getElementById('pt-list').style.display=v==='photo'?'block':'none';
+  if(v==='photo') renderPhotoTimeline();
+}
+
+/* --- 사진 타임라인 --- */
+var ptPhotos=[];
+function getFilteredKeys(){
+  var q=((document.getElementById('s-input')||{}).value||'').toLowerCase();
+  var mf=(document.getElementById('f-mood')||{}).value||'';
+  var wf=(document.getElementById('f-weather')||{}).value||'';
+  var range=(document.getElementById('f-range')||{}).value||'month';
+  var sf=(document.getElementById('s-from')||{}).value||'';
+  var st=(document.getElementById('s-to')||{}).value||'';
+  var ym=getYM(), yr=bcYear;
+  return Object.keys(entries).sort().reverse().filter(function(k){
+    if(range==='month'&&!k.startsWith(ym)) return false;
+    if(range==='year'&&!k.startsWith(String(yr))) return false;
+    if(sf&&k<sf) return false;
+    if(st&&k>st) return false;
+    var e=entries[k];
+    if(q){
+      var tagStr=(e.tags||[]).join(' ').toLowerCase();
+      if(!(e.title||'').toLowerCase().includes(q)&&!(e.body||'').toLowerCase().includes(q)&&!tagStr.includes(q.replace(/^#/,''))) return false;
+    }
+    if(mf&&e.mood!==mf) return false;
+    if(wf&&e.weather!==wf) return false;
+    return true;
+  });
+}
+function renderPhotoTimeline(){
+  var box=document.getElementById('pt-list'); if(!box) return;
+  ptPhotos=[];
+  getFilteredKeys().forEach(function(ds){
+    var e=entries[ds];
+    (e.photos||[]).forEach(function(p,i){
+      ptPhotos.push({ds:ds,src:resolvePhotoSrc(p),e:e,n:(e.photos||[]).length,i:i});
+    });
+  });
+  var lc=document.getElementById('list-count');
+  if(lc&&listView==='photo') lc.textContent=ptPhotos.length+'장의 사진';
+  if(!ptPhotos.length){
+    box.innerHTML='<div style="text-align:center;padding:40px 12px;color:#b0a898;font-size:12px">아직 사진이 없어요 📷</div>';
+    return;
+  }
+  var groups={};
+  ptPhotos.forEach(function(p,idx){
+    var ym=p.ds.slice(0,7);
+    if(!groups[ym]) groups[ym]=[];
+    groups[ym].push({p:p,idx:idx});
+  });
+  box.innerHTML=Object.keys(groups).sort().reverse().map(function(ym){
+    var parts=ym.split('-');
+    return '<div class="pt-month">'+parts[0]+'년 '+parseInt(parts[1])+'월 <span style="font-weight:400;color:#b0a898;font-size:11px">'+groups[ym].length+'장</span></div>'
+      +'<div class="pt-grid">'+groups[ym].map(function(g){
+        return '<div class="pt-cell" onclick="openLB('+g.idx+')"><img src="'+g.p.src+'" loading="lazy">'
+          +(g.p.n>1?'<span class="pt-badge">'+g.p.n+'</span>':'')
+          +'<div class="pt-day">'+parseInt(g.p.ds.slice(8))+'일</div></div>';
+      }).join('')+'</div>';
+  }).join('');
+}
+
+/* --- 라이트박스 --- */
+var lbIdx=0;
+function openLB(i){
+  window._lbMode='diary';
+  lbIdx=i; renderLB();
+  document.getElementById('lightbox').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeLB(){
+  document.getElementById('lightbox').classList.remove('on');
+  document.body.style.overflow='';
+}
+function lbMove(d){
+  if(window._lbMode==='couple'){
+    if(!cpPhotos.length) return;
+    cpLbIdx=(cpLbIdx+d+cpPhotos.length)%cpPhotos.length;
+    renderCpLB(); return;
+  }
+  if(!ptPhotos.length) return;
+  lbIdx=(lbIdx+d+ptPhotos.length)%ptPhotos.length;
+  renderLB();
+}
+function renderLB(){
+  var p=ptPhotos[lbIdx]; if(!p) return;
+  document.getElementById('lb-img').src=p.src;
+  document.getElementById('lb-idx').textContent=(lbIdx+1)+' / '+ptPhotos.length;
+  document.getElementById('lb-date').textContent=(p.e.mood?p.e.mood+' ':'')+p.ds+(p.e.title?' · '+p.e.title:'');
+  document.getElementById('lb-body').textContent=(p.e.body||'').slice(0,160);
+}
+function lbOpenEntry(){
+  if(window._lbMode==='couple'){
+    var cp=cpPhotos[cpLbIdx]; if(!cp) return;
+    closeLB();
+    if(typeof openEntryModal==='function') setTimeout(function(){openEntryModal(cp.ds);},80);
+    return;
+  }
+  var p=ptPhotos[lbIdx]; if(!p) return;
+  closeLB();
+  if(typeof goTabD==='function') goTabD('write');
+  setTimeout(function(){ if(typeof selectDate==='function') selectDate(p.ds); },80);
+}
+function clearSearch(){
+  ['s-input','s-from','s-to'].forEach(function(id){
+    var el=document.getElementById(id); if(el) el.value='';
+  });
+  var m=document.getElementById('f-mood'); if(m) m.value='';
+  renderFL();
+}
+document.addEventListener('keydown',function(e){
+  var lb=document.getElementById('lightbox');
+  if(!lb||!lb.classList.contains('on')) return;
+  if(e.key==='Escape') closeLB();
+  else if(e.key==='ArrowLeft') lbMove(-1);
+  else if(e.key==='ArrowRight') lbMove(1);
+});
+
 function goTabD(id){
   document.querySelectorAll('#section-diary .tab-content').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('#tabbar-diary .tb').forEach(function(el){el.classList.remove('active');});
@@ -1133,8 +1589,11 @@ function selectDate(ds){
   selWeather=e?e.weather||'':'';
   Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.toggle('on',k===selMood);});
   Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.toggle('on',k===selWeather);});
+  curTags=(e&&e.tags)?e.tags.slice():[];
+  if(typeof renderTags==='function') renderTags();
   renderDiaryPrompt();
   updCC();
+  if(typeof checkDraft==='function') setTimeout(checkDraft,50);
   goTabD('write');
 }
 
@@ -1144,11 +1603,15 @@ function saveEntry(){
   if(!selDate){toast('날짜를 선택해주세요!');return;}
   var body=document.getElementById('e-body').value.trim();
   if(!body){toast('내용을 입력해주세요!');return;}
-  entries[selDate]={title:document.getElementById('e-title').value.trim(),body:body,mood:selMood,weather:selWeather,photos:persistPhotoList(curDiaryPhotos),updatedAt:Date.now()};
+  entries[selDate]={title:document.getElementById('e-title').value.trim(),body:body,mood:selMood,weather:selWeather,photos:persistPhotoList(curDiaryPhotos),tags:curTags.slice(),updatedAt:Date.now()};
+  localStorage.removeItem(DRAFT_KEY);
+  var _dh=document.getElementById('draft-hint'); if(_dh)_dh.textContent='';
+  var _db=document.getElementById('draft-bar'); if(_db)_db.classList.remove('on');
   curDiaryPhotos=entries[selDate].photos.slice();
   saveDiary(); toast('💾 저장됐어요!'); setTimeout(launchSaveParticles,50);
   renderFL(); renderStatCards();
   checkMoodBalance(); checkDiaryGoalAchieved(); checkDiaryBadges();
+  if(typeof renderTagSugg==='function') renderTagSugg();
 }
 
 function delEntry(){
@@ -1358,10 +1821,10 @@ function checkDiaryMonthlyReport(){
     var mk=Object.keys(moodCounts).sort(function(a,b){return moodCounts[b]-moodCounts[a];});
     var wrap=document.getElementById('diary-mr-mood-wrap');
     wrap.innerHTML = mk.length>0
-      ? '<div style="font-size:11px;color:#9dc4a0;margin-bottom:6px">가장 많이 느낀 기분</div>'
+      ? '<div style="font-size:11px;color:var(--dm-l);margin-bottom:6px">가장 많이 느낀 기분</div>'
         +mk.slice(0,3).map(function(m){
           var pct=Math.round(moodCounts[m]/prevKeys.length*100);
-          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px"><span>'+m+'</span><div style="flex:1;height:7px;background:#eee;border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:#7aaa82;border-radius:4px"></div></div><span>'+moodCounts[m]+'일</span></div>';
+          return '<div style="display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px"><span>'+m+'</span><div style="flex:1;height:7px;background:#eee;border-radius:4px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--dm);border-radius:4px"></div></div><span>'+moodCounts[m]+'일</span></div>';
         }).join('')
       : '';
     document.getElementById('diary-monthly-report-popup').style.display='flex';
@@ -1641,16 +2104,25 @@ function renderFL(){
   var mf=document.getElementById('f-mood').value;
   var wf=document.getElementById('f-weather').value;
   var range=document.getElementById('f-range').value;
+  var sf=(document.getElementById('s-from')||{}).value||'';
+  var st=(document.getElementById('s-to')||{}).value||'';
   var ym=getYM(), yr=bcYear;
   var keys=Object.keys(entries).sort().reverse().filter(function(k){
     if(range==='month'&&!k.startsWith(ym)) return false;
     if(range==='year'&&!k.startsWith(String(yr))) return false;
     var e=entries[k];
-    if(q&&!(e.title||'').toLowerCase().includes(q)&&!(e.body||'').toLowerCase().includes(q)) return false;
+    if(sf&&k<sf) return false;
+    if(st&&k>st) return false;
+    if(q){
+      var tagStr=(e.tags||[]).join(' ').toLowerCase();
+      var hit=(e.title||'').toLowerCase().includes(q)||(e.body||'').toLowerCase().includes(q)||tagStr.includes(q.replace(/^#/,''));
+      if(!hit) return false;
+    }
     if(mf&&e.mood!==mf) return false;
     if(wf&&e.weather!==wf) return false;
     return true;
   });
+  if(typeof listView!=='undefined'&&listView==='photo'){ renderPhotoTimeline(); return; }
   document.getElementById('list-count').textContent=keys.length+'개의 일기';
   var container=document.getElementById('fl-list');
   if(keys.length===0){container.innerHTML='<div style="text-align:center;color:#d0b090;font-size:13px;padding:32px">검색 결과가 없어요 🔍</div>';return;}
@@ -1659,13 +2131,14 @@ function renderFL(){
   var html='';
   Object.keys(groups).sort().reverse().forEach(function(ym2){
     var pts=ym2.split('-');
-    html+='<div style="font-size:12px;font-weight:bold;color:#9dc4a0;margin:12px 0 6px 2px">'+pts[0]+'년 '+parseInt(pts[1])+'월 ('+groups[ym2].length+'편)</div>';
+    html+='<div style="font-size:12px;font-weight:bold;color:var(--dm-l);margin:12px 0 6px 2px">'+pts[0]+'년 '+parseInt(pts[1])+'월 ('+groups[ym2].length+'편)</div>';
     groups[ym2].forEach(function(k){
       var e=entries[k],d=parseDate(k);
       var ds=(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
       html+='<div class="ec" onclick="openDiaryPreview(\''+k+'\')">'
         +'<div class="ech"><span class="ecd">'+ds+'</span><span class="eci">'+(e.weather||'')+' '+(e.mood||'')+(e.photos&&e.photos.length?' 📷':'')+'</span></div>'
         +'<div class="ect">'+(e.title||'(제목 없음)')+'</div>'
+        +((e.tags&&e.tags.length)?'<div class="entry-tags">'+e.tags.map(function(t){return '<span class="entry-tag">#'+t+'</span>';}).join('')+'</div>':'')
         +'<div class="ecp">'+(e.body||'').replace(/\n/g,' ')+'</div>'
         +'</div>';
     });
@@ -1688,7 +2161,7 @@ function renderStats(){
     });
     document.getElementById('mood-leg').innerHTML=mk.map(function(m){
       var pct=Math.round(moodCounts[m]/mKeys.length*100);
-      return '<div class="mli"><span>'+m+'</span><span style="color:#9dc4a0;font-size:11px">'+MOOD_LABELS[m]+' '+moodCounts[m]+'일 ('+pct+'%)</span></div>';
+      return '<div class="mli"><span>'+m+'</span><span style="color:var(--dm-l);font-size:11px">'+MOOD_LABELS[m]+' '+moodCounts[m]+'일 ('+pct+'%)</span></div>';
     }).join('');
   } else {
     document.getElementById('mood-leg').innerHTML='<div style="font-size:12px;color:#d0b090;text-align:center;width:100%">이달 기분 기록이 없어요</div>';
@@ -1872,10 +2345,10 @@ function renderPlanSummary(){
       if(diff<nearestDiff){ nearestDiff=diff; nearest=a; }
     });
     if(nearest){
-      html+='<div class="diary-card" style="background:linear-gradient(135deg,#fff5f7,#fde2e4);border:1px solid #ffc9d4;margin-bottom:8px">'
+      html+='<div class="diary-card" style="background:linear-gradient(135deg,#fff5f7,var(--cm-lt3));border:1px solid var(--cm-lt);margin-bottom:8px">'
         +'<span class="card-icon">🎉</span>'
         +'<div class="card-body" style="flex:1">'
-        +'<div class="card-title" style="color:#d17a8a">'+nearest.name+' '+(nearestDiff===0?'D-day예요!':'D-'+nearestDiff)+'</div>'
+        +'<div class="card-title" style="color:var(--cm-d)">'+nearest.name+' '+(nearestDiff===0?'D-day예요!':'D-'+nearestDiff)+'</div>'
         +'<div class="card-desc">가장 가까운 기념일이에요</div>'
         +'</div>'
         +'<button class="card-dismiss" data-cp-dismiss="'+annivDismissKey+'">✕</button>'
@@ -1893,10 +2366,10 @@ function renderPlanSummary(){
       var pd=new Date(pKeys[0]+'T00:00:00');
       var diff2=Math.round((pd-today)/86400000);
       var memo=(cpData.promises[pKeys[0]]&&cpData.promises[pKeys[0]].memo)||'';
-      html+='<div class="diary-card" style="background:linear-gradient(135deg,#fff0f5,#ffe0eb);border:1px solid #ffc9d4">'
+      html+='<div class="diary-card" style="background:linear-gradient(135deg,#fff0f5,#ffe0eb);border:1px solid var(--cm-lt)">'
         +'<span class="card-icon">📅</span>'
         +'<div class="card-body" style="flex:1">'
-        +'<div class="card-title" style="color:#ff6b8a">'+(diff2===0?'오늘 약속이 있어요!':'D-'+diff2+' 약속')+'</div>'
+        +'<div class="card-title" style="color:var(--cm)">'+(diff2===0?'오늘 약속이 있어요!':'D-'+diff2+' 약속')+'</div>'
         +'<div class="card-desc">'+(memo?memo+' · ':'')+(pd.getMonth()+1)+'월 '+pd.getDate()+'일</div>'
         +'</div>'
         +'<button class="card-dismiss" data-cp-dismiss="'+promiseDismissKey+'">✕</button>'
@@ -1950,7 +2423,7 @@ function handleCoupleProfilePhoto(ev){
 
 // ===== 커플 모드: 기분 통계 =====
 var cpMoodChart=null;
-var CP_MOOD_COLORS={'🥰':'#ff6b8a','😊':'#ffb84d','😐':'#94a3b8','😢':'#818cf8','😡':'#f87171'};
+var CP_MOOD_COLORS={'🥰':'var(--cm)','😊':'#ffb84d','😐':'#94a3b8','😢':'#818cf8','😡':'#f87171'};
 var CP_MOOD_LABELS={'🥰':'사랑','😊':'좋음','😐':'보통','😢':'눈물','😡':'싸움'};
 function renderCpMoodStats(){
   var canvas=document.getElementById('cp-mood-chart'); if(!canvas) return;
@@ -1968,20 +2441,20 @@ function renderCpMoodStats(){
       if(cpMoodChart){ cpMoodChart.destroy(); cpMoodChart=null; }
       cpMoodChart=new Chart(canvas,{
         type:'doughnut',
-        data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'#ffb3c1';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fff'}]},
+        data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'var(--cm-lt4)';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fff'}]},
         options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/totalMoodDays*100)+'%)';}}}}}
       });
     }catch(e){ /* Chart.js 로드 실패해도 아래 범례/퍼센트는 계속 보여줌 */ }
     document.getElementById('cp-mood-leg').innerHTML=mk.map(function(m){
       var pct=Math.round(moodCounts[m]/totalMoodDays*100);
-      return '<div class="mli" style="color:#ff6b8a;background:#fff5f7;border-color:#ffe0e6"><span>'+m+'</span><span style="color:#ffb3c1;font-size:11px">'+CP_MOOD_LABELS[m]+' '+moodCounts[m]+'일 ('+pct+'%)</span></div>';
+      return '<div class="mli" style="color:var(--cm);background:#fff5f7;border-color:var(--cm-lt2)"><span>'+m+'</span><span style="color:var(--cm-lt4);font-size:11px">'+CP_MOOD_LABELS[m]+' '+moodCounts[m]+'일 ('+pct+'%)</span></div>';
     }).join('');
   } else {
-    document.getElementById('cp-mood-leg').innerHTML='<div style="font-size:12px;color:#ffc9d4;text-align:center;width:100%">이달 기분 기록이 없어요</div>';
+    document.getElementById('cp-mood-leg').innerHTML='<div style="font-size:12px;color:var(--cm-lt);text-align:center;width:100%">이달 기분 기록이 없어요</div>';
     try{
       var ctx=canvas.getContext('2d');
       ctx.clearRect(0,0,canvas.width||260,canvas.height||260);
-      ctx.font='13px sans-serif';ctx.fillStyle='#ffc9d4';ctx.textAlign='center';
+      ctx.font='13px sans-serif';ctx.fillStyle='var(--cm-lt)';ctx.textAlign='center';
       ctx.fillText('기록 없음',(canvas.width||260)/2,(canvas.height||260)/2);
     }catch(e){}
   }
@@ -2114,7 +2587,7 @@ function renderCpBadges(){
     gridEl.innerHTML=CP_ALL_BADGES.map(function(b,i){
       var on=b.check();
       return '<div onclick="onCpBadgeClick('+i+')" style="cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px">'
-        +'<div style="width:54px;height:54px;border-radius:50%;background:'+(on?'linear-gradient(135deg,#ffd6e0,#ff9eb5)':'#eee')+';display:flex;align-items:center;justify-content:center;font-size:24px;'+(on?'box-shadow:0 3px 10px rgba(255,107,138,.25)':'filter:grayscale(1);opacity:.28')+'">'+b.icon+'</div>'
+        +'<div style="width:54px;height:54px;border-radius:50%;background:'+(on?'linear-gradient(135deg,#ffd6e0,var(--cm-l))':'#eee')+';display:flex;align-items:center;justify-content:center;font-size:24px;'+(on?'box-shadow:0 3px 10px rgba(255,107,138,.25)':'filter:grayscale(1);opacity:.28')+'">'+b.icon+'</div>'
         +'<div style="font-size:9px;text-align:center;color:'+(on?'#555':'#ccc')+';font-weight:'+(on?600:400)+'">'+b.label+'</div>'
         +'</div>';
     }).join('');
@@ -2165,7 +2638,7 @@ function renderAnnivList(){
   var list=cpData.anniversaries.slice().sort(function(a,b){return a.date.localeCompare(b.date);});
   var el=document.getElementById('anniv-list');
   if(list.length===0){
-    el.innerHTML='<div style="text-align:center;color:#ffc9d4;font-size:12px;padding:14px">아직 등록된 기념일이 없어요</div>';
+    el.innerHTML='<div style="text-align:center;color:var(--cm-lt);font-size:12px;padding:14px">아직 등록된 기념일이 없어요</div>';
     return;
   }
   var today=new Date(); today.setHours(0,0,0,0);
@@ -2368,7 +2841,7 @@ function renderGallery(){
       ?bucketPhotos.filter(function(b){return b.cat===bucketGalleryCat;})
       :bucketPhotos;
     if(filtered.length===0){
-      grid.innerHTML='<div style="text-align:center;color:#ffc9d4;font-size:12px;padding:20px">완료한 버킷리스트에 사진을 추가해보세요 💝</div>';
+      grid.innerHTML='<div style="text-align:center;color:var(--cm-lt);font-size:12px;padding:20px">완료한 버킷리스트에 사진을 추가해보세요 💝</div>';
     } else {
       grid.innerHTML=filtered.map(function(it){
         var icon=it.cat?(it.cat.split(' ')[0]):'💝';
@@ -2401,13 +2874,37 @@ function renderGallery(){
     var e=cpData.entries[k];
     e.photos.forEach(function(p){items.push({date:k,photo:p,mood:e.mood});});
   });
-  grid.innerHTML=items.map(function(it){
+  cpPhotos=items.map(function(it){
+    var e=cpData.entries[it.date]||{};
+    return {ds:it.date,src:resolvePhotoSrc(it.photo),mood:it.mood,title:e.title||'',body:e.text||e.body||''};
+  });
+  grid.innerHTML=items.map(function(it,idx){
     var d=new Date(it.date+'T00:00:00');
-    return '<div class="gallery-item de-item" data-date="'+it.date+'" title="'+(d.getMonth()+1)+'/'+d.getDate()+'">'
+    return '<div class="gallery-item de-item" data-idx="'+idx+'" title="'+(d.getMonth()+1)+'/'+d.getDate()+'">'
       +'<img src="'+resolvePhotoSrc(it.photo)+'">'
       +(it.mood?'<span class="gmood">'+it.mood+'</span>':'')
       +'</div>';
   }).join('');
+  grid.onclick=function(e){
+    var el=e.target.closest('.de-item');
+    if(el) openCpLB(+el.getAttribute('data-idx'));
+  };
+}
+
+/* --- 커플 갤러리 라이트박스 --- */
+var cpPhotos=[], cpLbIdx=0;
+function openCpLB(i){
+  cpLbIdx=i; renderCpLB();
+  document.getElementById('lightbox').classList.add('on');
+  document.body.style.overflow='hidden';
+  window._lbMode='couple';
+}
+function renderCpLB(){
+  var p=cpPhotos[cpLbIdx]; if(!p) return;
+  document.getElementById('lb-img').src=p.src;
+  document.getElementById('lb-idx').textContent=(cpLbIdx+1)+' / '+cpPhotos.length;
+  document.getElementById('lb-date').textContent=(p.mood?p.mood+' ':'')+p.ds+(p.title?' · '+p.title:'');
+  document.getElementById('lb-body').textContent=(p.body||'').slice(0,160);
 }
 
 function renderThrowback(){
@@ -2478,7 +2975,7 @@ function renderBucket(){
   document.getElementById('bucket-prog-fill').style.width=pct+'%';
   document.getElementById('bucket-prog-text').textContent=done+'/'+total+' 완료 ('+pct+'%)';
   if(list.length===0){
-    el.innerHTML='<div style="text-align:center;color:#ffc9d4;font-size:12px;padding:20px">같이 하고 싶은 걸 추가해보세요 💝</div>';
+    el.innerHTML='<div style="text-align:center;color:var(--cm-lt);font-size:12px;padding:20px">같이 하고 싶은 걸 추가해보세요 💝</div>';
     return;
   }
   renderBucketCatSel();
@@ -2490,7 +2987,7 @@ function renderBucket(){
   // 미완료 항목
   todo.forEach(function(item){
     var catTag=item.cat
-      ?'<span style="font-size:10px;background:#fde2e4;color:#d17a8a;border-radius:8px;padding:2px 6px;margin-left:4px">'+item.cat+'</span>'
+      ?'<span style="font-size:10px;background:var(--cm-lt3);color:var(--cm-d);border-radius:8px;padding:2px 6px;margin-left:4px">'+item.cat+'</span>'
       :'';
     html+='<div class="bucket-item">';
     html+='<button class="bucket-check" data-bid="'+item.id+'"></button>';
@@ -2503,9 +3000,9 @@ function renderBucket(){
   if(doneList.length>0){
     var doneOpen=document.getElementById('bucket-done-section-open');
     var isOpen=doneOpen?doneOpen.dataset.open!=='false':true;
-    html+='<div id="bucket-done-section-open" data-open="'+isOpen+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 4px;margin-top:8px;border-top:1.5px dashed #fde2e4;cursor:pointer">';
-    html+='<span style="font-size:12px;font-weight:700;color:#d17a8a">✅ 완료 '+doneList.length+'개</span>';
-    html+='<span style="font-size:11px;color:#d17a8a">'+(isOpen?'▲':'▼')+'</span>';
+    html+='<div id="bucket-done-section-open" data-open="'+isOpen+'" style="display:flex;align-items:center;justify-content:space-between;padding:10px 4px;margin-top:8px;border-top:1.5px dashed var(--cm-lt3);cursor:pointer">';
+    html+='<span style="font-size:12px;font-weight:700;color:var(--cm-d)">✅ 완료 '+doneList.length+'개</span>';
+    html+='<span style="font-size:11px;color:var(--cm-d)">'+(isOpen?'▲':'▼')+'</span>';
     html+='</div>';
     html+='<div id="bucket-done-items" style="display:'+(isOpen?'block':'none')+'">';
     doneList.forEach(function(item){
@@ -2513,7 +3010,7 @@ function renderBucket(){
         ?(new Date(item.doneDate+'T00:00:00').getMonth()+1)+'월 '+new Date(item.doneDate+'T00:00:00').getDate()+'일 달성'
         :'';
       var catTag=item.cat
-        ?'<span style="font-size:10px;background:#fde2e4;color:#d17a8a;border-radius:8px;padding:2px 6px;margin-left:4px">'+item.cat+'</span>'
+        ?'<span style="font-size:10px;background:var(--cm-lt3);color:var(--cm-d);border-radius:8px;padding:2px 6px;margin-left:4px">'+item.cat+'</span>'
         :'';
       var photoIcon=item.photo?'🖼️':'📷';
       html+='<div class="bucket-item done">';
@@ -2521,7 +3018,7 @@ function renderBucket(){
       html+='<span style="flex:1">';
       html+='<span class="bucket-text" contenteditable="true" data-bid="'+item.id+'" style="text-decoration:line-through;color:#ccc">'+item.text+'</span>';
       html+=catTag;
-      if(dateStr) html+='<div style="font-size:10px;color:#d17a8a;margin-top:2px">📅 '+dateStr+'</div>';
+      if(dateStr) html+='<div style="font-size:10px;color:var(--cm-d);margin-top:2px">📅 '+dateStr+'</div>';
       html+='</span>';
       html+='<button class="bucket-photo-btn" data-bid="'+item.id+'" style="background:none;border:none;font-size:14px;cursor:pointer;padding:0 2px">'+photoIcon+'</button>';
       html+='<button class="bucket-del" data-bid="'+item.id+'">−</button>';
@@ -2570,6 +3067,8 @@ function toggleDoneSection(){
 ========================================================= */
 loadDiary();
 loadCp();
+applyDSkin(getDSkin());
+applyCSkin(getCSkin());
 loadDiarySettings();
 restoreDarkMode();
 loadDarkSchedule();
@@ -2597,6 +3096,10 @@ openPhotoDB().then(loadAllPhotosToCache).then(function(){
     currentMode='couple';
   }
   applyMode();
+  if(typeof renderDiaryThrowback==='function') renderDiaryThrowback();
+  if(typeof renderPhotoTimeline==='function') renderPhotoTimeline();
+  if(typeof renderTags==='function') renderTags();
+  if(typeof checkDraft==='function') setTimeout(checkDraft,200);
 });
 
 // 20~24시 사이에 앱을 계속 켜놓고 있는 경우도 놓치지 않도록 30분마다 재확인
@@ -2633,7 +3136,7 @@ function renderCatManageList(){
   el.innerHTML=cats.map(function(cat,i){
     return '<div style="display:flex;align-items:center;gap:6px;padding:6px 0;border-bottom:1px solid #f9f0f2">'
       +'<span style="flex:1;font-size:13px;color:#555">'+cat+'</span>'
-      +'<button onclick="editCat('+i+')" style="background:#fde2e4;border:none;border-radius:5px;padding:3px 8px;font-size:11px;color:#d17a8a;cursor:pointer;font-family:inherit">수정</button>'
+      +'<button onclick="editCat('+i+')" style="background:var(--cm-lt3);border:none;border-radius:5px;padding:3px 8px;font-size:11px;color:var(--cm-d);cursor:pointer;font-family:inherit">수정</button>'
       +'<button onclick="deleteCat('+i+')" style="background:#f5f5f5;border:none;border-radius:5px;padding:3px 8px;font-size:11px;color:#aaa;cursor:pointer;font-family:inherit">삭제</button>'
       +'</div>';
   }).join('');
@@ -2737,8 +3240,8 @@ function launchBucketParticles(){
   var ct=cv.getContext('2d');
   var isDiary=document.body.classList.contains('mode-diary');
   var COLS=isDiary
-    ?['#a8d8a8','#c5e2d3','#d4e8c4','#7aaa82','#fff3b0','#e8f0e8']
-    :['#FACDD8','#F0C4DC','#fde2e4','#F06B8A','#ffc9d4','#F2ABBC','#DCAFBE','#ffd6e0'];
+    ?['#a8d8a8','#c5e2d3','var(--dm-lt)','var(--dm)','#fff3b0','#e8f0e8']
+    :['#FACDD8','#F0C4DC','var(--cm-lt3)','#F06B8A','var(--cm-lt)','#F2ABBC','#DCAFBE','#ffd6e0'];
   var CHARS=isDiary?['🍀','✨','🌿','★','●','🌱']:['💕','✨','🌸','★','●','♦','💝'];
   var pts=[],run=true;
   function P(x,y){this.x=x;this.y=y;this.vx=(Math.random()-.5)*14;this.vy=(Math.random()-.5)*14-7;this.g=0.4;this.a=1;this.d=0.013+Math.random()*.012;this.s=8+Math.random()*13;this.c=COLS[Math.floor(Math.random()*COLS.length)];this.ch=CHARS[Math.floor(Math.random()*CHARS.length)];this.r=Math.random()*360;this.rs=(Math.random()-.5)*10;}
@@ -2835,9 +3338,9 @@ function renderCoupleCards(){
         var p=cpData.promises[ds];
         var memo=p&&p.memo?p.memo:'';
         var dLabel=diff===0?'D-day':'D-'+diff;
-        var bgColor=diff===0?'linear-gradient(135deg,#ffe0eb,#ffc9d4)':'linear-gradient(135deg,#fff0f5,#ffe0eb)';
-        var titleColor=diff===0?'#ff4477':'#ff6b8a';
-        html+='<div class="diary-card" style="background:'+bgColor+';border:1px solid #ffc9d4;cursor:default">'
+        var bgColor=diff===0?'linear-gradient(135deg,#ffe0eb,var(--cm-lt))':'linear-gradient(135deg,#fff0f5,#ffe0eb)';
+        var titleColor=diff===0?'#ff4477':'var(--cm)';
+        html+='<div class="diary-card" style="background:'+bgColor+';border:1px solid var(--cm-lt);cursor:default">'
           +'<span class="card-icon">📅</span>'
           +'<div class="card-body" style="flex:1">'
           +'<div class="card-title" style="color:'+titleColor+'">'+dLabel+' '+pname3+'이와 약속!</div>'
@@ -2893,8 +3396,8 @@ function togglePromiseFilter(){
   promiseFilterOn=!promiseFilterOn;
   var btn=document.getElementById('promise-filter-btn');
   if(btn){
-    btn.style.background=promiseFilterOn?'#ff6b8a':'#f5f5f5';
-    btn.style.borderColor=promiseFilterOn?'#ff6b8a':'#eee';
+    btn.style.background=promiseFilterOn?'var(--cm)':'#f5f5f5';
+    btn.style.borderColor=promiseFilterOn?'var(--cm)':'#eee';
     btn.style.color=promiseFilterOn?'#fff':'#aaa';
     btn.style.fontWeight=promiseFilterOn?'700':'400';
   }
@@ -2966,8 +3469,8 @@ function launchSaveParticles(){
   var ct=cv.getContext('2d');
   var isDiary=document.body.classList.contains('mode-diary');
   var COLS=isDiary
-    ?['#d4e8c4','#d0e4bc','#eef7e8','#a8c888','#c5d4b5']
-    :['#FACDD8','#ffc9d4','#F0C4DC','#ff9eb5','#ffd6e0','#fff'];
+    ?['var(--dm-lt)','#d0e4bc','#eef7e8','#a8c888','#c5d4b5']
+    :['#FACDD8','var(--cm-lt)','#F0C4DC','var(--cm-l)','#ffd6e0','#fff'];
   var CHARS=isDiary?['🍀','✨','🌿','★','🌱']:['💕','✨','🌸','★','♦'];
   var pts=[]; var run=true;
   function P(x,y){
@@ -3096,12 +3599,12 @@ function savePartnerNameFromInput2(){
   <div style="background:#fff;border-radius:20px;padding:24px 20px;max-width:320px;width:100%;text-align:center;box-sizing:border-box">
     <input type="hidden" id="bucket-done-id">
     <div style="font-size:36px;margin-bottom:8px">🎉</div>
-    <div id="bucket-done-title" style="font-size:17px;font-weight:700;color:#d17a8a;margin-bottom:4px">달성했어요!</div>
+    <div id="bucket-done-title" style="font-size:17px;font-weight:700;color:var(--cm-d);margin-bottom:4px">달성했어요!</div>
     <div style="font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.6">사진을 추가하면<br>버킷 앨범에 기록돼요 📷</div>
     <div id="bucket-done-preview-wrap" style="margin-bottom:12px">
       <img id="bucket-done-preview" style="display:none;width:100%;border-radius:10px;max-height:200px;object-fit:cover">
     </div>
-    <label style="display:block;width:100%;background:#fde2e4;color:#d17a8a;border-radius:10px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;margin-bottom:8px;box-sizing:border-box">
+    <label style="display:block;width:100%;background:var(--cm-lt3);color:var(--cm-d);border-radius:10px;padding:11px;font-size:13px;font-weight:600;cursor:pointer;text-align:center;margin-bottom:8px;box-sizing:border-box">
       📷 사진 추가하기
       <input type="file" accept="image/*" id="bucket-done-file" onchange="previewBucketPhoto(event)" style="display:none">
     </label>
@@ -3115,7 +3618,7 @@ function savePartnerNameFromInput2(){
   <div style="max-width:340px;width:100%;text-align:center">
     <img id="bucket-photo-view-img" style="width:100%;border-radius:14px;margin-bottom:12px">
     <div id="bucket-photo-view-text" style="font-size:15px;font-weight:700;color:#fff;margin-bottom:4px"></div>
-    <div id="bucket-photo-view-date" style="font-size:12px;color:#ffc9d4"></div>
+    <div id="bucket-photo-view-date" style="font-size:12px;color:var(--cm-lt)"></div>
   </div>
 </div>
 
@@ -3123,11 +3626,11 @@ function savePartnerNameFromInput2(){
 <div id="cp-badge-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:16px;padding:18px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;box-sizing:border-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <span style="font-size:15px;font-weight:700;color:#ff6b8a">🏅 뱃지 컬렉션</span>
+      <span style="font-size:15px;font-weight:700;color:var(--cm)">🏅 뱃지 컬렉션</span>
       <button onclick="closeCpBadgeModal()" style="background:none;border:none;font-size:18px;color:#bbb;cursor:pointer">✕</button>
     </div>
-    <div style="font-size:11px;color:#ffb3c1;margin-bottom:10px" id="cp-badge-modal-count"></div>
-    <div style="height:6px;background:#ffeef1;border-radius:3px;overflow:hidden;margin-bottom:14px"><div id="cp-badge-progress-bar" style="height:100%;width:0%;background:#ff6b8a;border-radius:3px;transition:width .4s"></div></div>
+    <div style="font-size:11px;color:var(--cm-lt4);margin-bottom:10px" id="cp-badge-modal-count"></div>
+    <div style="height:6px;background:#ffeef1;border-radius:3px;overflow:hidden;margin-bottom:14px"><div id="cp-badge-progress-bar" style="height:100%;width:0%;background:var(--cm);border-radius:3px;transition:width .4s"></div></div>
     <div id="cp-badge-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px"></div>
   </div>
 </div>
@@ -3136,10 +3639,10 @@ function savePartnerNameFromInput2(){
 <div id="cp-badge-achieved-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:28px 22px;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
     <div id="cp-badge-pop-icon" style="font-size:48px;margin-bottom:10px">🏅</div>
-    <h3 style="font-size:18px;font-weight:800;color:#ff6b8a;margin-bottom:8px">새 뱃지 획득!</h3>
+    <h3 style="font-size:18px;font-weight:800;color:var(--cm);margin-bottom:8px">새 뱃지 획득!</h3>
     <div id="cp-badge-pop-label" style="font-size:15px;font-weight:700;color:#444;margin-bottom:6px"></div>
     <p id="cp-badge-pop-desc" style="font-size:13px;color:#888;line-height:1.6;margin-bottom:20px"></p>
-    <button onclick="closeCpBadgeAchievedPopup()" style="width:100%;background:#ff6b8a;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">확인</button>
+    <button onclick="closeCpBadgeAchievedPopup()" style="width:100%;background:var(--cm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">확인</button>
   </div>
 </div>
 
@@ -3147,9 +3650,9 @@ function savePartnerNameFromInput2(){
 <div id="cp-anniv-today-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:28px 22px;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
     <div style="font-size:48px;margin-bottom:10px">🎉</div>
-    <h3 style="font-size:18px;font-weight:800;color:#ff6b8a;margin-bottom:8px">오늘은 특별한 날이에요!</h3>
+    <h3 style="font-size:18px;font-weight:800;color:var(--cm);margin-bottom:8px">오늘은 특별한 날이에요!</h3>
     <div id="cp-anniv-pop-name" style="font-size:16px;font-weight:700;color:#444;margin-bottom:20px"></div>
-    <button onclick="closeCpAnnivTodayPopup()" style="width:100%;background:#ff6b8a;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">축하해요 💕</button>
+    <button onclick="closeCpAnnivTodayPopup()" style="width:100%;background:var(--cm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">축하해요 💕</button>
   </div>
 </div>
 
@@ -3164,17 +3667,33 @@ function savePartnerNameFromInput2(){
       <span id="diary-preview-mood" style="font-size:17px"></span>
       <button onclick="closeDiaryPreview()" style="margin-left:auto;background:none;border:none;font-size:18px;color:#bbb;cursor:pointer">✕</button>
     </div>
-    <div id="diary-preview-divider-green" style="border-top:2px solid #7aaa82;margin-bottom:14px"></div>
+    <div id="diary-preview-divider-green" style="border-top:2px solid var(--dm);margin-bottom:14px"></div>
     <div id="diary-preview-title" style="font-size:16px;font-weight:700;color:#5a3a1a;margin-bottom:10px"></div>
     <div id="diary-preview-body" style="font-size:14px;color:#5a3a1a;line-height:1.8;white-space:pre-wrap;margin-bottom:14px"></div>
     <div id="diary-preview-divider-gray" style="display:none;border-top:1px solid #ddd;margin-bottom:14px"></div>
     <div id="diary-preview-photos" style="display:none;gap:6px;margin-bottom:18px"></div>
-    <button onclick="editFromPreview()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">✏️ 수정하기</button>
+    <button onclick="editFromPreview()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">✏️ 수정하기</button>
   </div>
 </div>
 
 
 <!-- 다크모드 설정 모달 -->
+<div id="skin-modal" onclick="closeSkinModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:340px;max-height:82vh;overflow-y:auto" onclick="event.stopPropagation()">
+    <div style="padding:16px 18px;border-bottom:1px solid #f0ede4;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center">
+      <span>🎨 테마 색상</span>
+      <button onclick="closeSkinModal()" style="background:none;border:none;font-size:19px;color:#bbb;cursor:pointer">&times;</button>
+    </div>
+    <div style="padding:14px 18px">
+      <div class="sk-tabs">
+        <button class="sk-tab on" id="sktab-d" onclick="setSkinTab('diary')">📔 일기장</button>
+        <button class="sk-tab" id="sktab-c" onclick="setSkinTab('couple')">💑 커플</button>
+      </div>
+      <div id="skin-grid" class="sk-grid"></div>
+    </div>
+  </div>
+</div>
+
 <div id="dark-settings-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box">
     <h3 style="font-size:15px;margin-bottom:14px;color:#333">🌗 다크모드 설정</h3>
@@ -3184,9 +3703,9 @@ function savePartnerNameFromInput2(){
     </div>
     <div id="dark-sch-time-row" style="display:none;align-items:center;flex-wrap:wrap;gap:6px;font-size:12px;color:#888;margin-bottom:14px">
       <span>매일</span>
-      <input type="time" id="dark-sch-start" onchange="onDarkScheduleTimeChange()" value="20:00" style="border:1.5px solid #d4e8c4;border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit">
+      <input type="time" id="dark-sch-start" onchange="onDarkScheduleTimeChange()" value="20:00" style="border:1.5px solid var(--dm-lt);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit">
       <span>부터</span>
-      <input type="time" id="dark-sch-end" onchange="onDarkScheduleTimeChange()" value="07:00" style="border:1.5px solid #d4e8c4;border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit">
+      <input type="time" id="dark-sch-end" onchange="onDarkScheduleTimeChange()" value="07:00" style="border:1.5px solid var(--dm-lt);border-radius:6px;padding:5px 8px;font-size:12px;font-family:inherit">
       <span>까지 다크모드</span>
     </div>
     <button onclick="closeDarkSettingsModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">닫기</button>
@@ -3241,9 +3760,9 @@ function savePartnerNameFromInput2(){
   <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box">
     <h3 style="font-size:15px;margin-bottom:6px;color:#333">✍️ 글쓰기 목표 설정</h3>
     <p style="font-size:11px;color:#aaa;margin-bottom:16px;line-height:1.6">이번달 안에 몇 편을 쓸지 정해보세요</p>
-    <div style="margin-bottom:14px"><div style="font-size:11px;color:#888;margin-bottom:4px">목표 편수</div><input type="number" id="diary-goal-amount-inp" placeholder="예: 20" style="width:100%;border:1.5px solid #d4e8c4;border-radius:8px;padding:10px;font-size:16px;font-weight:700;outline:none;color:#5a8a62;font-family:inherit;box-sizing:border-box"></div>
-    <div style="margin-bottom:16px"><div style="font-size:11px;color:#888;margin-bottom:4px">목표 이름 (선택)</div><input type="text" id="diary-goal-name-inp" placeholder="예: 이번달 열심히 쓰기" style="width:100%;border:1.5px solid #d4e8c4;border-radius:8px;padding:8px;font-size:13px;outline:none;font-family:inherit;box-sizing:border-box"></div>
-    <button onclick="saveDiaryGoalSetting()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;font-family:inherit">저장</button>
+    <div style="margin-bottom:14px"><div style="font-size:11px;color:#888;margin-bottom:4px">목표 편수</div><input type="number" id="diary-goal-amount-inp" placeholder="예: 20" style="width:100%;border:1.5px solid var(--dm-lt);border-radius:8px;padding:10px;font-size:16px;font-weight:700;outline:none;color:var(--dm-d);font-family:inherit;box-sizing:border-box"></div>
+    <div style="margin-bottom:16px"><div style="font-size:11px;color:#888;margin-bottom:4px">목표 이름 (선택)</div><input type="text" id="diary-goal-name-inp" placeholder="예: 이번달 열심히 쓰기" style="width:100%;border:1.5px solid var(--dm-lt);border-radius:8px;padding:8px;font-size:13px;outline:none;font-family:inherit;box-sizing:border-box"></div>
+    <button onclick="saveDiaryGoalSetting()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:8px;font-family:inherit">저장</button>
     <button onclick="closeDiaryGoalModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">취소</button>
   </div>
 </div>
@@ -3253,10 +3772,10 @@ function savePartnerNameFromInput2(){
 <div id="diary-goal-achieved-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:28px 22px;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
     <div style="font-size:48px;margin-bottom:10px">✍️</div>
-    <h3 style="font-size:18px;font-weight:800;color:#5a8a62;margin-bottom:8px">글쓰기 목표 달성!</h3>
+    <h3 style="font-size:18px;font-weight:800;color:var(--dm-d);margin-bottom:8px">글쓰기 목표 달성!</h3>
     <div id="diary-goal-pop-desc" style="font-size:15px;font-weight:700;color:#444;margin-bottom:6px"></div>
     <p style="font-size:13px;color:#888;line-height:1.6;margin-bottom:20px">목표했던 만큼 다 썼어요. 꾸준함이 최고의 재능이에요 💚</p>
-    <button onclick="closeDiaryGoalAchievedPopup()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">다음 목표 정하기</button>
+    <button onclick="closeDiaryGoalAchievedPopup()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">다음 목표 정하기</button>
   </div>
 </div>
 
@@ -3264,9 +3783,9 @@ function savePartnerNameFromInput2(){
 <div id="diary-streak-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:28px 22px;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
     <div style="font-size:48px;margin-bottom:10px">🔥</div>
-    <h3 id="diary-streak-pop-title" style="font-size:18px;font-weight:800;color:#5a8a62;margin-bottom:8px"></h3>
+    <h3 id="diary-streak-pop-title" style="font-size:18px;font-weight:800;color:var(--dm-d);margin-bottom:8px"></h3>
     <p id="diary-streak-pop-desc" style="font-size:13px;color:#888;line-height:1.6;margin-bottom:20px"></p>
-    <button onclick="closeDiaryStreakPopup()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">확인</button>
+    <button onclick="closeDiaryStreakPopup()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">확인</button>
   </div>
 </div>
 
@@ -3274,10 +3793,10 @@ function savePartnerNameFromInput2(){
 <div id="diary-badge-achieved-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:28px 22px;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
     <div id="diary-badge-pop-icon" style="font-size:48px;margin-bottom:10px">📝</div>
-    <h3 style="font-size:18px;font-weight:800;color:#5a8a62;margin-bottom:8px">새 뱃지 획득!</h3>
+    <h3 style="font-size:18px;font-weight:800;color:var(--dm-d);margin-bottom:8px">새 뱃지 획득!</h3>
     <div id="diary-badge-pop-label" style="font-size:15px;font-weight:700;color:#444;margin-bottom:6px"></div>
     <p id="diary-badge-pop-desc" style="font-size:13px;color:#888;line-height:1.6;margin-bottom:20px"></p>
-    <button onclick="closeDiaryBadgeAchievedPopup()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">확인</button>
+    <button onclick="closeDiaryBadgeAchievedPopup()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">확인</button>
   </div>
 </div>
 
@@ -3285,11 +3804,11 @@ function savePartnerNameFromInput2(){
 <div id="diary-badge-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:16px;padding:18px;max-width:400px;width:100%;max-height:80vh;overflow-y:auto;box-sizing:border-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <span style="font-size:15px;font-weight:700;color:#5a8a62">🏅 뱃지 컬렉션</span>
+      <span style="font-size:15px;font-weight:700;color:var(--dm-d)">🏅 뱃지 컬렉션</span>
       <button onclick="closeDiaryBadgeModal()" style="background:none;border:none;font-size:18px;color:#bbb;cursor:pointer">✕</button>
     </div>
-    <div style="font-size:11px;color:#9dc4a0;margin-bottom:10px" id="diary-badge-modal-count"></div>
-    <div style="height:6px;background:#eef7e8;border-radius:3px;overflow:hidden;margin-bottom:14px"><div id="diary-badge-progress-bar" style="height:100%;width:0%;background:#7aaa82;border-radius:3px;transition:width .4s"></div></div>
+    <div style="font-size:11px;color:var(--dm-l);margin-bottom:10px" id="diary-badge-modal-count"></div>
+    <div style="height:6px;background:#eef7e8;border-radius:3px;overflow:hidden;margin-bottom:14px"><div id="diary-badge-progress-bar" style="height:100%;width:0%;background:var(--dm);border-radius:3px;transition:width .4s"></div></div>
     <div id="diary-badge-grid" style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px 8px"></div>
   </div>
 </div>
@@ -3298,10 +3817,10 @@ function savePartnerNameFromInput2(){
 <div id="diary-monthly-report-popup" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:26px 22px;max-width:320px;width:100%;text-align:center;box-sizing:border-box">
     <div style="font-size:44px;margin-bottom:8px">📅</div>
-    <h3 id="diary-mr-title" style="font-size:17px;font-weight:800;color:#5a8a62;margin-bottom:14px"></h3>
-    <div id="diary-mr-stat-row" style="display:flex;justify-content:space-between;background:#f4f9ef;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px"><span>총 작성</span><b id="diary-mr-total" style="color:#5a8a62;font-size:14px"></b></div>
+    <h3 id="diary-mr-title" style="font-size:17px;font-weight:800;color:var(--dm-d);margin-bottom:14px"></h3>
+    <div id="diary-mr-stat-row" style="display:flex;justify-content:space-between;background:#f4f9ef;border-radius:10px;padding:10px 14px;margin-bottom:8px;font-size:12px"><span>총 작성</span><b id="diary-mr-total" style="color:var(--dm-d);font-size:14px"></b></div>
     <div id="diary-mr-mood-wrap" style="margin:10px 0 18px;text-align:left"></div>
-    <button onclick="closeDiaryMonthlyReport()" style="width:100%;background:#7aaa82;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">이번달도 잘 써볼게요 🌿</button>
+    <button onclick="closeDiaryMonthlyReport()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">이번달도 잘 써볼게요 🌿</button>
   </div>
 </div>
 
@@ -3309,12 +3828,12 @@ function savePartnerNameFromInput2(){
 <div id="bucket-cat-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:14px;padding:20px;max-width:340px;width:100%;box-sizing:border-box;max-height:80vh;overflow-y:auto">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <span style="font-size:15px;font-weight:700;color:#d17a8a">🏷️ 카테고리 관리</span>
+      <span style="font-size:15px;font-weight:700;color:var(--cm-d)">🏷️ 카테고리 관리</span>
       <button onclick="closeCatManageModal()" style="background:none;border:none;font-size:18px;color:#bbb;cursor:pointer">✕</button>
     </div>
     <div id="cat-manage-list" style="margin-bottom:14px"></div>
     <div style="display:flex;gap:6px">
-      <input type="text" id="cat-new-input" placeholder="새 카테고리 (예: 🍜 라멘)" style="flex:1;border:1.5px solid #fde2e4;border-radius:8px;padding:8px;font-size:13px;outline:none;font-family:inherit">
+      <input type="text" id="cat-new-input" placeholder="새 카테고리 (예: 🍜 라멘)" style="flex:1;border:1.5px solid var(--cm-lt3);border-radius:8px;padding:8px;font-size:13px;outline:none;font-family:inherit">
       <button onclick="addCat()" style="background:#F06B8A;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">추가</button>
     </div>
   </div>
@@ -3325,14 +3844,14 @@ function savePartnerNameFromInput2(){
 <div id="partner-name-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:20px;padding:24px 20px;max-width:320px;width:100%;box-sizing:border-box;text-align:center">
     <div style="font-size:24px;margin-bottom:8px">💑</div>
-    <div style="font-size:16px;font-weight:700;color:#ff6b8a;margin-bottom:4px">상대방 이름 설정</div>
-    <div style="font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.6">카드에 @<span style="color:#ff6b8a;font-weight:700">이름</span> 으로 표시돼요</div>
-    <div style="display:flex;align-items:center;border:1.5px solid #ffc9d4;border-radius:10px;overflow:hidden;margin-bottom:16px">
-      <span style="padding:10px 10px 10px 14px;font-size:16px;font-weight:700;color:#ff6b8a;flex-shrink:0">@</span>
+    <div style="font-size:16px;font-weight:700;color:var(--cm);margin-bottom:4px">상대방 이름 설정</div>
+    <div style="font-size:12px;color:#aaa;margin-bottom:16px;line-height:1.6">카드에 @<span style="color:var(--cm);font-weight:700">이름</span> 으로 표시돼요</div>
+    <div style="display:flex;align-items:center;border:1.5px solid var(--cm-lt);border-radius:10px;overflow:hidden;margin-bottom:16px">
+      <span style="padding:10px 10px 10px 14px;font-size:16px;font-weight:700;color:var(--cm);flex-shrink:0">@</span>
       <input id="partner-name-input" type="text" placeholder="이, 준, 민준..." maxlength="10"
-        style="flex:1;border:none;padding:10px 14px 10px 0;font-size:16px;outline:none;font-family:inherit;color:#ff6b8a;font-weight:700;background:transparent">
+        style="flex:1;border:none;padding:10px 14px 10px 0;font-size:16px;outline:none;font-family:inherit;color:var(--cm);font-weight:700;background:transparent">
     </div>
-    <button onclick="savePartnerName()" style="width:100%;background:#ff6b8a;color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px">저장 💕</button>
+    <button onclick="savePartnerName()" style="width:100%;background:var(--cm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px">저장 💕</button>
     <button onclick="closePartnerNameModal()" style="width:100%;background:none;border:1.5px solid #ddd;color:#aaa;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">취소</button>
   </div>
 </div>
@@ -3348,5 +3867,16 @@ function savePartnerNameFromInput2(){
   <button class="push-close" onclick="closePushBanner()">✕</button>
 </div>
 
+<div class="lb" id="lightbox">
+  <div class="lb-top"><span id="lb-idx"></span><button class="lb-x" onclick="closeLB()">&times;</button></div>
+  <button class="lb-nav lb-prev" onclick="lbMove(-1)">‹</button>
+  <img id="lb-img" src="" alt="">
+  <button class="lb-nav lb-next" onclick="lbMove(1)">›</button>
+  <div class="lb-info">
+    <div class="lb-date" id="lb-date"></div>
+    <div class="lb-body" id="lb-body"></div>
+    <button class="lb-open" onclick="lbOpenEntry()">이 날 일기 보기 →</button>
+  </div>
+</div>
 </body>
 </html>
