@@ -238,7 +238,12 @@ body.dark-mode .eb-del{background:var(--cm-card);color:var(--cm-l)}
 .throwback-photos img{width:50px;height:50px;border-radius:8px;object-fit:cover}
 .throwback-text{font-size:12px;color:#555;line-height:1.5;flex:1}
 .throwback-mood{font-size:16px}
-.bucket-item{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--cm-lt2)}
+.bucket-item{display:flex;align-items:center;gap:10px;padding:10px 4px;border-bottom:1px solid var(--cm-lt2);background:transparent;transition:background .15s,transform .15s}
+.bucket-item.dragging{background:var(--cm-lt3);border-radius:10px;opacity:.9;box-shadow:0 4px 14px rgba(0,0,0,.13);transform:scale(1.02)}
+.bucket-item.drop-target{border-top:2px solid var(--cm)}
+.bucket-grip{cursor:grab;color:var(--cm-lt);font-size:14px;flex-shrink:0;padding:2px 2px;touch-action:none;user-select:none;-webkit-user-select:none}
+.bucket-grip:active{cursor:grabbing}
+body.dark-mode .bucket-item.dragging{background:#3a2830}
 .bucket-item:last-child{border-bottom:none}
 .bucket-item.done .bucket-text{color:var(--cm-lt);text-decoration:line-through}
 .bucket-check{width:26px;height:26px;border-radius:50%;border:2px solid var(--cm-lt);background:#fff;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
@@ -340,6 +345,47 @@ body.dark-mode .hm-st .l{color:#8a8a80}
 body.dark-mode .hm-lg{background:#232323;border-color:#3a3a3a;color:#bbb}
 body.dark-mode .hm-legend{border-top-color:#333}
 body.dark-mode .hm-nav button{background:#232323;border-color:#3a3a3a}
+
+/* ===== 일기 카드 ===== */
+.cardsp{background:#fff;border:1.5px solid var(--dm-lt);border-radius:16px;padding:6px 13px;font-size:12px;color:#8a8578;cursor:pointer;font-family:inherit}
+.cardsp.on{background:var(--dm);border-color:var(--dm);color:#fff;font-weight:700}
+.dcard{width:320px;border-radius:20px;overflow:hidden;position:relative}
+.dcard .c-date{font-size:11.5px;letter-spacing:.5px}
+.dcard .c-title{font-size:19px;font-weight:700;line-height:1.35}
+.dcard .c-body{font-size:12.5px;line-height:1.95;white-space:pre-wrap;word-break:break-word}
+.dcard .c-foot{font-size:10px;opacity:.55;letter-spacing:.4px}
+.dcard .c-emo{font-size:15px;letter-spacing:2px}
+.dcard .c-top{display:flex;justify-content:space-between;align-items:center}
+.dcard.a{background:#fff;border:1px solid var(--dm-lt2);padding:26px 24px 20px}
+.dcard.a .c-top{margin-bottom:16px}
+.dcard.a .c-date{color:var(--dm-l);font-weight:600}
+.dcard.a .c-title{color:#3a3a30;margin-bottom:12px}
+.dcard.a .c-line{height:2px;background:var(--dm-lt);width:34px;border-radius:2px;margin-bottom:14px}
+.dcard.a .c-body{color:#6a6558}
+.dcard.a .c-foot{margin-top:20px;color:var(--dm-l);text-align:right}
+.dcard.b{background:linear-gradient(160deg,var(--dm-l),var(--dm-lt) 55%,var(--dm-lt3));padding:28px 24px 20px}
+.dcard.b .c-top{margin-bottom:18px}
+.dcard.b .c-date{color:rgba(255,255,255,.92);font-weight:600}
+.dcard.b .c-title{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.12);margin-bottom:14px}
+.dcard.b .c-inner{background:rgba(255,255,255,.85);border-radius:14px;padding:16px}
+.dcard.b .c-body{color:#5a5850}
+.dcard.b .c-foot{margin-top:16px;color:rgba(255,255,255,.88);text-align:right}
+.dcard.c{background:#fffdf6;border:1px solid #eee6d0;padding:0}
+.dcard.c .c-head{background:#f6efdc;padding:16px 22px;display:flex;justify-content:space-between;align-items:center}
+.dcard.c .c-date{color:#a89878;font-weight:700}
+.dcard.c .c-main{padding:20px 22px 18px;background-image:repeating-linear-gradient(#fffdf6 0px,#fffdf6 30px,#f0e9d8 31px)}
+.dcard.c .c-title{color:#5a5040;margin-bottom:10px}
+.dcard.c .c-body{color:#6a6250;line-height:31px}
+.dcard.c .c-foot{margin-top:16px;color:#b8ad92;text-align:right}
+.dcard.d{background:#fff;padding:14px 14px 0;border:1px solid #eee}
+.dcard.d .c-photo{height:210px;border-radius:6px;background:var(--dm-lt2);display:flex;align-items:center;justify-content:center;font-size:52px;overflow:hidden}
+.dcard.d .c-photo img{width:100%;height:100%;object-fit:cover}
+.dcard.d .c-under{padding:16px 6px 18px}
+.dcard.d .c-top{margin-bottom:10px}
+.dcard.d .c-date{color:#a8a89a;font-weight:600}
+.dcard.d .c-title{font-size:17px;color:#3a3a30;margin-bottom:8px}
+.dcard.d .c-body{color:#7a7568;font-size:12px;line-height:1.85}
+.dcard.d .c-foot{margin-top:14px;color:#b8b8aa;text-align:right}
 
 /* ===== 일기 달력 기분 색상 ===== */
 /* 기분 색은 감정 구분이 목적이라 스킨과 무관하게 고정 */
@@ -2661,6 +2707,7 @@ function bcMove(dir){
 
 function openDiaryPreview(ds){
   var e=entries[ds]; if(!e) return;
+  window._previewDate=ds;
   var d=parseDate(ds);
   document.getElementById('diary-preview-date').textContent=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
   document.getElementById('diary-preview-weather').textContent=e.weather||'';
@@ -3747,7 +3794,8 @@ function renderBucket(){
     var catTag=item.cat
       ?'<span style="font-size:10px;background:var(--cm-lt3);color:var(--cm-d);border-radius:8px;padding:2px 6px;margin-left:4px">'+item.cat+'</span>'
       :'';
-    html+='<div class="bucket-item">';
+    html+='<div class="bucket-item" data-bid="'+item.id+'">';
+    html+='<span class="bucket-grip" data-bid="'+item.id+'">⠿</span>';
     html+='<button class="bucket-check" data-bid="'+item.id+'"></button>';
     html+='<span style="flex:1"><span class="bucket-text" contenteditable="true" data-bid="'+item.id+'">'+item.text+'</span>'+catTag+'</span>';
     html+='<button class="bucket-del" data-bid="'+item.id+'">−</button>';
@@ -3807,6 +3855,267 @@ function renderBucket(){
       if(id) renameBucket(id,e.target.textContent);
     }
   },true);
+  bindBucketDrag();
+}
+
+/* ===== 일기 카드 만들기 ===== */
+var cardStyle=localStorage.getItem('diary_card_style')||'a';
+var cardDate=null;
+var CARD_STYLES=[{k:'a',n:'심플'},{k:'b',n:'그라데이션'},{k:'c',n:'노트'},{k:'d',n:'폴라로이드'}];
+
+function openCardModal(){
+  cardDate=window._previewDate||selDate;
+  if(!cardDate||!entries[cardDate]){ toast('일기를 찾을 수 없어요'); return; }
+  document.getElementById('card-style-pick').innerHTML=CARD_STYLES.map(function(s){
+    return '<button class="cardsp'+(s.k===cardStyle?' on':'')+'" onclick="pickCardStyle(\''+s.k+'\')">'+s.n+'</button>';
+  }).join('');
+  renderCard();
+  document.getElementById('card-modal').style.display='flex';
+}
+function closeCardModal(){ document.getElementById('card-modal').style.display='none'; }
+function pickCardStyle(k){
+  cardStyle=k; localStorage.setItem('diary_card_style',k);
+  document.querySelectorAll('#card-style-pick .cardsp').forEach(function(b,i){
+    b.classList.toggle('on', CARD_STYLES[i].k===k);
+  });
+  renderCard();
+}
+function cardEsc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+
+function renderCard(){
+  var e=entries[cardDate]; if(!e) return;
+  var d=parseDate(cardDate);
+  var dateTxt=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
+  var emo=(e.weather||'')+' '+(e.mood||'');
+  var title=cardEsc(e.title||'(제목 없음)');
+  // 카드가 너무 길어지지 않게 본문은 잘라서 넣는다
+  var raw=String(e.body||'');
+  var body=cardEsc(raw.length>240?raw.slice(0,240)+'…':raw);
+  var foot='나의 일기장';
+  var html='';
+  if(cardStyle==='a'){
+    html='<div class="dcard a" id="dcard">'
+      +'<div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
+      +'<div class="c-title">'+title+'</div><div class="c-line"></div>'
+      +'<div class="c-body">'+body+'</div><div class="c-foot">'+foot+'</div></div>';
+  } else if(cardStyle==='b'){
+    html='<div class="dcard b" id="dcard">'
+      +'<div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
+      +'<div class="c-title">'+title+'</div>'
+      +'<div class="c-inner"><div class="c-body">'+body+'</div></div>'
+      +'<div class="c-foot">'+foot+'</div></div>';
+  } else if(cardStyle==='c'){
+    html='<div class="dcard c" id="dcard">'
+      +'<div class="c-head"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
+      +'<div class="c-main"><div class="c-title">'+title+'</div>'
+      +'<div class="c-body">'+body+'</div><div class="c-foot">'+foot+'</div></div></div>';
+  } else {
+    var ph=(e.photos&&e.photos.length)?resolvePhotoSrc(e.photos[0]):'';
+    html='<div class="dcard d" id="dcard">'
+      +'<div class="c-photo">'+(ph?'<img src="'+ph+'">':(e.mood||'📔'))+'</div>'
+      +'<div class="c-under"><div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
+      +'<div class="c-title">'+title+'</div><div class="c-body">'+body+'</div>'
+      +'<div class="c-foot">'+foot+'</div></div></div>';
+  }
+  document.getElementById('card-host').innerHTML=html;
+}
+
+/* 이미지로 변환할 때는 외부 폰트 파일을 못 읽으므로,
+   현재 선택된 폰트를 읽어 SVG 안에 직접 심어준다. 실패하면 기본 폰트로 저장. */
+function cardEmbedFontCSS(){
+  return new Promise(function(resolve){
+    var k=getFont();
+    if(!k){ resolve(''); return; }
+    var st=[].slice.call(document.styleSheets);
+    var src=null;
+    try{
+      st.forEach(function(sheet){
+        var rules; try{ rules=sheet.cssRules; }catch(err){ return; }
+        [].slice.call(rules||[]).forEach(function(r){
+          if(r.type===5 && r.style && r.style.fontFamily.replace(/['"]/g,'')===k){
+            var m=/url\(['"]?([^'")]+)['"]?\)/.exec(r.cssText);
+            if(m) src=m[1];
+          }
+        });
+      });
+    }catch(err){}
+    if(!src){ resolve(''); return; }
+    var done=false;
+    var t=setTimeout(function(){ if(!done){ done=true; resolve(''); } },6000); // 너무 느리면 포기
+    fetch(src).then(function(r){ return r.blob(); }).then(function(b){
+      return new Promise(function(res){
+        var fr=new FileReader(); fr.onload=function(){res(fr.result);}; fr.onerror=function(){res(null);};
+        fr.readAsDataURL(b);
+      });
+    }).then(function(dataUrl){
+      clearTimeout(t);
+      if(done) return; done=true;
+      if(!dataUrl){ resolve(''); return; }
+      var fmt=/\.ttf($|\?)/i.test(src)?'truetype':'woff2';
+      resolve("@font-face{font-family:'"+k+"';src:url('"+dataUrl+"') format('"+fmt+"')}"
+             +"#dcard,#dcard *{font-family:'"+k+"',sans-serif}");
+    }).catch(function(){ clearTimeout(t); if(!done){ done=true; resolve(''); } });
+  });
+}
+
+function saveDiaryCard(){
+  var node=document.getElementById('dcard');
+  if(!node){ toast('카드를 찾을 수 없어요'); return; }
+  var btn=document.getElementById('card-save-btn');
+  var hint=document.getElementById('card-hint');
+  btn.disabled=true; btn.textContent='만드는 중…';
+  hint.textContent='글꼴을 담는 중이라 몇 초 걸릴 수 있어요';
+
+  cardEmbedFontCSS().then(function(fontCSS){
+    var w=node.offsetWidth, h=node.offsetHeight, scale=3;
+    var baseCSS='';
+    try{
+      var main=document.querySelector('style');
+      if(main) baseCSS=main.textContent;
+    }catch(e){}
+    var clone=node.cloneNode(true);
+    var inner='<div xmlns="http://www.w3.org/1999/xhtml"><style>'+baseCSS+fontCSS+'</style>'
+      +'<div style="width:'+w+'px">'+clone.outerHTML+'</div></div>';
+    var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
+      +'<foreignObject width="100%" height="100%">'+inner+'</foreignObject></svg>';
+
+    var img=new Image();
+    img.onload=function(){
+      var cv=document.createElement('canvas');
+      cv.width=w*scale; cv.height=h*scale;
+      var ctx=cv.getContext('2d');
+      ctx.fillStyle='#fff'; ctx.fillRect(0,0,cv.width,cv.height);
+      ctx.scale(scale,scale); ctx.drawImage(img,0,0);
+      cv.toBlob(function(blob){
+        cardReset(btn,hint);
+        if(!blob){ toast('이미지 만들기에 실패했어요'); return; }
+        var url=URL.createObjectURL(blob);
+        var a=document.createElement('a');
+        a.href=url; a.download='diary_'+cardDate+'.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        setTimeout(function(){URL.revokeObjectURL(url);},1500);
+        toast('🖼️ 카드를 저장했어요!');
+      },'image/png');
+    };
+    img.onerror=function(){ cardReset(btn,hint); toast('이미지 변환에 실패했어요'); };
+    img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
+  });
+}
+function cardReset(btn,hint){
+  btn.disabled=false; btn.textContent='🖼️ 이미지로 저장';
+  hint.textContent='저장하면 사진 앱에 담거나 공유할 수 있어요';
+}
+
+/* ===== 버킷리스트 순서 바꾸기 (길게 눌러 끌기) ===== */
+var bkDrag={on:false,id:null,el:null,timer:null,startY:0,list:null};
+
+function bkFindItem(y){
+  var items=[].slice.call(document.querySelectorAll('#bucket-list .bucket-item:not(.dragging)'));
+  for(var i=0;i<items.length;i++){
+    var r=items[i].getBoundingClientRect();
+    if(y < r.top + r.height/2) return items[i];
+  }
+  return null;
+}
+function bkClearMarks(){
+  document.querySelectorAll('#bucket-list .drop-target').forEach(function(e){ e.classList.remove('drop-target'); });
+}
+function bkStart(id, el, y){
+  bkDrag.on=true; bkDrag.id=id; bkDrag.el=el; bkDrag.startY=y;
+  el.classList.add('dragging');
+  if(navigator.vibrate) navigator.vibrate(15);
+  document.body.style.overflow='hidden'; // 끄는 동안 화면 스크롤 방지
+}
+function bkMove(y){
+  if(!bkDrag.on) return;
+  bkClearMarks();
+  var t=bkFindItem(y);
+  if(t) t.classList.add('drop-target');
+  bkDrag._target=t;
+}
+function bkEnd(){
+  if(!bkDrag.on){ bkCancelTimer(); return; }
+  var el=bkDrag.el, target=bkDrag._target;
+  if(el) el.classList.remove('dragging');
+  bkClearMarks();
+  document.body.style.overflow='';
+
+  var movedId=bkDrag.id;
+  var targetId=target?target.getAttribute('data-bid'):null;
+  bkDrag={on:false,id:null,el:null,timer:null,startY:0,list:null};
+
+  if(!movedId || movedId===targetId) return;
+  bkReorder(movedId, targetId);
+}
+function bkCancelTimer(){
+  if(bkDrag.timer){ clearTimeout(bkDrag.timer); bkDrag.timer=null; }
+}
+/* 미완료 항목들 사이에서만 순서를 바꾸고, 전체 배열에 반영한다 */
+function bkReorder(movedId, beforeId){
+  var list=cpData.bucket;
+  var mi=list.findIndex(function(b){return b.id===movedId;});
+  if(mi<0) return;
+  var moved=list.splice(mi,1)[0];
+  if(beforeId){
+    var bi=list.findIndex(function(b){return b.id===beforeId;});
+    if(bi<0) bi=list.length;
+    list.splice(bi,0,moved);
+  }else{
+    // 놓을 위치가 없으면 미완료 목록의 맨 끝으로
+    var lastTodo=-1;
+    list.forEach(function(b,i){ if(!b.done) lastTodo=i; });
+    list.splice(lastTodo+1,0,moved);
+  }
+  saveCp();
+  renderBucket();
+  toast('순서를 바꿨어요');
+}
+
+function bindBucketDrag(){
+  var el=document.getElementById('bucket-list');
+  if(!el || el._bkBound) return;
+  el._bkBound=true;
+
+  // --- 터치 (모바일) ---
+  el.addEventListener('touchstart',function(e){
+    var grip=e.target.closest('.bucket-grip');
+    var item=e.target.closest('.bucket-item');
+    if(!item) return;
+    var id=item.getAttribute('data-bid');
+    if(!id) return;
+    var y=e.touches[0].clientY;
+    if(grip){ bkStart(id,item,y); e.preventDefault(); return; }   // 손잡이는 바로 시작
+    bkDrag.startY=y;
+    bkCancelTimer();
+    bkDrag.timer=setTimeout(function(){ bkStart(id,item,y); },420); // 그 외는 길게 누르기
+  },{passive:false});
+
+  el.addEventListener('touchmove',function(e){
+    var y=e.touches[0].clientY;
+    if(!bkDrag.on){
+      if(bkDrag.timer && Math.abs(y-bkDrag.startY)>10) bkCancelTimer(); // 스크롤이면 취소
+      return;
+    }
+    e.preventDefault();
+    bkMove(y);
+  },{passive:false});
+
+  el.addEventListener('touchend',function(){ bkCancelTimer(); bkEnd(); });
+  el.addEventListener('touchcancel',function(){ bkCancelTimer(); bkEnd(); });
+
+  // --- 마우스 (PC) ---
+  el.addEventListener('mousedown',function(e){
+    var grip=e.target.closest('.bucket-grip');
+    if(!grip) return;
+    var item=grip.closest('.bucket-item');
+    if(!item) return;
+    var id=item.getAttribute('data-bid');
+    if(!id) return;
+    e.preventDefault();
+    bkStart(id,item,e.clientY);
+  });
+  document.addEventListener('mousemove',function(e){ if(bkDrag.on) bkMove(e.clientY); });
+  document.addEventListener('mouseup',function(){ if(bkDrag.on) bkEnd(); });
 }
 
 function toggleDoneSection(){
@@ -4434,9 +4743,25 @@ function savePartnerNameFromInput2(){
     <div id="diary-preview-divider-gray" style="display:none;border-top:1px solid #ddd;margin-bottom:14px"></div>
     <div id="diary-preview-photos" style="display:none;gap:6px;margin-bottom:18px"></div>
     <button onclick="editFromPreview()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">✏️ 수정하기</button>
+    <button onclick="openCardModal()" style="width:100%;background:var(--dm-lt3);color:var(--dm-d);border:1.5px solid var(--dm-lt);border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px">🎨 카드로 저장</button>
   </div>
 </div>
 
+
+
+<!-- 일기 카드 만들기 -->
+<div id="card-modal" onclick="closeCardModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99200;align-items:center;justify-content:center;padding:16px">
+  <div onclick="event.stopPropagation()" style="background:#fff;border-radius:18px;width:100%;max-width:392px;max-height:90vh;overflow-y:auto;padding:16px">
+    <div style="display:flex;align-items:center;margin-bottom:12px">
+      <span style="font-size:14px;font-weight:700;color:var(--dm-d)">🎨 카드로 저장</span>
+      <button onclick="closeCardModal()" style="margin-left:auto;background:none;border:none;font-size:18px;color:#bbb;cursor:pointer">✕</button>
+    </div>
+    <div id="card-style-pick" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"></div>
+    <div style="display:flex;justify-content:center;margin-bottom:12px"><div id="card-host"></div></div>
+    <button id="card-save-btn" onclick="saveDiaryCard()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">🖼️ 이미지로 저장</button>
+    <div id="card-hint" style="font-size:11px;color:#b0a894;text-align:center;margin-top:8px;line-height:1.6">저장하면 사진 앱에 담거나 공유할 수 있어요</div>
+  </div>
+</div>
 
 <!-- 다크모드 설정 모달 -->
 <div id="font-modal" onclick="closeFontModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
