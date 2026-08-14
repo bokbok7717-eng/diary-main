@@ -620,13 +620,64 @@ body.dark-mode .dm-body{background:#232323}
 .dm-tag{font-size:10.5px;color:#a09070;background:#f5f2ea;border-radius:9px;padding:2px 8px}
 body.dark-mode .dm-tag{background:#33302a;color:#a89870}
 .dm-empty{text-align:center;padding:30px 12px;color:#b0a898;font-size:12.5px}
+
+/* 상단 설정 드롭다운 */
+.ttl{cursor:pointer;user-select:none;transition:transform .15s}
+.ttl:active{transform:scale(.9)}
+#top-menu-ov{display:none;position:fixed;inset:0;z-index:9990}
+#top-menu-ov.on{display:block}
+#top-menu{display:none;position:fixed;top:46px;left:10px;width:212px;background:#fff;border-radius:15px;z-index:9991;padding:6px 0;box-shadow:0 8px 26px rgba(0,0,0,.2);transform-origin:top left;animation:tmIn .16s ease}
+#top-menu.on{display:block}
+@keyframes tmIn{from{opacity:0;transform:scale(.94) translateY(-4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+body.dark-mode #top-menu{background:#2a2a2a;box-shadow:0 8px 26px rgba(0,0,0,.5)}
+.tm-row{display:flex;align-items:center;justify-content:space-between;padding:10px 15px;font-size:12.5px;color:#5a5248;cursor:pointer;gap:8px}
+.tm-row:active{background:#f5f2ec}
+body.dark-mode .tm-row{color:#e0e0e0}
+body.dark-mode .tm-row:active{background:#333}
+.tm-val{font-size:11px;color:#a09888;font-weight:600}
+.tm-arr{color:#c8c4bc;font-size:14px}
+.tm-sep{height:1px;background:#f0ede4;margin:4px 12px}
+body.dark-mode .tm-sep{background:#3a3a3a}
+
+/* ===== 커스텀 폰트 ===== */
+@font-face{font-family:'BMHannaAir';src:url('fonts/BMHANNAAir_ttf.woff2') format('woff2'),url('fonts/BMHANNAAir_ttf.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'BMHanna';src:url('fonts/BMHANNA_11yrs_ttf.woff2') format('woff2'),url('fonts/BMHANNA_11yrs_ttf.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Cafe24Simplehae';src:url('fonts/Cafe24Simplehae-v2.0.woff2') format('woff2'),url('fonts/Cafe24Simplehae-v2.0.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Cafe24Ssurround';src:url('fonts/Cafe24SsurroundAir-v1.1.woff2') format('woff2'),url('fonts/Cafe24SsurroundAir-v1.1.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'EFDiary';src:url('fonts/EF_Diary.woff2') format('woff2'),url('fonts/EF_Diary(ttf).ttf') format('truetype');font-display:swap}
+@font-face{font-family:'HakgyoWooju';src:url('fonts/HakgyoansimWoojuR.woff2') format('woff2'),url('fonts/HakgyoansimWoojuR.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'MemomentKkukkukk';src:url('fonts/MemomentKkukkukk.woff2') format('woff2'),url('fonts/MemomentKkukkukk.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Mona10x12';src:url('fonts/Mona10x12.woff2') format('woff2'),url('fonts/Mona10x12.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Mona12';src:url('fonts/Mona12.woff2') format('woff2'),url('fonts/Mona12.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'NanumGodingg';src:url('fonts/NanumGodingg.woff2') format('woff2'),url('fonts/나눔손글씨 고딕 아니고 고딩.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'NanumNeurit';src:url('fonts/NanumNeurit.woff2') format('woff2'),url('fonts/나눔손글씨 느릿느릿체.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'NanumHippie';src:url('fonts/NanumHippie.woff2') format('woff2'),url('fonts/나눔손글씨 바른히피.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'NanumBaeeunhye';src:url('fonts/NanumBaeeunhye.woff2') format('woff2'),url('fonts/나눔손글씨 배은혜체.ttf') format('truetype');font-display:swap}
+@font-face{font-family:'Leeseoyun';src:url('fonts/Leeseoyun.woff2') format('woff2'),url('fonts/이서윤체.ttf') format('truetype');font-display:swap}
+
+/* 폰트 선택 UI */
+.fn-grid{display:flex;flex-direction:column;gap:7px}
+.fn-card{border:2px solid #eae6dc;border-radius:11px;padding:11px 13px;cursor:pointer;transition:all .13s;background:#fff}
+.fn-card.on{border-color:var(--dm);background:var(--dm-lt3)}
+body.mode-couple .fn-card.on{border-color:var(--cm);background:var(--cm-lt3)}
+body.dark-mode .fn-card{background:#2a2a2a;border-color:#3a3a3a}
+body.dark-mode .fn-card.on{background:var(--dm-card)}
+body.dark-mode.mode-couple .fn-card.on{background:var(--cm-card)}
+.fn-name{font-size:10.5px;color:#a09888;margin-bottom:4px}
+.fn-sample{font-size:16px;color:#4a4238;line-height:1.5}
+body.dark-mode .fn-sample{color:#e0e0e0}
+.fn-scope{display:flex;background:#f2efe8;border-radius:9px;padding:3px;gap:3px;margin-bottom:11px}
+body.dark-mode .fn-scope{background:#2a2a2a}
+.fn-sbtn{flex:1;background:none;border:none;border-radius:7px;padding:6px 0;font-size:11.5px;cursor:pointer;font-family:inherit;color:#a09888}
+.fn-sbtn.on{background:#fff;font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+body.dark-mode .fn-sbtn.on{background:#3a3a3a;color:#e8e8e8}
 </style>
 </head>
 <body class="mode-diary">
 
 <!-- 상단바 -->
 <div class="top-bar">
-  <span class="ttl" id="top-title">🍀</span>
+  <span class="ttl" id="top-title" onclick="toggleTopMenu(event)" title="설정">🍀</span>
   <button class="backup-btn" id="dark-toggle-btn" onclick="toggleDarkMode()" title="다크모드">☀️</button>
   <input type="number" class="inp-year" id="g-year" min="2000" max="2099" value="2026" onchange="onYMChange()">
   <span class="sep">년</span>
@@ -650,6 +701,20 @@ body.dark-mode .dm-tag{background:#33302a;color:#a89870}
     </label>
     <button onclick="closeBackupModal()" style="width:100%;background:none;border:1.5px solid var(--dm-lt);color:#999;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;font-family:inherit">닫기</button>
   </div>
+</div>
+
+<div id="top-menu-ov" onclick="closeTopMenu()"></div>
+<div id="top-menu">
+  <div class="tm-row" onclick="toggleDarkMode();updTopMenu()"><span>🌗 다크모드</span><span class="tm-val" id="tm-dark">OFF</span></div>
+  <div class="tm-row" onclick="closeTopMenu();openSkinModal()"><span>🎨 테마 색상</span><span class="tm-arr">›</span></div>
+  <div class="tm-row" onclick="closeTopMenu();openFontModal()"><span>🔤 글꼴</span><span class="tm-arr">›</span></div>
+  <div class="tm-row" onclick="closeTopMenu();toggleLockSetting()"><span>🔒 일기 잠금</span><span class="tm-val" id="tm-lock">OFF</span></div>
+  <div class="tm-sep"></div>
+  <div class="tm-row" onclick="closeTopMenu();openDarkSettingsModal()"><span>⏰ 다크모드 시간</span><span class="tm-arr">›</span></div>
+  <div class="tm-row" onclick="closeTopMenu();openCardSettingsModal()"><span>🗂 카드 표시</span><span class="tm-arr">›</span></div>
+  <div class="tm-row" onclick="closeTopMenu();openPromptSettingsModal()"><span>💡 일기 추천</span><span class="tm-arr">›</span></div>
+  <div class="tm-sep"></div>
+  <div class="tm-row" onclick="closeTopMenu();openBackupModal()"><span>💾 백업 / 복원</span><span class="tm-arr">›</span></div>
 </div>
 
 <!-- ============== 일기장 모드 ============== -->
@@ -847,20 +912,6 @@ body.dark-mode .dm-tag{background:#33302a;color:#a89870}
       </div>
       <div id="diary-badge-preview" style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px"></div>
       <button onclick="openDiaryBadgeModal()" style="width:100%;background:var(--dm-lt3);border:1.5px solid var(--dm-lt);color:var(--dm);border-radius:8px;padding:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit">전체 뱃지 보기</button>
-    </div>
-    <div class="box">
-      <div class="box-title" onclick="toggleSettingsSection()" style="cursor:pointer;display:flex;justify-content:space-between;align-items:center">
-        <span>⚙️ 설정</span>
-        <span id="settings-arrow" style="font-size:12px;font-weight:400;color:#bbb">▾</span>
-      </div>
-      <div id="settings-body" style="display:none">
-        <div class="settings-row" onclick="openSkinModal()"><span>🎨 테마 색상</span><span class="settings-arrow">›</span></div>
-        <div class="settings-row" onclick="toggleLockSetting()"><span>🔒 일기 잠금</span><span id="lock-setting-lb" style="font-size:12px;font-weight:700;color:var(--dm)">OFF</span></div>
-        <div class="settings-row" onclick="openDarkSettingsModal()"><span>🌗 다크모드</span><span class="settings-arrow">›</span></div>
-        <div class="settings-row" onclick="openBackupModal()"><span>💾 백업 / 복원</span><span class="settings-arrow">›</span></div>
-        <div class="settings-row" onclick="openCardSettingsModal()"><span>🗂 카드 표시</span><span class="settings-arrow">›</span></div>
-        <div class="settings-row" onclick="openPromptSettingsModal()"><span>💡 일기 추천</span><span class="settings-arrow">›</span></div>
-      </div>
     </div>
   </div>
 
@@ -1080,6 +1131,7 @@ function onModeToggle(){
 var DARK_MODE_KEY='diary_dark_mode';
 function isDarkMode(){ return document.body.classList.contains('dark-mode'); }
 function toggleDarkMode(){
+  setTimeout(function(){if(typeof updTopMenu==='function')updTopMenu();},20);
   var on=document.body.classList.toggle('dark-mode');
   localStorage.setItem(DARK_MODE_KEY, on?'1':'0');
   applyPageBg();
@@ -1230,6 +1282,95 @@ function updateThemeMeta(){
   var isCp=document.body.classList.contains('mode-couple');
   mt.content=isCp?(C_SKINS[getCSkin()]||C_SKINS.pink).m:(D_SKINS[getDSkin()]||D_SKINS.green).m;
 }
+/* ===== 글꼴 ===== */
+var FONT_KEY='diary_font_v1', FONT_SCOPE_KEY='diary_font_scope_v1';
+var FONTS=[
+  {k:'',n:'기본 (시스템)',f:''},
+  {k:'BMHanna',n:'배민 한나',f:"'BMHanna'"},
+  {k:'BMHannaAir',n:'배민 한나 에어',f:"'BMHannaAir'"},
+  {k:'Cafe24Simplehae',n:'카페24 심플해',f:"'Cafe24Simplehae'"},
+  {k:'Cafe24Ssurround',n:'카페24 써라운드 에어',f:"'Cafe24Ssurround'"},
+  {k:'EFDiary',n:'EF 다이어리',f:"'EFDiary'"},
+  {k:'HakgyoWooju',n:'학교안심 우주',f:"'HakgyoWooju'"},
+  {k:'MemomentKkukkukk',n:'메모먼트 꾸꾸',f:"'MemomentKkukkukk'"},
+  {k:'Leeseoyun',n:'이서윤체',f:"'Leeseoyun'"},
+  {k:'NanumBaeeunhye',n:'나눔손글씨 배은혜',f:"'NanumBaeeunhye'"},
+  {k:'NanumNeurit',n:'나눔손글씨 느릿느릿',f:"'NanumNeurit'"},
+  {k:'NanumHippie',n:'나눔손글씨 바른히피',f:"'NanumHippie'"},
+  {k:'NanumGodingg',n:'나눔손글씨 고딩',f:"'NanumGodingg'"},
+  {k:'Mona12',n:'모나 12',f:"'Mona12'"},
+  {k:'Mona10x12',n:'모나 10x12',f:"'Mona10x12'"}
+];
+function getFont(){ return localStorage.getItem(FONT_KEY)||''; }
+function getFontScope(){ return localStorage.getItem(FONT_SCOPE_KEY)||'all'; }
+function applyFont(){
+  var k=getFont(), scope=getFontScope();
+  var f=FONTS.find(function(x){return x.k===k;});
+  var fam=f&&f.f?f.f+", -apple-system, BlinkMacSystemFont, sans-serif":'';
+  var st=document.getElementById('font-style');
+  if(!st){ st=document.createElement('style'); st.id='font-style'; document.head.appendChild(st); }
+  if(!fam){ st.textContent=''; return; }
+  if(scope==='all'){
+    st.textContent='body,button,input,textarea,select{font-family:'+fam+' !important}';
+  } else {
+    st.textContent='.entry-body-inp,.dm-text,.dm-title,.eb,.ecb,.entry-text,#e-body,#cp-entry-text{font-family:'+fam+' !important}';
+  }
+}
+function openFontModal(){
+  renderFontGrid();
+  var sc=getFontScope();
+  document.getElementById('fnsc-all').classList.toggle('on',sc==='all');
+  document.getElementById('fnsc-body').classList.toggle('on',sc==='body');
+  document.getElementById('font-modal').style.display='flex';
+}
+function closeFontModal(){ document.getElementById('font-modal').style.display='none'; }
+function setFontScope(s){
+  localStorage.setItem(FONT_SCOPE_KEY,s);
+  document.getElementById('fnsc-all').classList.toggle('on',s==='all');
+  document.getElementById('fnsc-body').classList.toggle('on',s==='body');
+  applyFont();
+}
+function renderFontGrid(){
+  var cur=getFont();
+  document.getElementById('font-grid').innerHTML=FONTS.map(function(f){
+    var fam=f.f?f.f+',sans-serif':'inherit';
+    return '<div class="fn-card'+(cur===f.k?' on':'')+'" data-k="'+f.k+'" onclick="pickFont(this)">'
+      +'<div class="fn-name">'+f.n+'</div>'
+      +'<div class="fn-sample" style="font-family:'+fam+'">오늘 하루도 수고했어 ♡</div></div>';
+  }).join('');
+}
+function pickFont(el){
+  localStorage.setItem(FONT_KEY,el.dataset.k);
+  applyFont(); renderFontGrid();
+  if(typeof toast==='function') toast('글꼴을 바꿨어요');
+}
+
+/* ===== 상단 설정 드롭다운 ===== */
+function toggleTopMenu(ev){
+  if(ev) ev.stopPropagation();
+  var m=document.getElementById('top-menu'), o=document.getElementById('top-menu-ov');
+  if(m.classList.contains('on')) closeTopMenu();
+  else { updTopMenu(); m.classList.add('on'); o.classList.add('on'); }
+}
+function closeTopMenu(){
+  document.getElementById('top-menu').classList.remove('on');
+  document.getElementById('top-menu-ov').classList.remove('on');
+}
+function updTopMenu(){
+  var dk=document.getElementById('tm-dark');
+  if(dk){
+    var on=document.body.classList.contains('dark-mode');
+    dk.textContent=on?'ON':'OFF';
+    dk.style.color=on?(document.body.classList.contains('mode-couple')?'var(--cm)':'var(--dm)'):'#a09888';
+  }
+  var lk=document.getElementById('tm-lock');
+  if(lk&&typeof getLock==='function'){
+    var L=getLock();
+    lk.textContent=L.on?'ON':'OFF';
+    lk.style.color=L.on?(document.body.classList.contains('mode-couple')?'var(--cm)':'var(--dm)'):'#a09888';
+  }
+}
+
 /* ===== 접이식 ===== */
 function toggleFold(id){
   var b=document.getElementById(id), a=document.getElementById(id+'-arrow');
@@ -1383,6 +1524,7 @@ function setLock(o){ localStorage.setItem(LOCK_KEY,JSON.stringify(o)); }
 function updLockLabel(){
   var el=document.getElementById('lock-setting-lb');
   if(el){ var L=getLock(); el.textContent=L.on?'ON':'OFF'; el.style.color=L.on?'var(--dm)':'#b0a898'; }
+  if(typeof updTopMenu==='function') updTopMenu();
 }
 function toggleLockSetting(){
   var L=getLock();
@@ -1506,6 +1648,7 @@ var settingsSectionOpen=false;
 function toggleSettingsSection(){
   settingsSectionOpen=!settingsSectionOpen;
   var body=document.getElementById('settings-body');
+  if(!body) return;
   var arrow=document.getElementById('settings-arrow');
   if(body) body.style.display=settingsSectionOpen?'block':'none';
   if(arrow) arrow.textContent=settingsSectionOpen?'▴':'▾';
@@ -3677,6 +3820,7 @@ function toggleDoneSection(){
 ========================================================= */
 loadDiary();
 loadCp();
+applyFont();
 applyDSkin(getDSkin());
 applyCSkin(getCSkin());
 loadDiarySettings();
@@ -4290,6 +4434,22 @@ function savePartnerNameFromInput2(){
 
 
 <!-- 다크모드 설정 모달 -->
+<div id="font-modal" onclick="closeFontModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#fff;border-radius:18px;width:100%;max-width:340px;max-height:82vh;overflow-y:auto" onclick="event.stopPropagation()">
+    <div style="padding:16px 18px;border-bottom:1px solid #f0ede4;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center">
+      <span>🔤 글꼴</span>
+      <button onclick="closeFontModal()" style="background:none;border:none;font-size:19px;color:#bbb;cursor:pointer">&times;</button>
+    </div>
+    <div style="padding:14px 18px">
+      <div class="fn-scope">
+        <button class="fn-sbtn on" id="fnsc-all" onclick="setFontScope('all')">전체</button>
+        <button class="fn-sbtn" id="fnsc-body" onclick="setFontScope('body')">일기 본문만</button>
+      </div>
+      <div class="fn-grid" id="font-grid"></div>
+    </div>
+  </div>
+</div>
+
 <div id="skin-modal" onclick="closeSkinModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;align-items:center;justify-content:center;padding:20px">
   <div style="background:#fff;border-radius:18px;width:100%;max-width:340px;max-height:82vh;overflow-y:auto" onclick="event.stopPropagation()">
     <div style="padding:16px 18px;border-bottom:1px solid #f0ede4;font-size:15px;font-weight:700;display:flex;justify-content:space-between;align-items:center">
