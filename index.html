@@ -1286,7 +1286,7 @@ var entries={};
 var selDate=null, selMood='', selWeather='';
 var bcYear, bcMonth;
 var moodChart=null, moChart=null;
-var MOOD_COLORS={'😄':'#fbbf24','😊':'#a3e635','🥰':'#f472b6','😐':'#94a3b8','😔':'#60a5fa','😢':'#818cf8','😡':'#f87171','😴':'#c084fc'};
+var MOOD_COLORS={'😄':'#fbbf24','😊':'#a3e635','🥰':'#ff8fa6','😐':'#94a3b8','😔':'#60a5fa','😢':'#818cf8','😡':'#f87171','😴':'#c084fc'};
 var MOOD_LABELS={'😄':'신남','😊':'좋음','🥰':'사랑','😐':'보통','😔':'슬픔','😢':'눈물','😡':'화남','😴':'피곤'};
 var WEATHER_IDS={'☀️':'w-sun','⛅':'w-cloud1','☁️':'w-cloud2','☔':'w-rain','❄️':'w-snow'};
 var MOOD_IDS={'😄':'m-1','😊':'m-2','🥰':'m-3','😐':'m-4','😔':'m-5','😢':'m-6','😡':'m-7','😴':'m-8'};
@@ -2461,7 +2461,8 @@ function handleCoupleProfilePhoto(ev){
 
 // ===== 커플 모드: 기분 통계 =====
 var cpMoodChart=null;
-var CP_MOOD_COLORS={'🥰':'var(--cm)','😊':'#ffb84d','😐':'#94a3b8','😢':'#818cf8','😡':'#f87171'};
+/* 차트는 canvas에 그려져 var(--x)를 해석하지 못하므로 실제 색상값만 사용 */
+var CP_MOOD_COLORS={'🥰':'#ff8fa6','😊':'#ffb84d','😐':'#94a3b8','😢':'#818cf8','😡':'#f87171'};
 var CP_MOOD_LABELS={'🥰':'사랑','😊':'좋음','😐':'보통','😢':'눈물','😡':'싸움'};
 function renderCpMoodStats(){
   var canvas=document.getElementById('cp-mood-chart'); if(!canvas) return;
@@ -2479,7 +2480,7 @@ function renderCpMoodStats(){
       if(cpMoodChart){ cpMoodChart.destroy(); cpMoodChart=null; }
       cpMoodChart=new Chart(canvas,{
         type:'doughnut',
-        data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'var(--cm-lt4)';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fff'}]},
+        data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'#ffb3c1';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fff'}]},
         options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/totalMoodDays*100)+'%)';}}}}}
       });
     }catch(e){ /* Chart.js 로드 실패해도 아래 범례/퍼센트는 계속 보여줌 */ }
