@@ -758,6 +758,10 @@ body.dark-mode .dm-tag{background:#33302a;color:#a89870}
       </div>
       <div class="bcg" id="bc-grid"></div>
     </div>
+    <div class="box">
+      <div class="box-title">📝 월별 일기 수</div>
+      <div style="position:relative;height:180px;margin-top:6px"><canvas id="mo-chart"></canvas></div>
+    </div>
   </div>
 
   <!-- 탭3: 목록 -->
@@ -835,15 +839,6 @@ body.dark-mode .dm-tag{background:#33302a;color:#a89870}
       <div class="hm-detail" id="hm-detail"></div>
       <div class="hm-stats" id="hm-stats"></div>
       <div class="hm-legend" id="hm-legend"></div>
-    </div>
-    <div class="box">
-      <div class="box-title fold-head" onclick="toggleFold('mo-fold')">
-        <span>📝 월별 일기 수</span>
-        <span class="fold-arrow" id="mo-fold-arrow">▾</span>
-      </div>
-      <div class="fold-body" id="mo-fold">
-        <div style="position:relative;height:180px;margin-top:8px"><canvas id="mo-chart"></canvas></div>
-      </div>
     </div>
     <div class="box">
       <div class="box-title" style="display:flex;justify-content:space-between;align-items:center">
@@ -1973,7 +1968,7 @@ function goTabD(id){
   document.querySelectorAll('#tabbar-diary .tb').forEach(function(el){el.classList.remove('active');});
   document.getElementById('tab-d-'+id).classList.add('active');
   document.getElementById('tbtn-d-'+id).classList.add('active');
-  if(id==='cal') renderBC();
+  if(id==='cal'){ renderBC(); if(typeof renderMonthChart==='function') setTimeout(renderMonthChart,30); }
   if(id==='list') renderFL();
   if(id==='stats'){ renderStats(); renderHeatmap(); renderDiaryBadges(); renderDarkScheduleUI(); }
 }
@@ -2780,9 +2775,19 @@ function renderStats(){
   document.getElementById('w-stat').innerHTML=wk.length>0
     ?wk.map(function(w){var pct=Math.round(wc[w]/wt*100);return '<div class="wsr"><span class="wsl">'+w+'</span><div class="wsb"><div class="wsbf" style="width:'+pct+'%"></div></div><span class="wsc">'+wc[w]+'일</span></div>';}).join('')
     :'<div style="font-size:12px;color:#d0b090">날씨 기록이 없어요</div>';
-  var moData=Array.from({length:12},function(_,i){var ym2=yr+'-'+String(i+1).padStart(2,'0');return Object.keys(entries).filter(function(k){return k.startsWith(ym2);}).length;});
+  renderMonthChart();
+}
+
+function renderMonthChart(){
+  var el=document.getElementById('mo-chart');
+  if(!el) return;
+  var yr=new Date().getFullYear();
+  var moData=Array.from({length:12},function(_,i){
+    var ym2=yr+'-'+String(i+1).padStart(2,'0');
+    return Object.keys(entries).filter(function(k){return k.startsWith(ym2);}).length;
+  });
   if(moChart) moChart.destroy();
-  moChart=new Chart(document.getElementById('mo-chart'),{
+  moChart=new Chart(el,{
     type:'bar',
     data:{labels:MONTHS,datasets:[{label:'일기 수',data:moData,backgroundColor:'#e8c4a099',borderColor:'#c8a070',borderWidth:1,borderRadius:4}]},
     options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{stepSize:1},beginAtZero:true}}}
