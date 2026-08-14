@@ -295,6 +295,52 @@ body.mode-diary .diary-card.card-throwback .card-title{color:var(--dm)}
 #push-banner .push-desc{font-size:11px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #push-banner .push-close{background:none;border:none;color:#ccc;font-size:16px;cursor:pointer;flex-shrink:0;padding:0}
 
+/* ===== 연간 기분 히트맵 ===== */
+.hm-nav{display:flex;align-items:center;gap:8px;font-weight:400}
+.hm-nav button{background:var(--dm-lt3);border:1px solid var(--dm-lt);border-radius:6px;color:var(--dm);cursor:pointer;font-size:11px;padding:2px 8px;font-family:inherit}
+.hm-nav button:disabled{opacity:.3;cursor:default}
+.hm-nav b{font-size:12px;color:var(--dm-d);min-width:38px;text-align:center}
+.hm-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
+.hm-inner{display:inline-block;min-width:100%}
+.hm-months{display:grid;grid-template-columns:22px repeat(53,12px);gap:3px;margin-bottom:3px}
+.hm-month-lb{font-size:9px;color:#b0a894;grid-row:1;white-space:nowrap}
+.hm-body{display:grid;grid-template-columns:22px 1fr;gap:4px}
+.hm-dows{display:grid;grid-template-rows:repeat(7,12px);gap:3px}
+.hm-dow{font-size:8.5px;color:#b0a894;line-height:12px;text-align:right;padding-right:2px}
+.hm-grid{display:grid;grid-template-rows:repeat(7,12px);grid-auto-flow:column;grid-auto-columns:12px;gap:3px}
+.hm-cell{width:12px;height:12px;border-radius:3px;background:#eef0ea;cursor:pointer;transition:transform .1s}
+.hm-cell:active{transform:scale(1.4)}
+.hm-cell.empty{background:transparent;cursor:default}
+.hm-cell.future{background:#f7f8f5;cursor:default}
+.hm-cell.today{outline:1.5px solid var(--dm-d);outline-offset:1px}
+.hm-detail{margin-top:12px;background:var(--dm-lt3);border:1px dashed var(--dm-lt);border-radius:10px;padding:11px 13px;font-size:12px;color:#6a6558;min-height:42px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.hm-detail .em{font-size:20px;flex-shrink:0}
+.hm-detail .dt{font-weight:700;color:#3a3a30}
+.hm-detail .go{margin-left:auto;color:var(--dm);font-size:15px;flex-shrink:0}
+.hm-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.hm-st{background:var(--dm-lt3);border:1px solid var(--dm-lt);border-radius:10px;padding:9px 6px;text-align:center}
+.hm-st .v{font-size:16px;font-weight:700;color:var(--dm-d)}
+.hm-st .l{font-size:9.5px;color:#a09888;margin-top:2px}
+.hm-legend{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;padding-top:12px;border-top:1px solid #f2f0e8}
+.hm-lg{display:flex;align-items:center;gap:4px;font-size:10.5px;color:#8a8578;background:var(--dm-lt3);border:1px solid var(--dm-lt);border-radius:12px;padding:3px 8px}
+body.mode-couple .hm-cell.today{outline-color:var(--cm-d)}
+body.mode-couple .hm-nav b{color:var(--cm-d)}
+body.mode-couple .hm-nav button{background:var(--cm-lt3);color:var(--cm);border-color:var(--cm-lt)}
+body.mode-couple .hm-detail{background:var(--cm-lt3);border-color:var(--cm-lt)}
+body.mode-couple .hm-lg{background:var(--cm-lt3);border-color:var(--cm-lt)}
+.hm-lg .sw{width:9px;height:9px;border-radius:2px;flex-shrink:0}
+body.dark-mode .hm-cell{background:#2a2a2a}
+body.dark-mode .hm-cell.future{background:#232323}
+body.dark-mode .hm-cell.empty{background:transparent}
+body.dark-mode .hm-month-lb,body.dark-mode .hm-dow{color:#6a6a60}
+body.dark-mode .hm-detail{background:#232323;border-color:#3a3a3a;color:#bbb}
+body.dark-mode .hm-detail .dt{color:#e8e8e8}
+body.dark-mode .hm-st{background:#232323;border-color:#3a3a3a}
+body.dark-mode .hm-st .l{color:#8a8a80}
+body.dark-mode .hm-lg{background:#232323;border-color:#3a3a3a;color:#bbb}
+body.dark-mode .hm-legend{border-top-color:#333}
+body.dark-mode .hm-nav button{background:#232323;border-color:#3a3a3a}
+
 /* ===== 일기 달력 기분 색상 ===== */
 /* 기분 색은 감정 구분이 목적이라 스킨과 무관하게 고정 */
 .bcd.has-e{background:var(--dm-lt3)}
@@ -490,6 +536,90 @@ body.dark .pt-cell{background:#2a2a2a}
 .srch-row{display:flex;gap:6px;margin-bottom:8px}
 .srch-row input[type=date]{flex:1;border:1px solid #e8e4dc;border-radius:9px;padding:6px 9px;font-size:11.5px;background:#fff;color:inherit;font-family:inherit;outline:none}
 body.dark .srch-row input[type=date]{background:#252525;border-color:#3a3a3a;color:#ddd}
+
+/* 잔디 히트맵 */
+.hm-wrap{overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+.hm-wrap::-webkit-scrollbar{height:4px}
+.hm-wrap::-webkit-scrollbar-thumb{background:#ddd;border-radius:2px}
+.hm-grid{display:grid;grid-auto-flow:column;grid-template-rows:repeat(7,1fr);gap:2.5px;min-width:max-content}
+.hm-cell{width:11px;height:11px;border-radius:2.5px;background:#f0eee8;cursor:pointer;transition:transform .1s}
+.hm-cell:active{transform:scale(1.35)}
+body.dark-mode .hm-cell{background:#2a2a2a}
+.hm-months{display:flex;font-size:8.5px;color:#b0a898;margin-bottom:3px;min-width:max-content;gap:2.5px}
+.hm-legend{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:8px;font-size:10px;color:#a09888}
+.hm-legend span{display:inline-flex;align-items:center;gap:3px}
+.hm-legend i{width:10px;height:10px;border-radius:2.5px;display:inline-block}
+.hm-year{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.hm-year button{background:none;border:1px solid #e8e4dc;border-radius:6px;width:24px;height:24px;cursor:pointer;font-size:12px;color:#a09888}
+body.dark-mode .hm-year button{border-color:#3a3a3a;color:#888}
+.hm-tip{font-size:11px;color:#a09888;text-align:center;margin-top:7px;min-height:16px}
+
+/* 접이식 */
+.fold-head{display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none}
+.fold-arrow{font-size:11px;color:#b0a898;transition:transform .2s}
+.fold-arrow.on{transform:rotate(180deg)}
+.fold-body{display:none}
+.fold-body.on{display:block}
+
+/* 커플 사진+내용 갤러리 */
+.cg-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--cm-lt2);cursor:pointer}
+.cg-item:last-child{border-bottom:none}
+body.dark-mode .cg-item{border-bottom-color:var(--cm-bd)}
+.cg-thumb{width:64px;height:64px;border-radius:10px;object-fit:cover;flex-shrink:0}
+.cg-noimg{width:64px;height:64px;border-radius:10px;background:var(--cm-lt3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+body.dark-mode .cg-noimg{background:var(--cm-card)}
+.cg-txt{flex:1;min-width:0}
+.cg-date{font-size:11px;color:var(--cm);font-weight:700;margin-bottom:3px}
+.cg-body{font-size:12px;color:#6a6258;line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+body.dark-mode .cg-body{color:#b0a8a0}
+.cg-more{font-size:10px;color:var(--cm-l);margin-top:3px}
+
+/* 잠금 화면 */
+#lock-screen{display:none;position:fixed;inset:0;background:#faf8f3;z-index:99999;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px}
+body.dark-mode #lock-screen{background:#161616}
+#lock-screen.on{display:flex}
+.lk-ico{font-size:44px}
+.lk-title{font-size:15px;font-weight:700;color:#6a6258}
+body.dark-mode .lk-title{color:#ddd}
+.lk-dots{display:flex;gap:14px}
+.lk-dot{width:14px;height:14px;border-radius:50%;border:2px solid #d8d2c6;transition:all .12s}
+.lk-dot.on{background:var(--dm);border-color:var(--dm)}
+body.mode-couple .lk-dot.on{background:var(--cm);border-color:var(--cm)}
+body.dark-mode .lk-dot{border-color:#444}
+.lk-pad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:230px;width:100%}
+.lk-key{aspect-ratio:1.35;border:none;border-radius:14px;background:#fff;font-size:19px;font-weight:600;color:#6a6258;cursor:pointer;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.lk-key:active{background:#f0ede6}
+body.dark-mode .lk-key{background:#242424;color:#ddd}
+.lk-key.fn{font-size:13px;background:transparent;box-shadow:none;color:#a09888}
+.lk-err{font-size:12px;color:#e07070;min-height:16px}
+
+/* 날짜 상세 팝업 */
+#day-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9998;align-items:center;justify-content:center;padding:18px}
+#day-modal.on{display:flex}
+.dm-box{background:#fff;border-radius:20px;width:100%;max-width:360px;max-height:84vh;min-height:200px;overflow:hidden;position:relative;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.25)}
+body.dark-mode .dm-box{background:#232323}
+.dm-weather-bg{position:absolute;top:0;left:0;right:0;height:78px;overflow:hidden;pointer-events:none;z-index:1;border-radius:20px 20px 0 0}
+.dm-float{position:absolute;opacity:.22;animation:dmFloat linear infinite;white-space:nowrap;will-change:transform}
+@keyframes dmFloat{from{transform:translateX(30px)}to{transform:translateX(-400px)}}
+.dm-head{position:relative;z-index:2;padding:16px 18px 12px;border-bottom:1px solid #f0ede4;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;background:transparent}
+body.dark-mode .dm-head{border-bottom-color:#333;background:transparent}
+.dm-date{font-size:15px;font-weight:700;color:#5a5248}
+body.dark-mode .dm-date{color:#e8e8e8}
+.dm-meta{display:flex;gap:7px;margin-top:5px;font-size:19px}
+.dm-x{background:#f2efe8;border:none;width:30px;height:30px;border-radius:50%;font-size:16px;color:#8a8278;cursor:pointer;flex-shrink:0;line-height:1}
+body.dark-mode .dm-x{background:#333;color:#bbb}
+.dm-body{position:relative;z-index:2;padding:14px 18px 20px;overflow-y:auto;flex:1;background:#fff}
+.dm-title{font-size:14px;font-weight:700;margin-bottom:7px;color:#4a4238}
+body.dark-mode .dm-title{color:#e0e0e0}
+.dm-text{font-size:13.5px;line-height:1.85;white-space:pre-wrap;word-break:break-word;color:#3a352e;min-height:20px}
+body.dark-mode .dm-text{color:#c8c4be}
+body.dark-mode .dm-body{background:#232323}
+.dm-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:7px;margin-top:13px}
+.dm-photos img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:11px;cursor:pointer}
+.dm-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:11px}
+.dm-tag{font-size:10.5px;color:#a09070;background:#f5f2ea;border-radius:9px;padding:2px 8px}
+body.dark-mode .dm-tag{background:#33302a;color:#a89870}
+.dm-empty{text-align:center;padding:30px 12px;color:#b0a898;font-size:12.5px}
 </style>
 </head>
 <body class="mode-diary">
@@ -681,8 +811,39 @@ body.dark .srch-row input[type=date]{background:#252525;border-color:#3a3a3a;col
       <div id="w-stat"></div>
     </div>
     <div class="box">
-      <div class="box-title">📝 월별 일기 수</div>
-      <div style="position:relative;height:180px"><canvas id="mo-chart"></canvas></div>
+      <div class="box-title" style="justify-content:space-between">
+        <span>🟩 올해의 기분</span>
+        <span class="hm-nav">
+          <button onclick="hmMove(-1)">◀</button>
+          <b id="hm-year">2026</b>
+          <button onclick="hmMove(1)">▶</button>
+        </span>
+      </div>
+      <div class="hm-scroll">
+        <div class="hm-inner">
+          <div class="hm-months" id="hm-months"></div>
+          <div class="hm-body">
+            <div class="hm-dows">
+              <div class="hm-dow">일</div><div class="hm-dow"></div><div class="hm-dow">화</div>
+              <div class="hm-dow"></div><div class="hm-dow">목</div><div class="hm-dow"></div>
+              <div class="hm-dow">토</div>
+            </div>
+            <div class="hm-grid" id="hm-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hm-detail" id="hm-detail"></div>
+      <div class="hm-stats" id="hm-stats"></div>
+      <div class="hm-legend" id="hm-legend"></div>
+    </div>
+    <div class="box">
+      <div class="box-title fold-head" onclick="toggleFold('mo-fold')">
+        <span>📝 월별 일기 수</span>
+        <span class="fold-arrow" id="mo-fold-arrow">▾</span>
+      </div>
+      <div class="fold-body" id="mo-fold">
+        <div style="position:relative;height:180px;margin-top:8px"><canvas id="mo-chart"></canvas></div>
+      </div>
     </div>
     <div class="box">
       <div class="box-title" style="display:flex;justify-content:space-between;align-items:center">
@@ -699,6 +860,7 @@ body.dark .srch-row input[type=date]{background:#252525;border-color:#3a3a3a;col
       </div>
       <div id="settings-body" style="display:none">
         <div class="settings-row" onclick="openSkinModal()"><span>🎨 테마 색상</span><span class="settings-arrow">›</span></div>
+        <div class="settings-row" onclick="toggleLockSetting()"><span>🔒 일기 잠금</span><span id="lock-setting-lb" style="font-size:12px;font-weight:700;color:var(--dm)">OFF</span></div>
         <div class="settings-row" onclick="openDarkSettingsModal()"><span>🌗 다크모드</span><span class="settings-arrow">›</span></div>
         <div class="settings-row" onclick="openBackupModal()"><span>💾 백업 / 복원</span><span class="settings-arrow">›</span></div>
         <div class="settings-row" onclick="openCardSettingsModal()"><span>🗂 카드 표시</span><span class="settings-arrow">›</span></div>
@@ -812,6 +974,31 @@ body.dark .srch-row input[type=date]{background:#252525;border-color:#3a3a3a;col
       <div class="cp-box-title">😊 기분 통계 <span id="cp-mood-stat-period" style="font-size:11px;color:var(--cm-lt4);font-weight:400"></span></div>
       <div class="cw"><canvas id="cp-mood-chart"></canvas></div>
       <div class="ml" id="cp-mood-leg"></div>
+    </div>
+    <div class="box">
+      <div class="cp-box-title" style="justify-content:space-between;display:flex;align-items:center">
+        <span>💕 올해의 기분</span>
+        <span class="hm-nav">
+          <button onclick="cpHmMove(-1)">◀</button>
+          <b id="cp-hm-year">2026</b>
+          <button onclick="cpHmMove(1)">▶</button>
+        </span>
+      </div>
+      <div class="hm-scroll">
+        <div class="hm-inner">
+          <div class="hm-months" id="cp-hm-months"></div>
+          <div class="hm-body">
+            <div class="hm-dows">
+              <div class="hm-dow">일</div><div class="hm-dow"></div><div class="hm-dow">화</div>
+              <div class="hm-dow"></div><div class="hm-dow">목</div><div class="hm-dow"></div>
+              <div class="hm-dow">토</div>
+            </div>
+            <div class="hm-grid" id="cp-hm-grid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="hm-detail" id="cp-hm-detail"></div>
+      <div class="hm-legend" id="cp-hm-legend"></div>
     </div>
     <!-- 뱃지 컬렉션 -->
     <div class="box">
@@ -1048,6 +1235,246 @@ function updateThemeMeta(){
   var isCp=document.body.classList.contains('mode-couple');
   mt.content=isCp?(C_SKINS[getCSkin()]||C_SKINS.pink).m:(D_SKINS[getDSkin()]||D_SKINS.green).m;
 }
+/* ===== 접이식 ===== */
+function toggleFold(id){
+  var b=document.getElementById(id), a=document.getElementById(id+'-arrow');
+  if(!b) return;
+  var on=b.classList.toggle('on');
+  if(a) a.classList.toggle('on',on);
+  if(on&&id==='mo-fold'&&typeof renderStats==='function') setTimeout(renderStats,50);
+}
+
+/* ===== 날짜 상세 팝업 ===== */
+var WEATHER_EMOJI={'☀️':['☀️','✨','🌻'],'⛅':['⛅','☁️','☀️'],'☁️':['☁️','☁️','💨'],'☔':['☔','💧','☁️'],'❄️':['❄️','⛄','☁️']};
+function openDayModal(ds,isCp){
+  var e=isCp?(cpData.entries||{})[ds]:entries[ds];
+  var d=new Date(ds+'T00:00:00');
+  var DN=['일','월','화','수','목','금','토'];
+  document.getElementById('dm-date').textContent=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DN[d.getDay()]+')';
+  var meta=document.getElementById('dm-meta');
+  meta.innerHTML=e?((e.mood?'<span>'+e.mood+'</span>':'')+(e.weather?'<span>'+e.weather+'</span>':'')):'';
+  var body=document.getElementById('dm-body');
+  if(!e||(!(e.body||e.text||'').trim()&&!(e.photos&&e.photos.length))){
+    body.innerHTML='<div class="dm-empty">이 날은 기록이 없어요 ☁️</div>';
+  } else {
+    var txt=(e.body||e.text||'').trim();
+    var h='';
+    if(e.title) h+='<div class="dm-title">'+escHtml(e.title)+'</div>';
+    if(txt) h+='<div class="dm-text">'+escHtml(txt)+'</div>';
+    if(e.photos&&e.photos.length){
+      h+='<div class="dm-photos">'+e.photos.map(function(p,i){
+        return '<img src="'+resolvePhotoSrc(p)+'" onclick="dmPhoto('+i+')">';
+      }).join('')+'</div>';
+      window._dmPhotos=e.photos.map(function(p){return resolvePhotoSrc(p);});
+      window._dmDate=ds;
+      window._dmEntry=e;
+    }
+    if(e.tags&&e.tags.length){
+      h+='<div class="dm-tags">'+e.tags.map(function(t){return '<span class="dm-tag">#'+escHtml(t)+'</span>';}).join('')+'</div>';
+    }
+    body.innerHTML=h;
+  }
+  renderWeatherBg(e&&e.weather,e&&e.mood);
+  document.getElementById('day-modal').classList.add('on');
+}
+function escHtml(s){var d=document.createElement('div');d.textContent=s||'';return d.innerHTML;}
+function closeDayModal(ev){
+  if(ev&&ev.target&&ev.target.id!=='day-modal') return;
+  document.getElementById('day-modal').classList.remove('on');
+  document.getElementById('dm-bg').innerHTML='';
+}
+function renderWeatherBg(weather,mood){
+  var bg=document.getElementById('dm-bg');
+  if(!bg) return;
+  var set=WEATHER_EMOJI[weather];
+  var icons=set?set.slice():[];
+  if(mood) icons.push(mood);
+  if(!icons.length) icons=['✨'];
+  var h='';
+  for(var i=0;i<7;i++){
+    var ic=icons[i%icons.length];
+    var top=Math.random()*60;
+    var dur=9+Math.random()*11;
+    var delay=-Math.random()*dur;
+    var size=14+Math.random()*8;
+    h+='<span class="dm-float" style="top:'+top+'%;left:100%;font-size:'+size+'px;animation-duration:'+dur+'s;animation-delay:'+delay+'s">'+ic+'</span>';
+  }
+  bg.innerHTML=h;
+}
+function dmPhoto(i){
+  if(!window._dmPhotos) return;
+  ptPhotos=window._dmPhotos.map(function(src){
+    return {ds:window._dmDate,src:src,e:window._dmEntry||{},n:window._dmPhotos.length,i:0};
+  });
+  openLB(i);
+}
+
+/* ===== 커플 히트맵 ===== */
+var cpHmYear=new Date().getFullYear(), cpHmSelected=null;
+function cpHmMove(d){
+  var ys=cpHmYears(), ny=cpHmYear+d;
+  if(ny<ys.min||ny>ys.max) return;
+  cpHmYear=ny; cpHmSelected=null; renderCpHeatmap();
+}
+function cpHmYears(){
+  var thisY=new Date().getFullYear();
+  var ks=Object.keys(cpData.entries||{}).map(function(k){return +k.slice(0,4);}).filter(function(n){return n>1900;});
+  var min=ks.length?Math.min.apply(null,ks):thisY;
+  if(min>thisY) min=thisY;
+  return {min:min,max:thisY};
+}
+function renderCpHeatmap(){
+  var grid=document.getElementById('cp-hm-grid'); if(!grid) return;
+  var months=document.getElementById('cp-hm-months');
+  grid.innerHTML=''; if(months) months.innerHTML='';
+  var ys=cpHmYears();
+  if(cpHmYear<ys.min) cpHmYear=ys.min;
+  if(cpHmYear>ys.max) cpHmYear=ys.max;
+  var yl=document.getElementById('cp-hm-year');
+  if(yl) yl.textContent=cpHmYear+'년';
+  var today=new Date(); today.setHours(0,0,0,0);
+  var todayStr=fmt(today);
+  var jan1=new Date(cpHmYear,0,1), lead=jan1.getDay();
+  var dec31=new Date(cpHmYear,11,31);
+  var total=Math.round((dec31-jan1)/86400000)+1;
+  for(var i=0;i<lead;i++){
+    var e0=document.createElement('div'); e0.className='hm-cell empty'; grid.appendChild(e0);
+  }
+  var monthCol={}, data=cpData.entries||{};
+  for(var n=0;n<total;n++){
+    var d=new Date(cpHmYear,0,1+n), ds=fmt(d);
+    var col=Math.floor((lead+n)/7)+2;
+    if(d.getDate()===1) monthCol[d.getMonth()]=col;
+    var cell=document.createElement('div');
+    cell.className='hm-cell';
+    var rec=data[ds];
+    if(d>today) cell.className+=' future';
+    else if(rec&&rec.mood&&MOOD_COLORS[rec.mood]) cell.style.background=MOOD_COLORS[rec.mood];
+    else if(rec&&((rec.text||rec.body||'').trim()||(rec.photos&&rec.photos.length))) cell.style.background='var(--cm-lt)';
+    if(ds===todayStr) cell.className+=' today';
+    cell.dataset.ds=ds;
+    cell.onclick=function(){ openDayModal(this.dataset.ds,true); };
+    grid.appendChild(cell);
+  }
+  var MN=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  if(months){
+    Object.keys(monthCol).forEach(function(m){
+      var lb=document.createElement('div');
+      lb.className='hm-month-lb'; lb.textContent=MN[m];
+      lb.style.gridColumn=monthCol[m]; months.appendChild(lb);
+    });
+  }
+  var lg=document.getElementById('cp-hm-legend');
+  if(lg){
+    var counts={};
+    Object.keys(data).forEach(function(k){
+      if(k.slice(0,4)!=String(cpHmYear)) return;
+      var mo=data[k].mood; if(mo) counts[mo]=(counts[mo]||0)+1;
+    });
+    var ks=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
+    lg.innerHTML=ks.length?ks.map(function(m){
+      return '<span class="hm-lg"><span class="sw" style="background:'+(MOOD_COLORS[m]||'#ddd')+'"></span>'+m+' '+counts[m]+'일</span>';
+    }).join(''):'<span style="font-size:11px;color:#b0a898">아직 기록이 없어요</span>';
+  }
+  var dt=document.getElementById('cp-hm-detail');
+  if(dt) dt.innerHTML='<div style="font-size:11px;color:#b0a898;text-align:center;padding:6px">칸을 탭하면 그 날 기록이 보여요</div>';
+}
+
+/* ===== 일기 잠금 ===== */
+var LOCK_KEY='diary_lock_v1';
+var lkInput='', lkMode='verify', lkTemp='';
+function getLock(){ try{return JSON.parse(localStorage.getItem(LOCK_KEY))||{on:false,pin:''};}catch(e){return {on:false,pin:''};} }
+function setLock(o){ localStorage.setItem(LOCK_KEY,JSON.stringify(o)); }
+function updLockLabel(){
+  var el=document.getElementById('lock-setting-lb');
+  if(el){ var L=getLock(); el.textContent=L.on?'ON':'OFF'; el.style.color=L.on?'var(--dm)':'#b0a898'; }
+}
+function toggleLockSetting(){
+  var L=getLock();
+  if(L.on){
+    if(!confirm('일기 잠금을 해제할까요?')) return;
+    lkMode='disable'; showLock('비밀번호를 입력하세요');
+  } else {
+    lkMode='set1'; lkTemp=''; showLock('새 비밀번호 4자리를 입력하세요');
+  }
+}
+function showLock(title){
+  lkInput='';
+  document.getElementById('lk-title').textContent=title;
+  document.getElementById('lk-err').textContent='';
+  document.getElementById('lk-ico').textContent=lkMode==='verify'?'🔒':'🔑';
+  var cb=document.getElementById('lk-cancel');
+  if(cb) cb.textContent=lkMode==='verify'?'':'취소';
+  document.getElementById('lock-screen').classList.add('on');
+  renderLkDots();
+}
+function hideLock(){ document.getElementById('lock-screen').classList.remove('on'); lkInput=''; }
+function renderLkDots(){
+  for(var i=0;i<4;i++){
+    var d=document.getElementById('lkd'+i);
+    if(d) d.classList.toggle('on',i<lkInput.length);
+  }
+}
+function lkPress(n){
+  if(lkInput.length>=4) return;
+  lkInput+=n; renderLkDots();
+  if(lkInput.length===4) setTimeout(lkSubmit,140);
+}
+function lkDel(){ lkInput=lkInput.slice(0,-1); renderLkDots(); }
+function lkCancel(){
+  if(lkMode==='verify') return;
+  hideLock(); updLockLabel();
+}
+function lkErr(m){
+  document.getElementById('lk-err').textContent=m;
+  lkInput=''; renderLkDots();
+  var s=document.querySelector('.lk-dots');
+  if(s){ s.style.transform='translateX(-6px)'; setTimeout(function(){s.style.transform='';},90); }
+}
+function lkSubmit(){
+  var L=getLock();
+  if(lkMode==='verify'){
+    if(lkInput===L.pin){ hideLock(); }
+    else lkErr('비밀번호가 달라요');
+  } else if(lkMode==='set1'){
+    lkTemp=lkInput; lkMode='set2';
+    lkInput=''; renderLkDots();
+    document.getElementById('lk-title').textContent='한 번 더 입력해주세요';
+    document.getElementById('lk-err').textContent='';
+  } else if(lkMode==='set2'){
+    if(lkInput===lkTemp){
+      setLock({on:true,pin:lkTemp});
+      hideLock(); updLockLabel();
+      if(typeof toast==='function') toast('일기 잠금을 켰어요 🔒');
+    } else {
+      lkMode='set1'; lkTemp='';
+      lkErr('일치하지 않아요. 다시 설정해주세요');
+      document.getElementById('lk-title').textContent='새 비밀번호 4자리를 입력하세요';
+    }
+  } else if(lkMode==='disable'){
+    if(lkInput===L.pin){
+      setLock({on:false,pin:''});
+      hideLock(); updLockLabel();
+      if(typeof toast==='function') toast('잠금을 해제했어요');
+    } else lkErr('비밀번호가 달라요');
+  }
+}
+function checkLockOnStart(){
+  var L=getLock();
+  if(L.on&&L.pin){ lkMode='verify'; showLock('비밀번호를 입력하세요'); }
+  updLockLabel();
+}
+document.addEventListener('visibilitychange',function(){
+  if(document.hidden){
+    var L=getLock();
+    if(L.on&&L.pin) window._needLock=true;
+  } else if(window._needLock){
+    window._needLock=false;
+    var L2=getLock();
+    if(L2.on&&L2.pin){ lkMode='verify'; showLock('비밀번호를 입력하세요'); }
+  }
+});
+
 function openSkinModal(){
   skinTab=document.body.classList.contains('mode-couple')?'couple':'diary';
   setSkinTab(skinTab);
@@ -1267,7 +1694,7 @@ function restoreBackup(ev){
         toast('올바른 백업 파일이 아니에요!'); return;
       }
 
-      renderBC(); renderFL(); renderStats(); renderStatCards();
+      renderBC(); renderFL(); renderStats(); renderHeatmap(); renderStatCards();
       renderCpCal(); renderThrowback(); renderDday(); updateTopDday();
       closeBackupModal();
       toast('✅ 복원됐어요!');
@@ -1548,7 +1975,7 @@ function goTabD(id){
   document.getElementById('tbtn-d-'+id).classList.add('active');
   if(id==='cal') renderBC();
   if(id==='list') renderFL();
-  if(id==='stats'){ renderStats(); renderDiaryBadges(); renderDarkScheduleUI(); }
+  if(id==='stats'){ renderStats(); renderHeatmap(); renderDiaryBadges(); renderDarkScheduleUI(); }
 }
 
 function onYMChange(){
@@ -1556,7 +1983,7 @@ function onYMChange(){
   var m=parseInt(document.getElementById('g-month').value)||1;
   if(m<1||m>12) return;
   bcYear=y; bcMonth=m-1;
-  if(currentMode==='diary'){ renderBC(); renderStats(); renderStatCards(); renderFL(); }
+  if(currentMode==='diary'){ renderBC(); renderStats(); renderHeatmap(); renderStatCards(); renderFL(); }
   else { cpCalYear=y; cpCalMonth=m-1; renderCpCal(); }
 }
 
@@ -1648,6 +2075,7 @@ function saveEntry(){
   curDiaryPhotos=entries[selDate].photos.slice();
   saveDiary(); toast('💾 저장됐어요!'); setTimeout(launchSaveParticles,50);
   renderFL(); renderStatCards();
+  if(typeof renderHeatmap==='function') renderHeatmap();
   checkMoodBalance(); checkDiaryGoalAchieved(); checkDiaryBadges();
   if(typeof renderTagSugg==='function') renderTagSugg();
 }
@@ -1664,6 +2092,7 @@ function delEntry(){
   Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.remove('on');});
   Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.remove('on');});
   updCC(); toast('삭제됐어요');
+  if(typeof renderHeatmap==='function') renderHeatmap();
   renderFL(); renderStatCards();
   checkDiaryBadges();
 }
@@ -2184,6 +2613,143 @@ function renderFL(){
   container.innerHTML=html;
 }
 
+/* ========== 연간 기분 히트맵 ========== */
+var hmYear=new Date().getFullYear();
+var hmSelected=null;
+
+function hmMove(d){
+  var years=hmAvailableYears();
+  var ny=hmYear+d;
+  if(ny<years.min||ny>years.max) return;
+  hmYear=ny; hmSelected=null;
+  renderHeatmap();
+}
+function hmAvailableYears(){
+  var thisY=new Date().getFullYear();
+  var ys=Object.keys(entries).map(function(k){return +k.slice(0,4);}).filter(function(n){return n>1900;});
+  var min=ys.length?Math.min.apply(null,ys):thisY;
+  var max=thisY; // 미래 연도는 볼 이유가 없으니 올해까지
+  if(min>max) min=max;
+  return {min:min,max:max};
+}
+
+function renderHeatmap(){
+  var grid=document.getElementById('hm-grid');
+  if(!grid) return;
+  var months=document.getElementById('hm-months');
+  grid.innerHTML=''; months.innerHTML='';
+
+  var years=hmAvailableYears();
+  if(hmYear<years.min) hmYear=years.min;
+  if(hmYear>years.max) hmYear=years.max;
+  document.getElementById('hm-year').textContent=hmYear+'년';
+  var navBtns=document.querySelectorAll('.hm-nav button');
+  if(navBtns[0]) navBtns[0].disabled=(hmYear<=years.min);
+  if(navBtns[1]) navBtns[1].disabled=(hmYear>=years.max);
+
+  var today=new Date(); today.setHours(0,0,0,0);
+  var todayStr=fmt(today);
+  var jan1=new Date(hmYear,0,1);
+  var lead=jan1.getDay();
+  var dec31=new Date(hmYear,11,31);
+  var totalDays=Math.round((dec31-jan1)/86400000)+1;
+
+  for(var i=0;i<lead;i++){
+    var e0=document.createElement('div'); e0.className='hm-cell empty'; grid.appendChild(e0);
+  }
+  var monthCol={};
+  for(var n=0;n<totalDays;n++){
+    var d=new Date(hmYear,0,1+n);
+    var ds=fmt(d);
+    var col=Math.floor((lead+n)/7)+2;
+    if(d.getDate()===1) monthCol[d.getMonth()]=col;
+    var cell=document.createElement('div');
+    cell.className='hm-cell';
+    var rec=entries[ds];
+    if(d>today){ cell.className+=' future'; }
+    else if(rec&&rec.mood&&MOOD_COLORS[rec.mood]){ cell.style.background=MOOD_COLORS[rec.mood]; }
+    else if(rec){ cell.style.background='var(--dm-lt)'; } // 기분 없이 쓴 일기
+    if(ds===todayStr) cell.className+=' today';
+    cell.dataset.ds=ds;
+    cell.onclick=function(){ openDayModal(this.dataset.ds,false); };
+    grid.appendChild(cell);
+  }
+  var MN=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  Object.keys(monthCol).forEach(function(m){
+    var lb=document.createElement('div');
+    lb.className='hm-month-lb'; lb.textContent=MN[m];
+    lb.style.gridColumn=monthCol[m]; months.appendChild(lb);
+  });
+
+  hmRenderDetail();
+  hmRenderStats();
+  hmRenderLegend();
+}
+
+function hmSelect(ds){
+  // 같은 칸을 다시 누르면 일기를 연다
+  if(hmSelected===ds && entries[ds]){ openDiaryPreview(ds); return; }
+  hmSelected=ds;
+  hmRenderDetail();
+}
+function hmRenderDetail(){
+  var el=document.getElementById('hm-detail');
+  if(!el) return;
+  var ds=hmSelected;
+  if(!ds){
+    el.innerHTML='<span class="em">👆</span><span>칸을 탭하면 그날 기록을 볼 수 있어요</span>';
+    el.onclick=null; return;
+  }
+  var d=parseDate(ds);
+  var dateTxt=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
+  var today=new Date(); today.setHours(0,0,0,0);
+  var e=entries[ds];
+  if(d>today){
+    el.innerHTML='<span class="em">🗓️</span><span><span class="dt">'+dateTxt+'</span> · 아직 오지 않은 날이에요</span>';
+    el.onclick=null; return;
+  }
+  if(!e){
+    el.innerHTML='<span class="em">·</span><span><span class="dt">'+dateTxt+'</span> · 이날은 기록이 없어요</span>';
+    el.onclick=null; return;
+  }
+  var moodTxt=e.mood?(e.mood+' '+(MOOD_LABELS[e.mood]||'')):'';
+  el.innerHTML='<span class="em">'+(e.mood||'📝')+'</span>'
+    +'<span><span class="dt">'+dateTxt+'</span>'+(moodTxt?' · '+moodTxt:'')
+    +'<br><span style="color:#9a9284">'+((e.title||'(제목 없음)').slice(0,28))+'</span></span>'
+    +'<span class="go">›</span>';
+  el.onclick=function(){ openDiaryPreview(ds); };
+}
+function hmRenderStats(){
+  var el=document.getElementById('hm-stats');
+  if(!el) return;
+  var prefix=hmYear+'-';
+  var keys=Object.keys(entries).filter(function(k){return k.indexOf(prefix)===0;});
+  var today=new Date(); today.setHours(0,0,0,0);
+  var jan1=new Date(hmYear,0,1);
+  var endD=(hmYear===today.getFullYear())?today:new Date(hmYear,11,31);
+  var elapsed=Math.round((endD-jan1)/86400000)+1;
+  // 그 해 최장 연속 기록
+  var best=0,cur=0,d=new Date(hmYear,0,1);
+  while(d<=endD){ if(entries[fmt(d)]){cur++; if(cur>best)best=cur;} else cur=0; d.setDate(d.getDate()+1); }
+  var pct=elapsed>0?Math.round(keys.length/elapsed*100):0;
+  el.innerHTML='<div class="hm-st"><div class="v">'+keys.length+'</div><div class="l">'+hmYear+'년 일기</div></div>'
+    +'<div class="hm-st"><div class="v">'+pct+'%</div><div class="l">기록한 날</div></div>'
+    +'<div class="hm-st"><div class="v">'+best+'일</div><div class="l">최장 연속</div></div>';
+}
+function hmRenderLegend(){
+  var el=document.getElementById('hm-legend');
+  if(!el) return;
+  var prefix=hmYear+'-';
+  var counts={};
+  Object.keys(entries).filter(function(k){return k.indexOf(prefix)===0;})
+    .forEach(function(k){ var m=entries[k].mood; if(m) counts[m]=(counts[m]||0)+1; });
+  var ms=Object.keys(counts).sort(function(a,b){return counts[b]-counts[a];});
+  if(ms.length===0){ el.innerHTML='<span style="font-size:11px;color:#b0a894">'+hmYear+'년 기분 기록이 아직 없어요</span>'; return; }
+  el.innerHTML=ms.map(function(m){
+    return '<span class="hm-lg"><span class="sw" style="background:'+(MOOD_COLORS[m]||'#ddd')+'"></span>'+m+' '+(MOOD_LABELS[m]||'')+' '+counts[m]+'일</span>';
+  }).join('');
+}
+
 function renderStats(){
   var ym=getYM(),yr=bcYear;
   var mKeys=Object.keys(entries).filter(function(k){return k.startsWith(ym);});
@@ -2334,7 +2900,7 @@ function goTabC(id){
   if(id==='cal'){ renderCpCal(); renderThrowback(); renderCoupleProfile(); setTimeout(renderCoupleCards,0); }
   if(id==='dday'){ renderDday(); renderBucket(); renderPlanSummary(); checkAnnivTodayPopup(); }
   if(id==='gallery') renderGallery();
-  if(id==='bucket'){ renderCpMoodStats(); checkCpBadges(); var pnEl=document.getElementById('partner-name-input-2'); if(pnEl) pnEl.value=localStorage.getItem(PARTNER_KEY)||''; }
+  if(id==='bucket'){ renderCpMoodStats(); renderCpHeatmap(); checkCpBadges(); var pnEl=document.getElementById('partner-name-input-2'); if(pnEl) pnEl.value=localStorage.getItem(PARTNER_KEY)||''; }
 }
 
 function daysBetween(dateStr){
@@ -3136,6 +3702,7 @@ openPhotoDB().then(loadAllPhotosToCache).then(function(){
     currentMode='couple';
   }
   applyMode();
+  if(typeof checkLockOnStart==='function') checkLockOnStart();
   if(typeof renderDiaryThrowback==='function') renderDiaryThrowback();
   if(typeof renderPhotoTimeline==='function') renderPhotoTimeline();
   if(typeof renderTags==='function') renderTags();
@@ -3916,6 +4483,43 @@ function savePartnerNameFromInput2(){
     <div class="lb-date" id="lb-date"></div>
     <div class="lb-body" id="lb-body"></div>
     <button class="lb-open" onclick="lbOpenEntry()">이 날 일기 보기 →</button>
+  </div>
+</div>
+<div id="day-modal" onclick="closeDayModal(event)">
+  <div class="dm-box" onclick="event.stopPropagation()">
+    <div class="dm-weather-bg" id="dm-bg"></div>
+    <div class="dm-head">
+      <div>
+        <div class="dm-date" id="dm-date"></div>
+        <div class="dm-meta" id="dm-meta"></div>
+      </div>
+      <button class="dm-x" onclick="closeDayModal()">&times;</button>
+    </div>
+    <div class="dm-body" id="dm-body"></div>
+  </div>
+</div>
+
+<div id="lock-screen">
+  <div class="lk-ico" id="lk-ico">🔒</div>
+  <div class="lk-title" id="lk-title">비밀번호를 입력하세요</div>
+  <div class="lk-dots">
+    <div class="lk-dot" id="lkd0"></div><div class="lk-dot" id="lkd1"></div>
+    <div class="lk-dot" id="lkd2"></div><div class="lk-dot" id="lkd3"></div>
+  </div>
+  <div class="lk-err" id="lk-err"></div>
+  <div class="lk-pad">
+    <button class="lk-key" onclick="lkPress('1')">1</button>
+    <button class="lk-key" onclick="lkPress('2')">2</button>
+    <button class="lk-key" onclick="lkPress('3')">3</button>
+    <button class="lk-key" onclick="lkPress('4')">4</button>
+    <button class="lk-key" onclick="lkPress('5')">5</button>
+    <button class="lk-key" onclick="lkPress('6')">6</button>
+    <button class="lk-key" onclick="lkPress('7')">7</button>
+    <button class="lk-key" onclick="lkPress('8')">8</button>
+    <button class="lk-key" onclick="lkPress('9')">9</button>
+    <button class="lk-key fn" id="lk-cancel" onclick="lkCancel()"></button>
+    <button class="lk-key" onclick="lkPress('0')">0</button>
+    <button class="lk-key fn" onclick="lkDel()">⌫</button>
   </div>
 </div>
 </body>
