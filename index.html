@@ -13,6 +13,8 @@
   --cm:#ff6b8a; --cm-d:#d17a8a; --cm-l:#ff9eb5; --cm-lt:#ffc9d4; --cm-lt2:#ffe0e6; --cm-lt3:#fff2f5; --cm-lt4:#ffb3c1;
   /* 페이지 배경 전용 (lt3보다 더 연함 — 흰 카드가 떠 보이도록) */
   --dm-pg:#f4f9ef; --cm-pg:#fff5f7;
+  --dm-grad:#7aaa82; --cm-grad:#ff6b8a;
+  --dm-grad-d:#5a8a62; --cm-grad-d:#d17a8a;
   /* 커플 달력 칸 */
   --cm-cell:#ffe7ec;
   /* 다크 배경 */
@@ -26,8 +28,8 @@ body.mode-couple{background:#fff5f7;background:var(--cm-pg,#fff5f7);font-family:
 
 /* ===== 상단바 (공통 + 테마전환) ===== */
 .top-bar{position:fixed;top:0;left:0;right:0;z-index:200;padding:8px 16px;display:flex;align-items:center;gap:8px;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:background .3s}
-body.mode-diary .top-bar{background:var(--dm)}
-body.mode-couple .top-bar{background:var(--cm)}
+body.mode-diary .top-bar{background:var(--dm);background:var(--dm-grad,var(--dm))}
+body.mode-couple .top-bar{background:var(--cm);background:var(--cm-grad,var(--cm))}
 .top-bar .ttl{font-size:14px;font-weight:bold;letter-spacing:.3px;flex-shrink:0;white-space:nowrap}
 .top-bar input{background:rgba(255,255,255,.2);border:none;border-radius:6px;padding:5px 6px;color:#fff;font-size:14px;font-weight:600;outline:none;text-align:center}
 .top-bar input.inp-year{width:68px}
@@ -414,8 +416,8 @@ body.dark-mode .hm-nav button{background:#232323;border-color:#3a3a3a}
 body.dark-mode{background:#161616}
 body.dark-mode.mode-diary{background:var(--dm-bg)}
 body.dark-mode.mode-couple{background:var(--cm-bg)}
-body.dark-mode.mode-diary .top-bar{background:var(--dm-d)}
-body.dark-mode.mode-couple .top-bar{background:var(--cm-d)}
+body.dark-mode.mode-diary .top-bar{background:var(--dm-d);background:var(--dm-grad-d,var(--dm-d))}
+body.dark-mode.mode-couple .top-bar{background:var(--cm-d);background:var(--cm-grad-d,var(--cm-d))}
 body.dark-mode .tab-bar{background:#202020}
 body.dark-mode.mode-diary .tab-bar{border-top-color:var(--dm-tb)}
 body.dark-mode.mode-couple .tab-bar{border-top-color:var(--cm-tb)}
@@ -1227,6 +1229,14 @@ var D_SKIN_KEY='diary_skin_v1', C_SKIN_KEY='couple_skin_v1';
 var skinTab='diary';
 
 var D_SKINS={
+  freshgreen:{n:'새싹',m:'#8fc47a',d:'#70995f',l:'#aed59f',lt:'#cde4c3',lt2:'#e6f2e2',lt3:'#f4f9f2',pg:'#f9fcf8',g:'linear-gradient(120deg,#9ccf88,#bcd98e,#dbe39a)',gd:'linear-gradient(120deg,#465d3d,#556240,#636645)',
+    bg:'#0e140c',card:'#1d2718',card2:'#1f2b1b',bd:'#314329',tb:'#253320'},
+  aurora:{n:'오로라',m:'#7fc4b8',d:'#639990',l:'#a3d5cc',lt:'#c5e4df',lt2:'#e3f2ef',lt3:'#f2f9f8',pg:'#f8fcfb',gd:'linear-gradient(120deg,#405e58,#475368,#574c65)',g:'linear-gradient(120deg,#8fd0c4,#9db8e8,#c2a8e0)',
+    bg:'#0d1412',card:'#192725',card2:'#1c2b28',bd:'#2b433f',tb:'#213330'},
+  peachsoda:{n:'피치소다',m:'#f0a58c',d:'#bb816d',l:'#f4beac',lt:'#f8d6cb',lt2:'#fcebe6',lt3:'#fef6f4',pg:'#fefaf9',gd:'linear-gradient(120deg,#6e5247,#6f5d43,#6d6645)',g:'linear-gradient(120deg,#f5b79e,#f7cf94,#f2e29a)',
+    bg:'#18100e',card:'#30211c',card2:'#35241f',bd:'#523830',tb:'#3e2b24'},
+  hydrangea:{n:'수국',m:'#9aa8e0',d:'#7883af',l:'#b6c0e9',lt:'#d2d8f1',lt2:'#e9ecf8',lt3:'#f5f6fc',pg:'#f9fafd',gd:'linear-gradient(120deg,#4c4f68,#475867,#4c615e)',g:'linear-gradient(120deg,#a8b0e8,#9ec4e4,#a8d8d0)',
+    bg:'#0f1116',card:'#1f222d',card2:'#222531',bd:'#34394c',tb:'#282c3a'},
   green:{n:'연두',m:'#7aaa82',d:'#5a8a62',l:'#9dc4a0',lt:'#d4e8c4',lt2:'#eaf4e2',lt3:'#f2f8ee',pg:'#f4f9ef',
     bg:'#171b15',card:'#26301f',card2:'#2a3320',bd:'#3a4a32',tb:'#33402e'},
   lemon:{n:'레몬',m:'#d4b854',d:'#a89040',l:'#e0cc80',lt:'#f2e6b8',lt2:'#faf3dc',lt3:'#fdfaf0',pg:'#fdfbf2',
@@ -1241,6 +1251,14 @@ var D_SKINS={
     bg:'#141a16',card:'#1e2c22',card2:'#223026',bd:'#324434',tb:'#2c3c30'}
 };
 var C_SKINS={
+  blossom:{n:'벚꽃',m:'#f2a8bc',d:'#bd8393',l:'#f6c0cf',lt:'#f9d8e1',lt2:'#fcecf0',lt3:'#fef6f8',pg:'#fefafb',lt4:'#f7cbd7',cell:'#fef7f9',g:'linear-gradient(120deg,#f5b3c5,#f7c8d6,#fadfe6)',gd:'linear-gradient(120deg,#6e5159,#6f5a60,#706467)',
+    bg:'#181113',card:'#302226',card2:'#352529',bd:'#523940',tb:'#3f2c31'},
+  sunset:{n:'선셋',m:'#f5947e',d:'#bf7362',l:'#f8b2a2',lt:'#facfc5',lt2:'#fde7e3',lt3:'#fef4f2',pg:'#fef9f8',gd:'linear-gradient(120deg,#6f4b40,#70553d,#706245)',lt4:'#f9bfb2',cell:'#fef6ec',g:'linear-gradient(120deg,#f7a68e,#f8bd88,#f9d99a)',
+    bg:'#180f0d',card:'#311e19',card2:'#36211c',bd:'#53322b',tb:'#402621'},
+  unicorn:{n:'유니콘',m:'#f2a0c4',d:'#bd7d99',l:'#f6bbd5',lt:'#f9d4e4',lt2:'#fceaf2',lt3:'#fef6f9',pg:'#fefafc',gd:'linear-gradient(120deg,#6e4e5b,#5a4f67,#4c5a6a)',lt4:'#f7c6dc',cell:'#f3f6fc',g:'linear-gradient(120deg,#f5aecb,#c8b0e6,#a8c8ec)',
+    bg:'#181014',card:'#302027',card2:'#35232b',bd:'#523643',tb:'#3f2a33'},
+  berrymilk:{n:'베리밀크',m:'#e08fb0',d:'#af7089',l:'#e9aec6',lt:'#f1cddb',lt2:'#f8e6ee',lt3:'#fcf4f7',pg:'#fdf9fb',gd:'linear-gradient(120deg,#684855,#5d4e66,#6c5e63)',lt4:'#ecbcd0',cell:'#f7f3fa',g:'linear-gradient(120deg,#e89fbc,#cfaee2,#f0d0dc)',
+    bg:'#160e12',card:'#2d1d23',card2:'#311f27',bd:'#4c313c',tb:'#3a252e'},
   pink:{n:'핑크',m:'#ff6b8a',d:'#d17a8a',l:'#ff9eb5',lt:'#ffc9d4',lt2:'#ffe0e6',lt3:'#fff2f5',pg:'#fff5f7',lt4:'#ffb3c1',cell:'#ffe7ec',
     bg:'#1c1417',card:'#3a2830',card2:'#402530',bd:'#5a3540',tb:'#402630'},
   coral:{n:'다홍',m:'#f0705e',d:'#c45a4a',l:'#f79c8e',lt:'#fcc8bf',lt2:'#fde4de',lt3:'#fdeae6',pg:'#fff4f2',lt4:'#f9b3a6',cell:'#fdeae5',
@@ -1286,6 +1304,8 @@ function applyDSkin(k){
   r.setProperty('--dm',s.m); r.setProperty('--dm-d',s.d); r.setProperty('--dm-l',s.l);
   r.setProperty('--dm-lt',s.lt); r.setProperty('--dm-lt2',s.lt2); r.setProperty('--dm-lt3',s.lt3);
   r.setProperty('--dm-pg',s.pg||s.lt3);
+  r.setProperty('--dm-grad',s.g||s.m);
+  r.setProperty('--dm-grad-d',s.gd||s.d);
   applyPageBg();
   r.setProperty('--dm-bg',s.bg); r.setProperty('--dm-card',s.card); r.setProperty('--dm-card2',s.card2);
   r.setProperty('--dm-bd',s.bd); r.setProperty('--dm-tb',s.tb);
@@ -1299,6 +1319,8 @@ function applyCSkin(k){
   r.setProperty('--cm-lt3',s.lt3); r.setProperty('--cm-lt4',s.lt4);
   r.setProperty('--cm-pg',s.pg||s.lt3);
   r.setProperty('--cm-cell',s.cell||s.lt2);
+  r.setProperty('--cm-grad',s.g||s.m);
+  r.setProperty('--cm-grad-d',s.gd||s.d);
   applyPageBg();
   r.setProperty('--cm-bg',s.bg); r.setProperty('--cm-card',s.card); r.setProperty('--cm-card2',s.card2);
   r.setProperty('--cm-bd',s.bd); r.setProperty('--cm-tb',s.tb);
@@ -1342,21 +1364,27 @@ function applyFont(){
   if(scope==='all'){
     st.textContent='body,button,input,textarea,select{font-family:'+fam+' !important}';
   } else {
-    st.textContent='.entry-body-inp,.dm-text,.dm-title,.eb,.ecb,.entry-text,#e-body,#cp-entry-text{font-family:'+fam+' !important}';
+    /* 본문만 교체: 일기의 제목과 본문 글자에만 적용 (이모지 버튼 등 UI는 제외) */
+    st.textContent='#e-title,#e-body,#cp-entry-text,.entry-body-inp,.entry-text,'
+      +'.dm-title,.dm-text,#diary-preview-title,#diary-preview-body,'
+      +'.dcard .c-title,.dcard .c-body'
+      +'{font-family:'+fam+' !important}';
   }
 }
 function openFontModal(){
   renderFontGrid();
   var sc=getFontScope();
-  document.getElementById('fnsc-all').classList.toggle('on',sc==='all');
-  document.getElementById('fnsc-body').classList.toggle('on',sc==='body');
+  ['all','body'].forEach(function(k){
+    var b=document.getElementById('fnsc-'+k); if(b) b.classList.toggle('on',sc===k);
+  });
   document.getElementById('font-modal').style.display='flex';
 }
 function closeFontModal(){ document.getElementById('font-modal').style.display='none'; }
 function setFontScope(s){
   localStorage.setItem(FONT_SCOPE_KEY,s);
-  document.getElementById('fnsc-all').classList.toggle('on',s==='all');
-  document.getElementById('fnsc-body').classList.toggle('on',s==='body');
+  ['all','body'].forEach(function(k){
+    var b=document.getElementById('fnsc-'+k); if(b) b.classList.toggle('on',s===k);
+  });
   applyFont();
 }
 function renderFontGrid(){
@@ -1659,8 +1687,11 @@ function renderSkinGrid(){
   var cur=skinTab==='diary'?getDSkin():getCSkin();
   document.getElementById('skin-grid').innerHTML=Object.keys(set).map(function(k){
     var s=set[k];
+    var prev = s.g
+      ? '<div class="sk-prev" style="background:'+s.g+';border-radius:7px"></div>'
+      : '<div class="sk-prev"><i style="background:'+s.m+'"></i><i style="background:'+s.l+'"></i><i style="background:'+s.lt+'"></i></div>';
     return '<div class="sk-card'+(cur===k?' on':'')+'" data-k="'+k+'" onclick="pickSkin(this)">'
-      +'<div class="sk-prev"><i style="background:'+s.m+'"></i><i style="background:'+s.l+'"></i><i style="background:'+s.lt+'"></i></div>'
+      +prev
       +'<div class="sk-name">'+s.n+'</div></div>';
   }).join('');
 }
@@ -4773,7 +4804,10 @@ function savePartnerNameFromInput2(){
     <div style="padding:14px 18px">
       <div class="fn-scope">
         <button class="fn-sbtn on" id="fnsc-all" onclick="setFontScope('all')">전체</button>
-        <button class="fn-sbtn" id="fnsc-body" onclick="setFontScope('body')">일기 본문만</button>
+        <button class="fn-sbtn" id="fnsc-body" onclick="setFontScope('body')">본문만 교체</button>
+      </div>
+      <div style="font-size:10.5px;color:#b0a898;line-height:1.6;margin:-4px 0 10px">
+        <b>본문만 교체</b>는 일기의 제목·본문 글자에만 적용돼요.
       </div>
       <div class="fn-grid" id="font-grid"></div>
     </div>
