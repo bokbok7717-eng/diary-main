@@ -902,7 +902,7 @@ body.layout-minihome #couple-profile-row{display:none!important}
   body.layout-minihome.mode-diary #mh-mobile-profile{border-top:2px solid var(--dm)}
   body.layout-minihome.mode-couple #mh-mobile-profile{border-top:2px solid var(--cm)}
   body.layout-minihome .mh-mobile-avatar{width:48px;height:48px;flex-basis:48px;border-radius:2px;border:1px solid #bbc3c3;background:#f2f5f5}
-  body.layout-minihome .mh-mobile-text b{font-family:Arial,'Noto Sans KR',sans-serif;font-size:11px;color:#4f5757;letter-spacing:.3px}
+  body.layout-minihome .mh-mobile-text b{font-family:inherit;font-size:11px;color:#4f5757;letter-spacing:.3px}
   body.layout-minihome .mh-mobile-text>span{font-size:8.5px;color:#8e9696;line-height:1.3;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
   body.layout-minihome #mh-mobile-pagebar{height:25px;display:flex;align-items:center;gap:5px;padding:0 7px;margin-bottom:5px;background:var(--dm-lt3);border:1px solid var(--dm-lt);color:var(--dm-d);font-size:8px;letter-spacing:.7px}
   body.layout-minihome.mode-couple #mh-mobile-pagebar{background:var(--cm-lt3);border-color:var(--cm-lt);color:var(--cm-d)}
@@ -912,8 +912,8 @@ body.layout-minihome #couple-profile-row{display:none!important}
   body.layout-minihome #layout-main .tab-content.active{position:relative;background:#fff;border:1px solid #cbd1d1;padding:7px!important;min-height:280px;box-shadow:inset 0 0 0 2px #f7f8f8;overflow:hidden}
   body.layout-minihome.dark-mode #layout-main .tab-content.active{background:#202427;border-color:#454b4f;box-shadow:inset 0 0 0 2px #1b1e20}
   body.layout-minihome #layout-main .tab-content.active::before{display:block;margin:-7px -7px 7px;padding:5px 8px;background:#f0f3f3;border-bottom:1px dotted #b8c0c0;color:#788080;font-size:8px;font-weight:700;letter-spacing:1px}
-  body.layout-minihome #tab-d-write::before{content:'DIARY / WRITE'} body.layout-minihome #tab-d-cal::before{content:'DIARY / CALENDAR'} body.layout-minihome #tab-d-list::before{content:'DIARY / ARCHIVE'} body.layout-minihome #tab-d-stats::before{content:'DIARY / MY SPACE'}
-  body.layout-minihome #tab-c-cal::before{content:'OUR MINIHOME / CALENDAR'} body.layout-minihome #tab-c-gallery::before{content:'OUR MINIHOME / GALLERY'} body.layout-minihome #tab-c-dday::before{content:'OUR MINIHOME / ANNIVERSARY'} body.layout-minihome #tab-c-bucket::before{content:'OUR MINIHOME / SPACE'}
+  body.layout-minihome #tab-d-write::before{content:'DIARY / WRITE'} body.layout-minihome #tab-d-cal::before{content:'DIARY / CALENDAR'} body.layout-minihome #tab-d-list::before{content:'DIARY / ARCHIVE'} body.layout-minihome #tab-d-stats::before{content:'DIARY / MINIROOM'}
+  body.layout-minihome #tab-c-cal::before{content:'OUR MINIHOME / CALENDAR'} body.layout-minihome #tab-c-gallery::before{content:'OUR MINIHOME / GALLERY'} body.layout-minihome #tab-c-dday::before{content:'OUR MINIHOME / ANNIVERSARY'} body.layout-minihome #tab-c-bucket::before{content:'OUR MINIHOME / MINIROOM'}
 
   /* 공통 박스: 둥근 앱 카드 -> 2000s 웹 패널 */
   body.layout-minihome #layout-main .box{border-radius:3px!important;padding:8px!important;margin-bottom:7px!important;background:#fff!important;border:1px solid #d3d8d8!important;box-shadow:none!important}
@@ -970,7 +970,7 @@ body.layout-minihome #couple-profile-row{display:none!important}
 
   /* 하단 메뉴 — 둥근 앱 독 대신 미니홈피 탭 */
   body.layout-minihome #layout-main .tab-bar{display:flex;position:fixed;left:0;right:0;bottom:0;width:100%;height:54px;border:0;border-top:1px solid #aeb6b6;border-radius:0;overflow:visible;box-shadow:0 -2px 7px rgba(50,65,65,.12);background:#f5f7f7;backdrop-filter:none;z-index:1000;padding:4px 5px 3px;gap:3px}
-  body.layout-minihome #layout-main .tb{height:46px;padding:4px 1px 3px!important;border:1px solid #c9cfcf!important;background:#fff!important;border-radius:3px!important;font-family:Arial,'Noto Sans KR',sans-serif;font-size:7px!important;color:#8c9494!important;gap:1px!important}
+  body.layout-minihome #layout-main .tb{height:46px;padding:4px 1px 3px!important;border:1px solid #c9cfcf!important;background:#fff!important;border-radius:3px!important;font-family:inherit!important;font-size:7px!important;color:#8c9494!important;gap:1px!important}
   body.layout-minihome #layout-main .tb .ic{font-size:14px!important;filter:grayscale(.25)}
   body.layout-minihome.mode-diary #layout-main .tb.active{background:var(--dm-lt3)!important;border-color:var(--dm)!important;color:var(--dm-d)!important}
   body.layout-minihome.mode-couple #layout-main .tb.active{background:var(--cm-lt3)!important;border-color:var(--cm)!important;color:var(--cm-d)!important}
@@ -993,6 +993,23 @@ body.layout-minihome #couple-profile-row{display:none!important}
 
 
 
+/* MINIHOME v17 — font inheritance consistency */
+body.layout-minihome .mh-profile,
+body.layout-minihome #mh-mobile-profile,
+body.layout-minihome .mh-virtual-page,
+body.layout-minihome .mh-virtual-page button,
+body.layout-minihome .mh-virtual-page input,
+body.layout-minihome .mh-virtual-page textarea,
+body.layout-minihome .mh-virtual-page select,
+body.layout-minihome .mh-editor-window,
+body.layout-minihome .mh-editor-window button,
+body.layout-minihome .mh-editor-window input,
+body.layout-minihome .mh-editor-window textarea,
+body.layout-minihome .mh-room-toolbar button,
+body.layout-minihome .mh-room-upload,
+body.layout-minihome #mh-side-nav button,
+body.layout-minihome .mh-util-btn{font-family:inherit!important}
+
 /* =========================================================
    MINIHOME v4 — 세밀 UI 통일 / 세로형 프로필 / 편집 / 모달 저장 복구
 ========================================================= */
@@ -1012,11 +1029,11 @@ body.layout-minihome .mh-today-note{cursor:pointer}
 .mh-editor-modal{display:none;position:fixed;inset:0;background:rgba(18,24,24,.48);z-index:5000;align-items:center;justify-content:center;padding:14px}
 .mh-editor-modal.open{display:flex}
 .mh-editor-window{width:min(390px,100%);background:#f7f9f9;border:1px solid #9da7a7;box-shadow:5px 6px 0 rgba(50,65,65,.16);border-radius:5px;overflow:hidden}
-.mh-editor-chrome{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 9px;background:linear-gradient(#fff,#e7ebeb);border-bottom:1px solid #adb6b6;color:#697272;font:700 9px Arial,sans-serif;letter-spacing:.9px}
+.mh-editor-chrome{height:30px;display:flex;align-items:center;justify-content:space-between;padding:0 9px;background:linear-gradient(#fff,#e7ebeb);border-bottom:1px solid #adb6b6;color:#697272;font-family:inherit;font-size:9px;font-weight:700;line-height:normal;letter-spacing:.9px}
 .mh-editor-chrome button{border:0;background:transparent;color:#7b8585;font-size:16px;cursor:pointer}
 .mh-editor-body{padding:10px;background:#fff}
 .mh-editor-body label{display:block;font-size:9px;color:#7d8585;margin-bottom:8px;font-weight:700;letter-spacing:.2px}
-.mh-editor-body input,.mh-editor-body textarea{display:block;width:100%;margin-top:4px;border:1px solid #cbd2d2;border-radius:2px;background:#fbfcfc;padding:7px 8px;font:11px/1.4 Arial,'Noto Sans KR',sans-serif;color:#4f5757;outline:none;resize:vertical}
+.mh-editor-body input,.mh-editor-body textarea{display:block;width:100%;margin-top:4px;border:1px solid #cbd2d2;border-radius:2px;background:#fbfcfc;padding:7px 8px;font-family:inherit;font-size:11px;line-height:1.4;color:#4f5757;outline:none;resize:vertical}
 .mh-editor-body input:focus,.mh-editor-body textarea:focus{border-color:var(--dm)}.mode-couple .mh-editor-body input:focus,.mode-couple .mh-editor-body textarea:focus{border-color:var(--cm)}
 .mh-editor-tip{font-size:8px;color:#a1a8a8;border-top:1px dotted #cbd1d1;padding-top:7px}
 .mh-editor-btns{display:flex;justify-content:flex-end;gap:5px;margin-top:9px}.mh-editor-btns button{border-radius:2px;padding:6px 12px;font-size:9px;font-family:inherit;cursor:pointer}
@@ -1026,7 +1043,7 @@ body.layout-minihome .mh-today-note{cursor:pointer}
 /* couple entry modal must stay above fixed minihome navigation; restore visible save controls */
 body.layout-minihome .entry-modal{z-index:4200!important;background:rgba(15,20,20,.64)!important;padding:8px!important;align-items:center!important}
 body.layout-minihome .entry-sheet{position:relative;width:100%!important;max-width:460px!important;max-height:calc(100vh - 20px)!important;border-radius:4px!important;border:1px solid #9da7a7!important;border-top:3px solid var(--cm)!important;padding:36px 10px 10px!important;box-shadow:5px 6px 0 rgba(30,40,40,.2)!important;overflow-y:auto!important}
-body.layout-minihome .entry-sheet::before{content:'OUR MINIHOME / DAY RECORD';position:absolute;left:0;right:0;top:0;height:28px;display:flex;align-items:center;padding:0 9px;background:linear-gradient(#fff,#ecefef);border-bottom:1px solid #c2c9c9;color:#737b7b;font:700 8px Arial,sans-serif;letter-spacing:.8px}
+body.layout-minihome .entry-sheet::before{content:'OUR MINIHOME / DAY RECORD';position:absolute;left:0;right:0;top:0;height:28px;display:flex;align-items:center;padding:0 9px;background:linear-gradient(#fff,#ecefef);border-bottom:1px solid #c2c9c9;color:#737b7b;font-family:inherit;font-size:8px;font-weight:700;line-height:normal;letter-spacing:.8px}
 body.layout-minihome .entry-sheet>div:first-child{margin-bottom:8px!important;padding-bottom:6px;border-bottom:1px dotted #cbd1d1}
 body.layout-minihome .entry-sheet #modal-date-title{font-size:11px!important;color:#4f5757!important}
 body.layout-minihome #promise-toggle-btn{border-radius:2px!important;padding:3px 9px!important;font-size:8px!important}
@@ -1061,8 +1078,8 @@ body.layout-minihome.dark-mode .entry-sheet{background:#24282b!important;border-
   body.layout-minihome #layout-main input:not([type=checkbox]):not([type=radio]):not([type=file]),
   body.layout-minihome #layout-main select{border-radius:2px!important;min-height:28px!important;padding:5px 7px!important;font-size:9px!important;border-width:1px!important;box-shadow:none!important}
   body.layout-minihome #layout-main button{box-shadow:none}
-  body.layout-minihome .dday-card{border-radius:2px!important;border:1px solid var(--cm)!important;background:#fff!important;color:var(--cm-d)!important;padding:7px 8px!important;text-align:left!important}
-  body.layout-minihome .dday-card .start-date{font-size:7.5px!important;color:#9a9f9f!important}.layout-minihome .dday-card .dday-num{font-size:15px!important;margin-top:2px!important}
+  body.layout-minihome .dday-card{border-radius:2px!important;border:1px solid color-mix(in srgb,var(--cm) 78%,var(--cm-d))!important;background:linear-gradient(135deg,var(--cm),var(--cm-l))!important;color:#fff!important;padding:7px 8px!important;text-align:left!important}
+  body.layout-minihome .dday-card .start-date{font-size:7.5px!important;color:rgba(255,255,255,.86)!important}.layout-minihome .dday-card .dday-num{font-size:15px!important;margin-top:2px!important;color:#fff!important}
   body.layout-minihome .anniv-form{grid-template-columns:minmax(0,1fr) 110px 34px!important;gap:3px!important;margin-top:6px!important;padding-top:6px;border-top:1px dotted #cbd1d1}
   body.layout-minihome .anniv-form input#anniv-name{grid-column:auto!important}.layout-minihome .anniv-form .anniv-add-btn{grid-column:auto!important;border-radius:2px!important;padding:0!important;font-size:14px!important;min-height:28px!important}
   body.layout-minihome .anniv-item{display:grid!important;grid-template-columns:1fr auto auto auto;gap:5px!important;border-bottom:1px dotted #d2d7d7!important}.layout-minihome .anniv-dday{font-size:9px!important}.layout-minihome .anniv-del{font-size:10px!important}
@@ -1109,7 +1126,7 @@ body.layout-minihome #layout-main{font-size:13px;line-height:1.55}
 body.layout-minihome #layout-main button,
 body.layout-minihome #layout-main input,
 body.layout-minihome #layout-main select,
-body.layout-minihome #layout-main textarea{font-family:Arial,'Noto Sans KR',sans-serif}
+body.layout-minihome #layout-main textarea{font-family:inherit}
 
 /* 남아 있던 pill / app-card 모양을 미니홈피식 각진 컴포넌트로 통일 */
 body.layout-minihome #layout-main .box,
@@ -2130,6 +2147,12 @@ body.layout-minihome:not(.dark-mode).mode-couple .mode-switch input:checked + .m
   background:rgba(255,255,255,.34)!important;
 }
 
+
+/* MINIHOME v17 — calendar leading/trailing empty cells are visually identical */
+body.layout-minihome .bcd.empty{background:#f7f8f8!important;border-color:transparent!important}
+body.layout-minihome .cp-cal-day.empty{background:#f6f7f7!important;border-color:transparent!important}
+body.layout-minihome.dark-mode .bcd.empty,
+body.layout-minihome.dark-mode .cp-cal-day.empty{background:#202427!important;border-color:transparent!important}
 </style>
 
 <style id="mh-v11-style">
@@ -2138,7 +2161,7 @@ body.layout-minihome:not(.dark-mode).mode-couple .mode-switch input:checked + .m
    ========================================================= */
 .mh-virtual-page{display:none}
 body.layout-minihome .mh-virtual-page.active{display:block}
-body.layout-minihome .mh-virtual-page{font-family:Arial,'Noto Sans KR',sans-serif;color:#596161}
+body.layout-minihome .mh-virtual-page{font-family:inherit;color:#596161}
 body.layout-minihome .mh-vpage-head{display:flex;align-items:center;gap:8px;border:1px solid #cbd1d1;border-left:3px solid var(--dm);background:#f4f6f6;padding:10px 12px;margin-bottom:10px;font-size:13px;letter-spacing:.06em;font-weight:800}
 body.layout-minihome.mode-couple .mh-vpage-head{border-left-color:var(--cm)}
 body.layout-minihome .mh-vpage-head small{margin-left:auto;color:#a2a9a9;font-size:10px;font-weight:500;letter-spacing:.04em}
@@ -2146,7 +2169,7 @@ body.layout-minihome .mh-home-grid{display:grid;grid-template-columns:minmax(0,1
 body.layout-minihome .mh-panel{border:1px solid #cbd1d1;background:#fff;padding:12px;margin-bottom:10px;box-shadow:none}
 body.layout-minihome .mh-panel-title{display:flex;align-items:center;gap:6px;border-bottom:1px dotted #c4cccc;padding-bottom:7px;margin-bottom:10px;font-size:12px;font-weight:800;letter-spacing:.05em;color:var(--dm-d)}
 body.layout-minihome.mode-couple .mh-panel-title{color:var(--cm-d)}
-body.layout-minihome .mh-panel-title button{margin-left:auto;border:1px solid #c9d0d0;background:#f8f9f9;padding:4px 7px;font:10px Arial,sans-serif;color:#7e8787;cursor:pointer;border-radius:2px}
+body.layout-minihome .mh-panel-title button{margin-left:auto;border:1px solid #c9d0d0;background:#f8f9f9;padding:4px 7px;font-family:inherit;font-size:10px;line-height:normal;color:#7e8787;cursor:pointer;border-radius:2px}
 body.layout-minihome .mh-today-line{display:flex;align-items:center;gap:9px;min-height:54px;padding:10px 12px;border:1px dashed color-mix(in srgb,var(--dm) 50%,#c8cece);background:color-mix(in srgb,var(--dm-lt3) 60%,#fff);margin-bottom:10px}
 body.layout-minihome.mode-couple .mh-today-line{border-color:color-mix(in srgb,var(--cm) 48%,#d4c8cc);background:color-mix(in srgb,var(--cm-lt3) 58%,#fff)}
 body.layout-minihome .mh-today-line .ico{font-size:22px}.mh-today-line .copy{min-width:0;flex:1}.mh-today-line .label{font-size:9px;letter-spacing:.12em;color:#9aa1a1;margin-bottom:3px}.mh-today-line .text{font-size:13px;color:#596161;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mh-today-line button{border:0;background:transparent;font-size:15px;color:#939b9b;cursor:pointer}
@@ -2163,13 +2186,23 @@ body.layout-minihome .mh-home-links{display:grid;grid-template-columns:repeat(2,
 .mh-room-stage{position:relative;width:100%;aspect-ratio:16/10;min-height:280px;border:1px solid #aeb7b7;overflow:hidden;background:linear-gradient(180deg,#e9f1ee 0 67%,#d8c8ad 67% 100%);touch-action:none}
 .mode-couple .mh-room-stage{background:linear-gradient(180deg,#f6e8ec 0 67%,#d9c3b7 67% 100%)}
 .mh-room-stage.has-bg{background-size:cover!important;background-position:center!important}
-.mh-room-stage::after{content:'';position:absolute;left:0;right:0;top:67%;border-top:2px solid rgba(90,100,100,.22);pointer-events:none}.mh-room-item{position:absolute;left:40%;top:45%;font-size:40px;line-height:1;cursor:grab;user-select:none;touch-action:none;filter:drop-shadow(0 2px 1px rgba(0,0,0,.12));z-index:3}.mh-room-item:active{cursor:grabbing}.mh-room-toolbar{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.mh-room-toolbar button,.mh-room-upload{border:1px solid #cbd1d1;background:#f7f9f9;color:#6e7777;padding:7px 9px;font:11px Arial,sans-serif;cursor:pointer;border-radius:2px}.mh-room-toolbar .danger{margin-left:auto;color:#a87878}.mh-room-help{font-size:9.5px;color:#a0a7a7;margin-top:7px;line-height:1.5}
+.mh-room-stage::after{content:'';position:absolute;left:0;right:0;top:67%;border-top:2px solid rgba(90,100,100,.22);pointer-events:none}.mh-room-item{position:absolute;left:40%;top:45%;font-size:40px;line-height:1;cursor:grab;user-select:none;touch-action:none;filter:drop-shadow(0 2px 1px rgba(0,0,0,.12));z-index:3}.mh-room-item:active{cursor:grabbing}.mh-room-toolbar{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}.mh-room-toolbar button,.mh-room-upload{border:1px solid #cbd1d1;background:#f7f9f9;color:#6e7777;padding:7px 9px;font-family:inherit;font-size:11px;line-height:normal;cursor:pointer;border-radius:2px}.mh-room-toolbar .danger{margin-left:auto;color:#a87878}.mh-room-help{font-size:9.5px;color:#a0a7a7;margin-top:7px;line-height:1.5}
 
 /* Pinned photo picker */
-#mh-photo-picker{display:none;position:fixed;inset:0;background:rgba(15,20,20,.58);z-index:10020;align-items:center;justify-content:center;padding:14px}#mh-photo-picker.open{display:flex}.mh-picker-window{width:min(460px,100%);max-height:84vh;background:#f8f9f9;border:1px solid #9fa9a9;box-shadow:6px 7px 0 rgba(20,30,30,.18);overflow:hidden}.mh-picker-head{height:34px;display:flex;align-items:center;padding:0 10px;border-bottom:1px solid #cbd1d1;background:#eef1f1;font-size:10px;font-weight:800;letter-spacing:.08em;color:#626b6b}.mh-picker-head button{margin-left:auto;border:0;background:transparent;font-size:18px;color:#7c8585;cursor:pointer}.mh-picker-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px;max-height:58vh;overflow-y:auto}.mh-picker-item{position:relative;aspect-ratio:1;border:1px solid #cbd1d1;background:#e9eded;overflow:hidden;cursor:pointer}.mh-picker-item img{width:100%;height:100%;object-fit:cover}.mh-picker-item.on{outline:3px solid var(--dm);outline-offset:-3px}.mode-couple .mh-picker-item.on{outline-color:var(--cm)}.mh-picker-item .ck{position:absolute;right:4px;top:4px;background:rgba(255,255,255,.9);border:1px solid #bfc7c7;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;color:#657070}.mh-picker-foot{display:flex;gap:6px;padding:9px 10px;border-top:1px solid #cbd1d1}.mh-picker-foot button,.mh-picker-upload{flex:1;text-align:center;border:1px solid #c7cece;background:#fff;padding:8px;color:#737c7c;font-size:11px;cursor:pointer}.mh-picker-foot .primary{background:var(--dm);border-color:var(--dm-d);color:#fff}.mode-couple .mh-picker-foot .primary{background:var(--cm);border-color:var(--cm-d)}
+#mh-photo-picker{display:none;position:fixed;inset:0;background:rgba(15,20,20,.58);z-index:10020;align-items:center;justify-content:center;padding:14px}#mh-photo-picker.open{display:flex}.mh-picker-window{width:min(460px,100%);max-height:84vh;background:#f8f9f9;border:1px solid #9fa9a9;box-shadow:6px 7px 0 rgba(20,30,30,.18);overflow:hidden}.mh-picker-head{height:38px;display:flex;align-items:center;padding:0 11px;border-bottom:1px solid #cbd1d1;background:#eef1f1;font-size:11px;font-weight:800;letter-spacing:.08em;color:#626b6b}.mh-picker-head button{margin-left:auto;border:0;background:transparent;font-size:18px;color:#7c8585;cursor:pointer}.mh-picker-grid{display:flex;flex-direction:column;gap:7px;padding:10px;max-height:58vh;overflow-y:auto;overflow-x:hidden}.mh-picker-item{position:relative!important;display:grid!important;grid-template-columns:88px minmax(0,1fr) 30px!important;align-items:center!important;gap:10px!important;min-height:88px!important;width:100%!important;aspect-ratio:auto!important;border:1px solid #cbd1d1;background:#fff;overflow:hidden!important;cursor:pointer;padding:6px!important}.mh-picker-item img{position:static!important;display:block!important;width:88px!important;height:76px!important;min-width:88px!important;max-width:88px!important;object-fit:cover!important;transform:none!important;margin:0!important}.mh-picker-info{min-width:0;display:flex;flex-direction:column;gap:4px}.mh-picker-info b{font-size:11.5px;color:#5f6868;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mh-picker-info span{font-size:9.5px;color:#9aa1a1}.mh-picker-item.on{outline:2px solid var(--dm);outline-offset:-2px}.mode-couple .mh-picker-item.on{outline-color:var(--cm)}.mh-picker-item .ck{position:static!important;justify-self:end;background:#f7f9f9;border:1px solid #bfc7c7;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#657070}.mh-picker-foot{display:flex;gap:6px;padding:9px 10px;border-top:1px solid #cbd1d1}.mh-picker-foot button,.mh-picker-upload{flex:1;text-align:center;border:1px solid #c7cece;background:#fff;padding:9px;color:#737c7c;font-size:11px;cursor:pointer}.mh-picker-foot .primary{background:var(--dm);border-color:var(--dm-d);color:#fff}.mode-couple .mh-picker-foot .primary{background:var(--cm);border-color:var(--cm-d)}
+
+/* v16 polish */
+@media (max-width:899px){
+  body.layout-minihome .mh-picker-window{width:calc(100vw - 24px)!important;max-height:88vh!important}
+  body.layout-minihome .mh-picker-grid{max-height:64vh!important;padding:8px!important}
+  body.layout-minihome .mh-picker-item{grid-template-columns:96px minmax(0,1fr) 32px!important;min-height:94px!important}
+  body.layout-minihome .mh-picker-item img{width:96px!important;min-width:96px!important;max-width:96px!important;height:82px!important}
+}
 
 /* Tiny almost-hidden HOME entrance below profile controls */
-.mh-mobile-home{opacity:.18!important;transform:scale(.82);margin-top:5px!important}.mh-mobile-home:hover,.mh-mobile-home:focus{opacity:.8!important}.mh-home-ghost{opacity:.22!important;font-size:8px!important;letter-spacing:.12em!important}.mh-home-ghost:hover{opacity:.9!important}
+.mh-mobile-favorite,.mh-mobile-home{margin-top:4px!important;opacity:1!important;transform:none!important}
+.mh-mobile-favorite:hover,.mh-mobile-favorite:focus,.mh-mobile-home:hover,.mh-mobile-home:focus{opacity:1!important;transform:none!important}
+.mh-home-ghost{opacity:.22!important;font-size:8px!important;letter-spacing:.12em!important}.mh-home-ghost:hover{opacity:.9!important}
 
 /* Favorites in existing record UI */
 .mh-inline-fav{border:1px solid #cbd1d1;background:#fff;color:#a5abab;width:30px;height:30px;cursor:pointer;font-size:15px;margin-left:5px}.mh-inline-fav.on{color:var(--dm);border-color:var(--dm)}.mode-couple .mh-inline-fav.on{color:var(--cm);border-color:var(--cm)}
@@ -2190,10 +2223,26 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
   body.layout-minihome .mh-home-grid{display:block}
   body.layout-minihome .mh-vpage-head{font-size:14px;padding:10px;margin-bottom:8px}
   body.layout-minihome .mh-panel{padding:10px;margin-bottom:8px}
-  body.layout-minihome .mh-panel-title{font-size:13px}.layout-minihome .mh-today-line .text{font-size:13px}.layout-minihome .mh-pinned-grid{gap:5px}.layout-minihome .mh-recent{grid-template-columns:68px minmax(0,1fr) 32px;padding:10px 0}.layout-minihome .mh-recent-date{font-size:10px}.layout-minihome .mh-recent-copy b{font-size:12.5px}.layout-minihome .mh-recent-copy span{font-size:11px}.layout-minihome .mh-home-link{padding:10px 8px;font-size:11px}.layout-minihome .mh-home-link b{font-size:12px}.layout-minihome .mh-favorites-list{grid-template-columns:1fr}.layout-minihome .mh-fav-card{min-height:92px}.layout-minihome .mh-fav-card .d{font-size:10px}.layout-minihome .mh-fav-card b{font-size:13px}.layout-minihome .mh-fav-card p{font-size:11.5px}.layout-minihome .mh-room-stage{min-height:320px;aspect-ratio:4/5}.layout-minihome .mh-room-item{font-size:44px}.layout-minihome .mh-room-toolbar button,.layout-minihome .mh-room-upload{font-size:12px;padding:9px 10px}.layout-minihome .mh-picker-grid{grid-template-columns:repeat(3,1fr)}
+  body.layout-minihome .mh-panel-title{font-size:13px}.layout-minihome .mh-today-line .text{font-size:13px}.layout-minihome .mh-pinned-grid{gap:5px}.layout-minihome .mh-recent{grid-template-columns:68px minmax(0,1fr) 32px;padding:10px 0}.layout-minihome .mh-recent-date{font-size:10px}.layout-minihome .mh-recent-copy b{font-size:12.5px}.layout-minihome .mh-recent-copy span{font-size:11px}.layout-minihome .mh-home-link{padding:10px 8px;font-size:11px}.layout-minihome .mh-home-link b{font-size:12px}.layout-minihome .mh-favorites-list{grid-template-columns:1fr}.layout-minihome .mh-fav-card{min-height:92px}.layout-minihome .mh-fav-card .d{font-size:10px}.layout-minihome .mh-fav-card b{font-size:13px}.layout-minihome .mh-fav-card p{font-size:11.5px}.layout-minihome .mh-room-stage{min-height:320px;aspect-ratio:4/5}.layout-minihome .mh-room-item{font-size:44px}.layout-minihome .mh-room-toolbar button,.layout-minihome .mh-room-upload{font-size:12px;padding:9px 10px}.layout-minihome .mh-picker-grid{display:flex!important;flex-direction:column!important}
+}
+
+/* ===== v14: 기존 SPACE 기능 유지 + 표시명/UI는 MINIROOM으로 변경 ===== */
+.mh-space-room-wrap{display:none}
+body.layout-minihome .mh-space-room-wrap{display:block!important;margin-bottom:10px!important}
+body.layout-minihome #mh-space-room-host-d:empty,
+body.layout-minihome #mh-space-room-host-c:empty{display:none}
+body.layout-minihome #mh-room-module>.mh-panel-title::before{content:'▣ ';color:var(--dm)}
+body.layout-minihome.mode-couple #mh-room-module>.mh-panel-title::before{color:var(--cm)}
+@media(max-width:760px){
+  body.layout-minihome #mh-room-module{padding:10px!important;margin-bottom:8px!important}
+  body.layout-minihome .mh-room-stage{min-height:235px;aspect-ratio:4/3}
+  body.layout-minihome .mh-room-toolbar button,
+  body.layout-minihome .mh-room-upload{font-size:12px!important;min-width:42px;min-height:38px}
+  body.layout-minihome .mh-room-help{font-size:11.5px!important}
 }
 </style>
 
+<!-- Minihome v15: FAVORITES/HOME moved to profile action rail; bottom navigation stays four items -->
 </head>
 <body class="mode-diary">
 
@@ -2283,6 +2332,7 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
       <div class="mh-mobile-actions">
         <button class="mh-mobile-copyedit" type="button" onclick="openMinihomeProfileEditor()" title="프로필 문구 편집">✎</button>
         <button class="mh-mobile-setting" type="button" onclick="openSkinModal()" title="테마 / 레이아웃">✦</button>
+        <button class="mh-mobile-setting mh-mobile-favorite" type="button" onclick="mhShowVirtual('favorites')" title="FAVORITES">♡</button>
         <button class="mh-mobile-setting mh-mobile-home" type="button" onclick="mhShowVirtual('home')" title="HOME">⌂</button>
       </div>
     </div>
@@ -2325,7 +2375,7 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
 
     <div id="mh-miniroom-page" class="mh-virtual-page">
       <div class="mh-vpage-head"><span>▧</span><span>MINIROOM</span><small>decorate your tiny room</small></div>
-      <section class="mh-panel">
+      <section class="mh-panel mh-space-room-wrap" id="mh-room-module">
         <div class="mh-panel-title"><span>MY MINIROOM</span><button type="button" onclick="document.getElementById('mh-room-bg-file').click()">WALLPAPER</button></div>
         <div class="mh-room-stage" id="mh-room-stage"></div>
         <div class="mh-room-toolbar">
@@ -2495,6 +2545,8 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
 
   <!-- 탭4: 통계 -->
   <div class="tab-content" id="tab-d-stats">
+    <!-- MINIHOME 레이아웃에서만: 기존 공간 기능 위에 미니룸을 함께 표시 -->
+    <div id="mh-space-room-host-d"></div>
     <div class="box">
       <div class="box-title">😊 기분 통계</div>
       <div class="cw"><canvas id="mood-chart"></canvas></div>
@@ -2505,7 +2557,7 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
       <div id="w-stat"></div>
     </div>
     <div class="box">
-      <div class="box-title" style="justify-content:space-between">
+      <div class="box-title" style="justify-content:space-between;display:flex;align-items:center">
         <span>🌱 올해의 기분</span>
         <span class="hm-nav">
           <button onclick="hmMove(-1)">◀</button>
@@ -2640,6 +2692,8 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
 
   <!-- 탭4: 버킷리스트 -->
   <div class="tab-content" id="tab-c-bucket">
+    <!-- MINIHOME 레이아웃에서만: 기존 공간 기능 위에 미니룸을 함께 표시 -->
+    <div id="mh-space-room-host-c"></div>
     <!-- 기분 통계 -->
     <div class="box">
       <div class="cp-box-title">😊 기분 통계 <span id="cp-mood-stat-period" style="font-size:11px;color:var(--cm-lt4);font-weight:400"></span></div>
@@ -2738,6 +2792,7 @@ body.layout-minihome.dark-mode .mh-room-stage{border-color:#444;background:linea
     <button class="mh-util-btn" onclick="openSkinModal()">✦ 테마 / 레이아웃</button>
     <button class="mh-util-btn" onclick="toggleDarkMode()">◐ 다크모드</button>
     <button class="mh-util-btn" onclick="openFontModal()">Aa 글꼴 바꾸기</button>
+    <button class="mh-util-btn" onclick="mhShowVirtual('favorites')">♡ FAVORITES</button>
     <button class="mh-util-btn mh-home-ghost" onclick="mhShowVirtual('home')">⌂ HOME</button>
     <div class="mh-sticker"></div>
   </aside>
@@ -4523,6 +4578,8 @@ function renderBC(){
       +(e&&e.weather?'<span class="dw">'+e.weather+'</span>':'')
       +'</div>';
   }
+  var trailing=(7-((first+last)%7))%7;
+  for(var t=0;t<trailing;t++) html+='<div class="bcd empty"></div>';
   document.getElementById('bc-grid').innerHTML=html;
 }
 
@@ -5318,6 +5375,8 @@ function renderCpCal(){
     if(e&&e.mood){ inner+='<span class="dmood">'+e.mood+'</span>'; }
     html+='<div class="'+cls+'" onclick="cpCalDayClick(\''+ds+'\')">'+inner+'</div>';
   }
+  var trailing=(7-((first+last)%7))%7;
+  for(var t=0;t<trailing;t++) html+='<div class="cp-cal-day empty"></div>';
   document.getElementById('cp-cal-grid').innerHTML=html;
 }
 
@@ -6936,7 +6995,7 @@ function savePartnerNameFromInput2(){
 
   var baseMiniGo=window.miniGo;
   window.miniGo=function(id){
-    if(id==='home'||id==='favorites'||id==='miniroom'){ mhShowVirtual(id);return; }
+    if(id==='home'||id==='favorites'){ mhShowVirtual(id);return; }
     hideVirtual();
     if(currentMode==='couple') goTabC(id); else goTabD(id);
     refreshMinihomeBottomNav(id);
@@ -6945,8 +7004,8 @@ function savePartnerNameFromInput2(){
   window.updateMinihomeNav=function(activeId){
     var nav=document.getElementById('mh-side-nav');
     var items=currentMode==='couple'
-      ? [['cal','▦','CALENDAR'],['gallery','▧','GALLERY'],['dday','✿','ANNIVERSARY'],['favorites','♡','FAVORITES'],['miniroom','▣','MINIROOM']]
-      : [['write','▤','DIARY'],['cal','▦','CALENDAR'],['list','▧','ARCHIVE'],['favorites','♡','FAVORITES'],['miniroom','▣','MINIROOM']];
+      ? [['cal','▦','CALENDAR'],['gallery','▧','GALLERY'],['dday','✿','ANNIVERSARY'],['bucket','▣','MINIROOM']]
+      : [['write','▤','DIARY'],['cal','▦','CALENDAR'],['list','▧','ARCHIVE'],['stats','▣','MINIROOM']];
     if(!activeId){
       if(activeVirtual) activeId=activeVirtual;
       else {var act=document.querySelector((currentMode==='couple'?'#section-couple':'#section-diary')+' .tab-content.active');if(act)activeId=act.id.replace(currentMode==='couple'?'tab-c-':'tab-d-','');}
@@ -6965,8 +7024,8 @@ function savePartnerNameFromInput2(){
     if(!document.body.classList.contains('layout-minihome')){defaultBottomNav();return;}
     var nav=currentMode==='couple'?document.getElementById('tabbar-couple'):document.getElementById('tabbar-diary');if(!nav)return;
     var items=currentMode==='couple'
-      ? [['cal','📅','CALENDAR'],['gallery','📸','GALLERY'],['dday','💐','ANNIV.'],['favorites','♡','FAVORITE'],['miniroom','▣','MINIROOM']]
-      : [['write','✍️','DIARY'],['cal','📅','CALENDAR'],['list','📋','ARCHIVE'],['favorites','♡','FAVORITE'],['miniroom','▣','MINIROOM']];
+      ? [['cal','📅','CALENDAR'],['gallery','📸','GALLERY'],['dday','💐','ANNIV.'],['bucket','▣','MINIROOM']]
+      : [['write','✍️','DIARY'],['cal','📅','CALENDAR'],['list','📋','ARCHIVE'],['stats','▣','MINIROOM']];
     nav.innerHTML=items.map(function(it){return '<button class="tb'+(active===it[0]?' active':'')+'" id="mh-btm-'+it[0]+'" onclick="miniGo(\''+it[0]+'\')"><span class="ic">'+it[1]+'</span>'+it[2]+'</button>';}).join('');
   };
 
@@ -6976,6 +7035,7 @@ function savePartnerNameFromInput2(){
     setTimeout(function(){
       if(mode==='minihome'){
         refreshMinihomeBottomNav(activeVirtual||'home');
+        mhMountMiniroomInSpace();
         if(!silent)mhShowVirtual('home');
       }else{activeVirtual='';defaultBottomNav();}
     },0);
@@ -7000,7 +7060,7 @@ function savePartnerNameFromInput2(){
     if(rl){rl.innerHTML=ks.length?ks.map(function(ds){var x=e[ds],title=currentMode==='couple'?((x.text||'').split('\n')[0]||'우리의 기록'):(x.title||'(제목 없음)'),body=currentMode==='couple'?(x.text||''):(x.body||'');return '<div class="mh-recent" onclick="mhOpenRecord(\''+ds+'\')"><div class="mh-recent-date">'+ds.slice(5).replace('-',' / ')+'</div><div class="mh-recent-copy"><b>'+esc((x.mood||'')+' '+title)+'</b><span>'+esc(body.replace(/\n/g,' ').slice(0,55))+'</span></div><button class="mh-fav-mini'+(mhIsFavorite(ds)?' on':'')+'" onclick="mhToggleFavorite(\''+ds+'\',event)">'+(mhIsFavorite(ds)?'♥':'♡')+'</button></div>';}).join(''):'<div class="mh-empty-page" style="padding:25px 10px">아직 기록이 없어요.<br>첫 기록을 남겨보세요 ✎</div>';}
     var rc=document.getElementById('mh-recent-count');if(rc)rc.textContent=Object.keys(e).length+' RECORDS';
     var fav=mhGetFavorites().filter(function(ds){return !!e[ds];}),fs=document.getElementById('mh-home-fav-summary');if(fs)fs.innerHTML='<b style="font-size:20px;color:'+(currentMode==='couple'?'var(--cm)':'var(--dm)')+'">'+fav.length+'</b> saved memories<br><span style="font-size:10px">별표한 기록을 한곳에서 다시 볼 수 있어요.</span>';
-    var links=document.getElementById('mh-home-links');if(links){links.innerHTML=currentMode==='couple'?'<button class="mh-home-link" onclick="miniGo(\'dday\')"><b>ANNIVERSARY</b>기념일 · 버킷리스트</button><button class="mh-home-link" onclick="miniGo(\'bucket\')"><b>STATS</b>기분 · 배지 통계</button>':'<button class="mh-home-link" onclick="miniGo(\'stats\')"><b>STATS</b>기분 · 배지 통계</button><button class="mh-home-link" onclick="miniGo(\'list\')"><b>ARCHIVE</b>전체 기록 보기</button>';}
+    var links=document.getElementById('mh-home-links');if(links){links.innerHTML=currentMode==='couple'?'<button class="mh-home-link" onclick="miniGo(\'dday\')"><b>ANNIVERSARY</b>기념일 · 버킷리스트</button><button class="mh-home-link" onclick="miniGo(\'bucket\')"><b>MINIROOM</b>미니룸 · 기분 · 배지</button>':'<button class="mh-home-link" onclick="miniGo(\'stats\')"><b>MINIROOM</b>미니룸 · 기분 · 배지</button><button class="mh-home-link" onclick="miniGo(\'list\')"><b>ARCHIVE</b>전체 기록 보기</button>';}
   };
   window.mhEditTodayLine=function(){var old=localStorage.getItem(LINE_KEY[currentMode])||'';var v=prompt('오늘의 한 줄',old);if(v===null)return;v=v.trim().slice(0,80);localStorage.setItem(LINE_KEY[currentMode],v);mhRenderHome();if(typeof toast==='function')toast('오늘의 한 줄을 저장했어요');};
   window.mhOpenRecord=function(ds){hideVirtual();if(currentMode==='couple')openEntryModal(ds);else openDiaryPreview(ds);};
@@ -7010,7 +7070,7 @@ function savePartnerNameFromInput2(){
   window.mhOpenPhotoPicker=function(){pendingPins=getPins().slice(0,4);mhRenderPicker();document.getElementById('mh-photo-picker').classList.add('open');};
   window.mhClosePhotoPicker=function(ev){if(ev&&ev.target&&ev.target.id!=='mh-photo-picker')return;document.getElementById('mh-photo-picker').classList.remove('open');};
   function samePin(a,b){return a&&b&&((a.custom&&a.custom===b.custom)||(!a.custom&&!b.custom&&a.ds===b.ds&&a.i===b.i));}
-  window.mhRenderPicker=function(){var g=document.getElementById('mh-picker-grid');if(!g)return;var photos=allPhotos();g.innerHTML=photos.length?photos.map(function(p){var on=pendingPins.some(function(x){return samePin(x,p);});return '<div class="mh-picker-item'+(on?' on':'')+'" onclick="mhTogglePin(\''+p.ds+'\','+p.i+')"><img src="'+p.src+'"><span class="ck">'+(on?'✓':'')+'</span></div>';}).join(''):'<div class="mh-empty-page" style="grid-column:1/-1;padding:28px 8px">기록에 저장된 사진이 없어요.<br>아래 UPLOAD로 홈 전용 사진을 추가할 수 있어요.</div>';};
+  window.mhRenderPicker=function(){var g=document.getElementById('mh-picker-grid');if(!g)return;var photos=allPhotos();g.innerHTML=photos.length?photos.map(function(p){var on=pendingPins.some(function(x){return samePin(x,p);});var idx=(p.i||0)+1;return '<div class="mh-picker-item'+(on?' on':'')+'" onclick="mhTogglePin(\''+p.ds+'\','+p.i+')"><img src="'+p.src+'" alt="'+esc(p.ds)+' 사진 '+idx+'"><div class="mh-picker-info"><b>'+esc(p.ds)+'</b><span>PHOTO '+idx+(on?' · 선택됨':'')+'</span></div><span class="ck">'+(on?'✓':'')+'</span></div>';}).join(''):'<div class="mh-empty-page" style="padding:28px 8px">기록에 저장된 사진이 없어요.<br>아래 UPLOAD로 홈 전용 사진을 추가할 수 있어요.</div>';};
   window.mhTogglePin=function(ds,i){var p={ds:ds,i:i},idx=pendingPins.findIndex(function(x){return samePin(x,p);});if(idx>=0)pendingPins.splice(idx,1);else{if(pendingPins.length>=4){if(typeof toast==='function')toast('고정 사진은 최대 4장이에요');return;}pendingPins.push(p);}mhRenderPicker();};
   window.mhUploadHomePhoto=function(ev){var f=ev.target.files&&ev.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(x){var im=new Image();im.onload=function(){var max=900,w=im.width,h=im.height;if(w>max){h=Math.round(h*max/w);w=max;}if(h>max){w=Math.round(w*max/h);h=max;}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);var data=c.toDataURL('image/jpeg',.78);if(pendingPins.length>=4)pendingPins.shift();pendingPins.push({custom:data});mhRenderPicker();};im.src=x.target.result;};r.readAsDataURL(f);ev.target.value='';};
   window.mhSavePinnedPhotos=function(){jset(PIN_KEY[currentMode],pendingPins.slice(0,4));mhClosePhotoPicker();mhRenderHome();if(typeof toast==='function')toast('HOME 사진을 고정했어요');};
@@ -7023,7 +7083,14 @@ function savePartnerNameFromInput2(){
   if(window.openDiaryPreview){var _odp=window.openDiaryPreview;window.openDiaryPreview=function(ds){_odp(ds);addFavButtonToDiaryPreview(ds);};}
   if(window.openEntryModal){var _oem=window.openEntryModal;window.openEntryModal=function(ds){_oem(ds);addFavButtonToCoupleModal(ds);};}
 
-  /* MINIROOM */
+  /* MINIROOM — 기존 SPACE 탭 안에 함께 표시 (SPACE 기능은 유지) */
+  window.mhMountMiniroomInSpace=function(){
+    var mod=document.getElementById('mh-room-module');
+    if(!mod)return;
+    var host=document.getElementById(currentMode==='couple'?'mh-space-room-host-c':'mh-space-room-host-d');
+    if(host&&mod.parentElement!==host)host.appendChild(mod);
+    if(document.body.classList.contains('layout-minihome'))mhRenderMiniroom();
+  };
   function roomState(){return jget(ROOM_KEY[currentMode],{bg:'',items:[]});}
   function saveRoom(st){jset(ROOM_KEY[currentMode],st);}
   window.mhRenderMiniroom=function(){var st=roomState(),stage=document.getElementById('mh-room-stage');if(!stage)return;stage.innerHTML='';if(st.bg){stage.style.backgroundImage='url("'+st.bg+'")';stage.classList.add('has-bg');}else{stage.style.backgroundImage='';stage.classList.remove('has-bg');}st.items.forEach(function(it,idx){var el=document.createElement('div');el.className='mh-room-item';el.textContent=it.e;el.style.left=it.x+'%';el.style.top=it.y+'%';el.dataset.i=idx;stage.appendChild(el);});};
@@ -7037,8 +7104,8 @@ function savePartnerNameFromInput2(){
 
   /* keep virtual state in sync after mode/tab switches */
   if(window.onModeToggle){var _omt=window.onModeToggle;window.onModeToggle=function(){_omt();setTimeout(function(){if(document.body.classList.contains('layout-minihome'))mhShowVirtual('home');},0);};}
-  if(window.goTabD){var _gtd=window.goTabD;window.goTabD=function(id){hideVirtual();_gtd(id);refreshMinihomeBottomNav(id);};}
-  if(window.goTabC){var _gtc=window.goTabC;window.goTabC=function(id){hideVirtual();_gtc(id);refreshMinihomeBottomNav(id);};}
+  if(window.goTabD){var _gtd=window.goTabD;window.goTabD=function(id){hideVirtual();_gtd(id);if(id==='stats'&&document.body.classList.contains('layout-minihome'))mhMountMiniroomInSpace();refreshMinihomeBottomNav(id);};}
+  if(window.goTabC){var _gtc=window.goTabC;window.goTabC=function(id){hideVirtual();_gtc(id);if(id==='bucket'&&document.body.classList.contains('layout-minihome'))mhMountMiniroomInSpace();refreshMinihomeBottomNav(id);};}
 
   function initV11(){
     if(document.body.classList.contains('layout-minihome')){
