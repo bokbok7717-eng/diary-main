@@ -2166,6 +2166,42 @@ body.layout-minihome.dark-mode.mode-couple .mh-ed-save{background:var(--cm-grad-
 
 .mh-picker-month{position:sticky;top:-1px;z-index:2;padding:7px 8px 6px;background:#eef1f1;border-top:1px solid #cbd1d1;border-bottom:1px solid #cbd1d1;color:#687171;font-size:10.5px;font-weight:800;letter-spacing:.08em}
 body.layout-minihome.dark-mode .mh-picker-month{background:#25292c;border-color:#41464a;color:#bbb}
+
+
+/* ===== v19: MINIHOME calendar state colors + nav icon polish ===== */
+/* Promise days: restore the same visual signal used by the base couple calendar. */
+body.layout-minihome.mode-couple .cp-cal-day.has-promise{
+  background:var(--cm-lt3)!important;
+  border:1.5px solid var(--cm-l)!important;
+}
+body.layout-minihome.dark-mode.mode-couple .cp-cal-day.has-promise{
+  background:var(--cm-card2)!important;
+  border:1.5px solid var(--cm-bd)!important;
+}
+
+/* Diary mood cells: MINIHOME used to zero the border; restore each original mood border. */
+body.layout-minihome .bcd.mood-😄{border:1.5px solid #f0e880!important}
+body.layout-minihome .bcd.mood-😊{border:1.5px solid #ffe880!important}
+body.layout-minihome .bcd.mood-🥰{border:1.5px solid #f8cad9!important}
+body.layout-minihome .bcd.mood-😐{border:1.5px solid #c0d8c0!important}
+body.layout-minihome .bcd.mood-😔{border:1.5px solid #b0ccec!important}
+body.layout-minihome .bcd.mood-😢{border:1.5px solid #d0b8ff!important}
+body.layout-minihome .bcd.mood-😡{border:1.5px solid #ffb890!important}
+body.layout-minihome .bcd.mood-😴{border:1.5px solid #ddd!important}
+
+/* Couple mood cells: keep the mood-specific border even in MINIHOME. */
+body.layout-minihome .cp-cal-day.cp-mood-🥰{border:1.5px solid #f8cad9!important}
+body.layout-minihome .cp-cal-day.cp-mood-😊{border:1.5px solid #ffe08a!important}
+body.layout-minihome .cp-cal-day.cp-mood-😐{border:1.5px solid #c0c8c0!important}
+body.layout-minihome .cp-cal-day.cp-mood-😢{border:1.5px solid #d0b8ff!important}
+body.layout-minihome .cp-cal-day.cp-mood-😡{border:1.5px solid #ffb890!important}
+
+/* If a day is both a promise and has a mood, keep the promise fill and let the mood border identify the mood. */
+body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-🥰{border-color:#f8cad9!important}
+body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😊{border-color:#ffe08a!important}
+body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😐{border-color:#c0c8c0!important}
+body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😢{border-color:#d0b8ff!important}
+body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😡{border-color:#ffb890!important}
 </style>
 
 <style id="mh-v11-style">
@@ -5854,44 +5890,7 @@ function saveDiaryCard(){
       if(main) baseCSS=main.textContent;
     }catch(e){}
     var clone=node.cloneNode(true);
-    var inner='<div xmlns="http://www.w3.org/1999/xhtml"><style>'+baseCSS+fontCSS+'
-
-/* ===== v19: MINIHOME calendar state colors + nav icon polish ===== */
-/* Promise days: restore the same visual signal used by the base couple calendar. */
-body.layout-minihome.mode-couple .cp-cal-day.has-promise{
-  background:var(--cm-lt3)!important;
-  border:1.5px solid var(--cm-l)!important;
-}
-body.layout-minihome.dark-mode.mode-couple .cp-cal-day.has-promise{
-  background:var(--cm-card2)!important;
-  border:1.5px solid var(--cm-bd)!important;
-}
-
-/* Diary mood cells: MINIHOME used to zero the border; restore each original mood border. */
-body.layout-minihome .bcd.mood-😄{border:1.5px solid #f0e880!important}
-body.layout-minihome .bcd.mood-😊{border:1.5px solid #ffe880!important}
-body.layout-minihome .bcd.mood-🥰{border:1.5px solid #f8cad9!important}
-body.layout-minihome .bcd.mood-😐{border:1.5px solid #c0d8c0!important}
-body.layout-minihome .bcd.mood-😔{border:1.5px solid #b0ccec!important}
-body.layout-minihome .bcd.mood-😢{border:1.5px solid #d0b8ff!important}
-body.layout-minihome .bcd.mood-😡{border:1.5px solid #ffb890!important}
-body.layout-minihome .bcd.mood-😴{border:1.5px solid #ddd!important}
-
-/* Couple mood cells: keep the mood-specific border even in MINIHOME. */
-body.layout-minihome .cp-cal-day.cp-mood-🥰{border:1.5px solid #f8cad9!important}
-body.layout-minihome .cp-cal-day.cp-mood-😊{border:1.5px solid #ffe08a!important}
-body.layout-minihome .cp-cal-day.cp-mood-😐{border:1.5px solid #c0c8c0!important}
-body.layout-minihome .cp-cal-day.cp-mood-😢{border:1.5px solid #d0b8ff!important}
-body.layout-minihome .cp-cal-day.cp-mood-😡{border:1.5px solid #ffb890!important}
-
-/* If a day is both a promise and has a mood, keep the promise fill and let the mood border identify the mood. */
-body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-🥰{border-color:#f8cad9!important}
-body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😊{border-color:#ffe08a!important}
-body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😐{border-color:#c0c8c0!important}
-body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😢{border-color:#d0b8ff!important}
-body.layout-minihome.mode-couple .cp-cal-day.has-promise.cp-mood-😡{border-color:#ffb890!important}
-
-</style>'
+    var inner='<div xmlns="http://www.w3.org/1999/xhtml"><style>'+baseCSS+fontCSS+'</style>'
       +'<div style="width:'+w+'px">'+clone.outerHTML+'</div></div>';
     var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
       +'<foreignObject width="100%" height="100%">'+inner+'</foreignObject></svg>';
