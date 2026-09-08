@@ -1774,6 +1774,28 @@ body.layout-minihome #lock-screen{
   padding:18px;
   gap:0;
   font-family:inherit;
+  /* 내용이 화면보다 길어지면 스크롤되게 한다.
+     (justify-content:center 상태로 넘치면 위아래가 잘려 키패드를 못 누름) */
+  justify-content:flex-start;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+body.layout-minihome #lock-screen .lk-mini-window{margin:auto 0}
+
+/* ===== 모달이 화면보다 길어질 때 안전장치 =====
+   내용이 뷰포트보다 길면 위아래가 잘려 버튼(닫기 X 등)을 누를 수 없게 되므로,
+   덮개는 스크롤 가능하게 하고 안쪽 박스는 화면 높이를 넘지 않게 한다. */
+[id$="-modal"][style*="position:fixed"],
+[id$="-popup"][style*="position:fixed"],
+[id$="-view"][style*="position:fixed"]{
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+}
+[id$="-modal"][style*="position:fixed"]>div,
+[id$="-popup"][style*="position:fixed"]>div,
+[id$="-view"][style*="position:fixed"]>div{
+  max-height:calc(100vh - 40px);
+  overflow-y:auto;
 }
 body.layout-minihome.mode-couple #lock-screen{
   --lk-accent:var(--cm);
@@ -6973,7 +6995,7 @@ function savePartnerNameFromInput2(){
   window.mhRenderHome=function(){
     var line=document.getElementById('mh-home-line');if(line)line.textContent=localStorage.getItem(LINE_KEY[currentMode])||'오늘의 한 줄을 남겨보세요.';
     var pins=getPins().map(photoFromPin).filter(Boolean).slice(0,4),pg=document.getElementById('mh-pinned-grid');
-    if(pg){var h=pins.map(function(x){return '<div class="mh-pin" onclick="mhOpenPin(\''+esc(x.date)+'\')"><img src="'+x.src+'"><span class="mh-pin-date">'+esc(x.date)+'</span></div>';}).join('');while((h.match(/class="mh-pin"/g)||[]).length<4)h+='<div class="mh-pin empty" onclick="mhOpenPhotoPicker()">+ PIN PHOTO</div>';pg.innerHTML=h;}
+    if(pg){var h=pins.map(function(x){return '<div class="mh-pin" onclick="mhOpenPin(\''+esc(x.date)+'\')"><img src="'+x.src+'"><span class="mh-pin-date">'+esc(x.date)+'</span></div>';}).join('');for(var _pi=pins.length;_pi<4;_pi++)h+='<div class="mh-pin empty" onclick="mhOpenPhotoPicker()">+ PIN PHOTO</div>';pg.innerHTML=h;}
     var e=modeEntries(),ks=Object.keys(e).sort().reverse().slice(0,5),rl=document.getElementById('mh-recent-list');
     if(rl){rl.innerHTML=ks.length?ks.map(function(ds){var x=e[ds],title=currentMode==='couple'?((x.text||'').split('\n')[0]||'우리의 기록'):(x.title||'(제목 없음)'),body=currentMode==='couple'?(x.text||''):(x.body||'');return '<div class="mh-recent" onclick="mhOpenRecord(\''+ds+'\')"><div class="mh-recent-date">'+ds.slice(5).replace('-',' / ')+'</div><div class="mh-recent-copy"><b>'+esc((x.mood||'')+' '+title)+'</b><span>'+esc(body.replace(/\n/g,' ').slice(0,55))+'</span></div><button class="mh-fav-mini'+(mhIsFavorite(ds)?' on':'')+'" onclick="mhToggleFavorite(\''+ds+'\',event)">'+(mhIsFavorite(ds)?'♥':'♡')+'</button></div>';}).join(''):'<div class="mh-empty-page" style="padding:25px 10px">아직 기록이 없어요.<br>첫 기록을 남겨보세요 ✎</div>';}
     var rc=document.getElementById('mh-recent-count');if(rc)rc.textContent=Object.keys(e).length+' RECORDS';
