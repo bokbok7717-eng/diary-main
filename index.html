@@ -360,6 +360,8 @@ body.dark-mode .hm-nav button{background:#232323;border-color:#3a3a3a}
 .cardsp{background:#fff;border:1.5px solid var(--dm-lt);border-radius:16px;padding:6px 13px;font-size:12px;color:#8a8578;cursor:pointer;font-family:inherit}
 .cardsp.on{background:var(--dm);border-color:var(--dm);color:#fff;font-weight:700}
 .dcard{width:320px;border-radius:20px;overflow:hidden;position:relative}
+/* 카드는 기본적으로 일기장 색을 쓰되, 커플 카드일 때는 커플 스킨 색으로 바꾼다 */
+.dcard.cp{--dm:var(--cm);--dm-d:var(--cm-d);--dm-l:var(--cm-l);--dm-lt:var(--cm-lt);--dm-lt2:var(--cm-lt2);--dm-lt3:var(--cm-lt3)}
 .dcard .c-date{font-size:11.5px;letter-spacing:.5px}
 .dcard .c-title{font-size:19px;font-weight:700;line-height:1.35}
 .dcard .c-body{font-size:12.5px;line-height:1.95;white-space:pre-wrap;word-break:break-word}
@@ -396,6 +398,68 @@ body.dark-mode .hm-nav button{background:#232323;border-color:#3a3a3a}
 .dcard.d .c-title{font-size:17px;color:#3a3a30;margin-bottom:8px}
 .dcard.d .c-body{color:#7a7568;font-size:12px;line-height:1.85}
 .dcard.d .c-foot{margin-top:14px;color:#b8b8aa;text-align:right}
+
+/* ===== 사진 중심 카드 스타일 ===== */
+/* e. 필름 — 사진을 세로로 이어 붙인 필름 스트립 */
+.dcard.e{background:#1e1e1c;padding:14px 12px 12px}
+.dcard.e .c-strip{background:#111;border-radius:4px;padding:9px 8px;
+  background-image:repeating-linear-gradient(90deg,transparent 0 10px,rgba(255,255,255,.14) 10px 15px);
+  background-size:100% 7px;background-repeat:no-repeat;background-position:0 0,0 100%}
+.dcard.e .c-frames{display:flex;flex-direction:column;gap:6px;margin:9px 0}
+.dcard.e .c-frames img{width:100%;height:150px;object-fit:cover;border-radius:2px;display:block}
+.dcard.e .c-frames .c-ph{width:100%;height:150px;border-radius:2px;background:#2a2a26;display:flex;align-items:center;justify-content:center;font-size:40px}
+.dcard.e .c-top{margin-top:10px}
+.dcard.e .c-date{color:#c8c4b8;font-weight:600}
+.dcard.e .c-emo{color:#fff}
+.dcard.e .c-title{color:#f2efe6;font-size:16px;margin:8px 0 6px}
+.dcard.e .c-body{color:#a8a49a;font-size:11.5px;line-height:1.8}
+.dcard.e .c-foot{margin-top:12px;color:#6a6660;text-align:right}
+
+/* f. 사진첩 — 사진을 격자로 배치 */
+.dcard.f{background:#fff;border:1px solid var(--dm-lt2);padding:16px 15px 14px}
+.dcard.f .c-top{margin-bottom:11px}
+.dcard.f .c-date{color:var(--dm-l);font-weight:600}
+.dcard.f .c-grid{display:grid;gap:5px;margin-bottom:12px}
+.dcard.f .c-grid.n1{grid-template-columns:1fr}
+.dcard.f .c-grid.n2{grid-template-columns:1fr 1fr}
+.dcard.f .c-grid.n3{grid-template-columns:2fr 1fr}
+.dcard.f .c-grid img{width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;min-height:112px}
+.dcard.f .c-grid.n3 img:first-child{grid-row:span 2;min-height:200px}
+.dcard.f .c-ph{min-height:150px;border-radius:8px;background:var(--dm-lt3);display:flex;align-items:center;justify-content:center;font-size:44px}
+.dcard.f .c-title{color:#3a3a30;font-size:17px;margin-bottom:7px}
+.dcard.f .c-body{color:#6a6558;font-size:12px}
+.dcard.f .c-foot{margin-top:14px;color:var(--dm-l);text-align:right}
+
+/* g. 전면사진 — 사진을 배경으로 깔고 글자를 얹음 */
+.dcard.g{background:var(--dm-lt2);position:relative;min-height:400px;display:flex;align-items:flex-end}
+.dcard.g .c-bg{position:absolute;inset:0}
+.dcard.g .c-bg img{width:100%;height:100%;object-fit:cover;display:block}
+.dcard.g .c-bg .c-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:72px;background:var(--dm-lt2)}
+.dcard.g .c-veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 30%,rgba(0,0,0,.62) 100%)}
+.dcard.g .c-wrap{position:relative;padding:20px 20px 18px;width:100%}
+.dcard.g .c-top{margin-bottom:9px}
+.dcard.g .c-date{color:rgba(255,255,255,.92);font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.dcard.g .c-emo{text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.dcard.g .c-title{color:#fff;text-shadow:0 1px 6px rgba(0,0,0,.45);margin-bottom:7px}
+.dcard.g .c-body{color:rgba(255,255,255,.9);font-size:12px;text-shadow:0 1px 5px rgba(0,0,0,.45);
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.dcard.g .c-foot{margin-top:12px;color:rgba(255,255,255,.75);text-align:right;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+
+/* h. 스티커 — 사진을 살짝 기울여 붙인 느낌 */
+.dcard.h{background:var(--dm-lt3);padding:20px 18px 16px}
+.dcard.h .c-tape{display:flex;gap:10px;justify-content:center;margin-bottom:16px;flex-wrap:wrap}
+.dcard.h .c-poc{background:#fff;padding:7px 7px 22px;box-shadow:0 3px 10px rgba(0,0,0,.13);border-radius:2px}
+.dcard.h .c-poc:nth-child(1){transform:rotate(-3.5deg)}
+.dcard.h .c-poc:nth-child(2){transform:rotate(2.5deg)}
+.dcard.h .c-poc:nth-child(3){transform:rotate(-1.5deg)}
+.dcard.h .c-poc img{width:118px;height:118px;object-fit:cover;display:block}
+.dcard.h .c-poc .c-ph{width:118px;height:118px;background:var(--dm-lt2);display:flex;align-items:center;justify-content:center;font-size:40px}
+.dcard.h .c-card{background:#fff;border-radius:12px;padding:15px 16px 13px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.dcard.h .c-top{margin-bottom:9px}
+.dcard.h .c-date{color:var(--dm-l);font-weight:600}
+.dcard.h .c-title{color:#3a3a30;font-size:17px;margin-bottom:7px}
+.dcard.h .c-body{color:#6a6558;font-size:12px}
+.dcard.h .c-foot{margin-top:12px;color:var(--dm-l);text-align:right}
 
 /* ===== 일기 달력 기분 색상 ===== */
 /* 기분 색은 감정 구분이 목적이라 스킨과 무관하게 고정 */
@@ -2167,7 +2231,6 @@ body.layout-minihome.dark-mode.mode-couple .mh-ed-save{background:var(--cm-grad-
 .mh-picker-month{position:sticky;top:-1px;z-index:2;padding:7px 8px 6px;background:#eef1f1;border-top:1px solid #cbd1d1;border-bottom:1px solid #cbd1d1;color:#687171;font-size:10.5px;font-weight:800;letter-spacing:.08em}
 body.layout-minihome.dark-mode .mh-picker-month{background:#25292c;border-color:#41464a;color:#bbb}
 
-
 /* ===== v19: MINIHOME calendar state colors + nav icon polish ===== */
 /* Promise days: restore the same visual signal used by the base couple calendar. */
 body.layout-minihome.mode-couple .cp-cal-day.has-promise{
@@ -2780,6 +2843,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
       <textarea class="entry-textarea" id="entry-text" placeholder="오늘의 한마디를 남겨보세요 💌"></textarea>
       <div class="entry-btns">
         <button class="eb-del" onclick="deleteEntry()">삭제</button>
+        <button class="eb-cancel" onclick="openCardModal(true, curEntryDate)" title="이 날 기록을 카드 이미지로 저장">🎨</button>
         <button class="eb-cancel" onclick="closeEntryModal()">취소</button>
         <button class="eb-save" onclick="saveEntry_cp()">💾 저장</button>
       </div>
@@ -3161,6 +3225,11 @@ function openDayModal(ds,isCp){
     if(e.tags&&e.tags.length){
       h+='<div class="dm-tags">'+e.tags.map(function(t){return '<span class="dm-tag">#'+escHtml(t)+'</span>';}).join('')+'</div>';
     }
+    // 기록이 있는 날에만 카드 저장 버튼을 붙인다
+    h+='<button onclick="openCardModal('+(isCp?'true':'false')+',\''+ds+'\')" '
+      +'style="width:100%;margin-top:14px;background:transparent;border:1.5px solid currentColor;'
+      +'border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;'
+      +'font-family:inherit;opacity:.75">🎨 카드로 저장</button>';
     body.innerHTML=h;
   }
   renderWeatherBg(e&&e.weather,e&&e.mood);
@@ -3780,7 +3849,7 @@ var WEATHER_IDS={'☀️':'w-sun','⛅':'w-cloud1','☁️':'w-cloud2','☔':'w-
 var MOOD_IDS={'😄':'m-1','😊':'m-2','🥰':'m-3','😐':'m-4','😔':'m-5','😢':'m-6','😡':'m-7','😴':'m-8'};
 
 function loadDiary(){try{entries=JSON.parse(localStorage.getItem(DIARY_KEY))||{};}catch(e){entries={};}}
-function saveDiary(){localStorage.setItem(DIARY_KEY,JSON.stringify(entries));}
+function saveDiary(){ safeSave(DIARY_KEY, entries, '일기'); }
 
 
 /* ========== 태그 · 임시저장 · 회고 · 사진타임라인 ========== */
@@ -4032,8 +4101,10 @@ document.addEventListener('keydown',function(e){
 function goTabD(id){
   document.querySelectorAll('#section-diary .tab-content').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('#tabbar-diary .tb').forEach(function(el){el.classList.remove('active');});
-  document.getElementById('tab-d-'+id).classList.add('active');
-  document.getElementById('tbtn-d-'+id).classList.add('active');
+  var _tc=document.getElementById('tab-d-'+id); if(_tc) _tc.classList.add('active');
+  /* 미니홈에서는 하단 버튼 id가 달라 없을 수 있다. 여기서 멈추면 아래 렌더가 안 돌아감 */
+  var _tb=document.getElementById('tbtn-d-'+id); if(_tb) _tb.classList.add('active');
+  var _mb=document.getElementById('mh-btm-'+id); if(_mb) _mb.classList.add('active');
   if(id==='cal'){ renderBC(); if(typeof renderMonthChart==='function') setTimeout(renderMonthChart,30); }
   if(id==='list') renderFL();
   if(id==='stats'){ renderStats(); renderHeatmap(); renderDiaryBadges(); renderDarkScheduleUI(); }
@@ -5001,13 +5072,38 @@ function loadCp(){
     if(!e.photos) e.photos=[];
   });
 }
-function saveCp(){ localStorage.setItem(CP_KEY, JSON.stringify(cpData)); }
+function saveCp(){ safeSave(CP_KEY, cpData, '커플 다이어리'); }
+
+/* 저장 공간이 가득 차면 setItem이 실패하는데, 그대로 두면 기록이 조용히 사라진다.
+   실패를 감지해 사용자에게 알리고, 직전 내용이 날아가지 않게 한다. */
+function safeSave(key, obj, label){
+  try{
+    localStorage.setItem(key, JSON.stringify(obj));
+    return true;
+  }catch(e){
+    var full = e && (e.name==='QuotaExceededError' || e.code===22 || e.code===1014);
+    if(typeof toast==='function'){
+      toast(full ? '⚠️ 저장 공간이 가득 찼어요! 사진을 정리해주세요'
+                 : '⚠️ '+(label||'')+' 저장에 실패했어요');
+    }
+    if(full && !window._quotaWarned){
+      window._quotaWarned=true;
+      setTimeout(function(){
+        alert('저장 공간이 가득 찼어요.\n\n방금 작성한 내용이 저장되지 않았을 수 있어요.\n' +
+              '설정에서 백업 파일을 먼저 내려받은 뒤,\n오래된 사진을 지우면 공간이 확보돼요.');
+      },100);
+    }
+    return false;
+  }
+}
 
 function goTabC(id){
   document.querySelectorAll('#section-couple .tab-content').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('#tabbar-couple .tb').forEach(function(el){el.classList.remove('active');});
-  document.getElementById('tab-c-'+id).classList.add('active');
-  document.getElementById('tbtn-c-'+id).classList.add('active');
+  var _tc=document.getElementById('tab-c-'+id); if(_tc) _tc.classList.add('active');
+  /* 미니홈에서는 하단 버튼 id가 달라 없을 수 있다. 여기서 멈추면 아래 렌더가 안 돌아감 */
+  var _tb=document.getElementById('tbtn-c-'+id); if(_tb) _tb.classList.add('active');
+  var _mb=document.getElementById('mh-btm-'+id); if(_mb) _mb.classList.add('active');
   if(id==='cal'){ renderCpCal(); renderThrowback(); renderCoupleProfile(); setTimeout(renderCoupleCards,0); }
   if(id==='dday'){ renderDday(); renderBucket(); renderPlanSummary(); checkAnnivTodayPopup(); }
   if(id==='gallery') renderGallery();
@@ -5777,11 +5873,15 @@ function renderBucket(){
 /* ===== 일기 카드 만들기 ===== */
 var cardStyle=localStorage.getItem('diary_card_style')||'a';
 var cardDate=null;
-var CARD_STYLES=[{k:'a',n:'심플'},{k:'b',n:'그라데이션'},{k:'c',n:'노트'},{k:'d',n:'폴라로이드'}];
+var CARD_STYLES=[{k:'a',n:'심플'},{k:'b',n:'그라데이션'},{k:'c',n:'노트'},{k:'d',n:'폴라로이드'},{k:'e',n:'필름'},{k:'f',n:'사진첩'},{k:'g',n:'전면사진'},{k:'h',n:'스티커'}];
 
-function openCardModal(){
-  cardDate=window._previewDate||selDate;
-  if(!cardDate||!entries[cardDate]){ toast('일기를 찾을 수 없어요'); return; }
+/* 카드로 만들 대상(일기 / 커플)을 함께 관리한다 */
+var cardIsCp=false;
+function openCardModal(isCp, ds){
+  cardIsCp = !!isCp;
+  cardDate = ds || window._previewDate || (isCp?window._dmDate:selDate);
+  var src = cardIsCp ? (cpData.entries||{}) : entries;
+  if(!cardDate || !src[cardDate]){ toast('기록을 찾을 수 없어요'); return; }
   document.getElementById('card-style-pick').innerHTML=CARD_STYLES.map(function(s){
     return '<button class="cardsp'+(s.k===cardStyle?' on':'')+'" onclick="pickCardStyle(\''+s.k+'\')">'+s.n+'</button>';
   }).join('');
@@ -5799,41 +5899,104 @@ function pickCardStyle(k){
 function cardEsc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
 
 function renderCard(){
-  var e=entries[cardDate]; if(!e) return;
+  var e = cardIsCp ? (cpData.entries||{})[cardDate] : entries[cardDate];
+  if(!e) return;
   var d=parseDate(cardDate);
   var dateTxt=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일 ('+DAYS[d.getDay()]+')';
   var emo=(e.weather||'')+' '+(e.mood||'');
-  var title=cardEsc(e.title||'(제목 없음)');
-  // 카드가 너무 길어지지 않게 본문은 잘라서 넣는다
-  var raw=String(e.body||'');
-  var body=cardEsc(raw.length>240?raw.slice(0,240)+'…':raw);
-  var foot='나의 일기장';
+  /* 커플 기록은 제목이 없고 본문 필드 이름도 달라서 따로 처리한다 */
+  var title = cardIsCp
+    ? cardEsc(e.mood ? (CP_MOOD_LABELS[e.mood]||'우리의 하루') : '우리의 하루')
+    : cardEsc(e.title||'(제목 없음)');
+  var raw = String(cardIsCp ? (e.text||'') : (e.body||''));
+  var body = cardEsc(raw.length>240?raw.slice(0,240)+'…':raw);
+  var foot = cardIsCp
+    ? ((localStorage.getItem('diary_partner_name')||'') ? '우리의 다이어리' : '우리의 다이어리')
+    : '나의 일기장';
   var html='';
   if(cardStyle==='a'){
-    html='<div class="dcard a" id="dcard">'
+    html='<div class="dcard a '+(cardIsCp?'cp ':'')+'" id="dcard">'
       +'<div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
       +'<div class="c-title">'+title+'</div><div class="c-line"></div>'
       +'<div class="c-body">'+body+'</div><div class="c-foot">'+foot+'</div></div>';
   } else if(cardStyle==='b'){
-    html='<div class="dcard b" id="dcard">'
+    html='<div class="dcard b '+(cardIsCp?'cp ':'')+'" id="dcard">'
       +'<div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
       +'<div class="c-title">'+title+'</div>'
       +'<div class="c-inner"><div class="c-body">'+body+'</div></div>'
       +'<div class="c-foot">'+foot+'</div></div>';
   } else if(cardStyle==='c'){
-    html='<div class="dcard c" id="dcard">'
+    html='<div class="dcard c '+(cardIsCp?'cp ':'')+'" id="dcard">'
       +'<div class="c-head"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
       +'<div class="c-main"><div class="c-title">'+title+'</div>'
       +'<div class="c-body">'+body+'</div><div class="c-foot">'+foot+'</div></div></div>';
   } else {
     var ph=(e.photos&&e.photos.length)?resolvePhotoSrc(e.photos[0]):'';
-    html='<div class="dcard d" id="dcard">'
-      +'<div class="c-photo">'+(ph?'<img src="'+ph+'">':(e.mood||'📔'))+'</div>'
+    html='<div class="dcard d '+(cardIsCp?'cp ':'')+'" id="dcard">'
+      +'<div class="c-photo">'+(ph?'<img src="'+ph+'">':(e.mood||(cardIsCp?'💕':'📔')))+'</div>'
       +'<div class="c-under"><div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>'
       +'<div class="c-title">'+title+'</div><div class="c-body">'+body+'</div>'
       +'<div class="c-foot">'+foot+'</div></div></div>';
   }
+  if(cardStyle==='e'||cardStyle==='f'||cardStyle==='g'||cardStyle==='h'){
+    html=buildPhotoCard(cardStyle, e, dateTxt, emo, title, body, foot);
+  }
   document.getElementById('card-host').innerHTML=html;
+}
+
+/* 사진을 여러 장 쓰는 카드들 */
+function cardPhotoList(e){
+  var out=[];
+  (e.photos||[]).forEach(function(p){
+    var src=resolvePhotoSrc(p);
+    if(src) out.push(src);
+  });
+  return out;
+}
+function buildPhotoCard(style, e, dateTxt, emo, title, body, foot){
+  var ps=cardPhotoList(e);
+  var cp=cardIsCp?'cp ':'';
+  var fallback=e.mood||(cardIsCp?'💕':'📔');
+  var top='<div class="c-top"><span class="c-date">'+dateTxt+'</span><span class="c-emo">'+emo+'</span></div>';
+
+  if(style==='e'){ // 필름
+    var frames = ps.length
+      ? ps.map(function(src){return '<img src="'+src+'">';}).join('')
+      : '<div class="c-ph">'+fallback+'</div>';
+    return '<div class="dcard e '+cp+'" id="dcard">'
+      +'<div class="c-strip"><div class="c-frames">'+frames+'</div></div>'
+      +top+'<div class="c-title">'+title+'</div><div class="c-body">'+body+'</div>'
+      +'<div class="c-foot">'+foot+'</div></div>';
+  }
+  if(style==='f'){ // 사진첩
+    var n=Math.min(ps.length,3);
+    var grid = n
+      ? '<div class="c-grid n'+n+'">'+ps.slice(0,3).map(function(src){return '<img src="'+src+'">';}).join('')+'</div>'
+      : '<div class="c-ph">'+fallback+'</div>';
+    return '<div class="dcard f '+cp+'" id="dcard">'
+      +top+grid
+      +'<div class="c-title">'+title+'</div><div class="c-body">'+body+'</div>'
+      +'<div class="c-foot">'+foot+'</div></div>';
+  }
+  if(style==='g'){ // 전면사진
+    var bg = ps.length
+      ? '<img src="'+ps[0]+'">'
+      : '<div class="c-ph">'+fallback+'</div>';
+    return '<div class="dcard g '+cp+'" id="dcard">'
+      +'<div class="c-bg">'+bg+'</div><div class="c-veil"></div>'
+      +'<div class="c-wrap">'+top
+      +'<div class="c-title">'+title+'</div><div class="c-body">'+body+'</div>'
+      +'<div class="c-foot">'+foot+'</div></div></div>';
+  }
+  // h. 스티커
+  var pocs = ps.length
+    ? ps.slice(0,3).map(function(src){return '<div class="c-poc"><img src="'+src+'"></div>';}).join('')
+    : '<div class="c-poc"><div class="c-ph">'+fallback+'</div></div>';
+  return '<div class="dcard h '+cp+'" id="dcard">'
+    +'<div class="c-tape">'+pocs+'</div>'
+    +'<div class="c-card">'+top
+    +'<div class="c-title">'+title+'</div><div class="c-body">'+body+'</div>'
+    +'<div class="c-foot">'+foot+'</div></div></div>';
 }
 
 /* 이미지로 변환할 때는 외부 폰트 파일을 못 읽으므로,
@@ -5886,11 +6049,15 @@ function saveDiaryCard(){
     var w=node.offsetWidth, h=node.offsetHeight, scale=3;
     var baseCSS='';
     try{
-      var main=document.querySelector('style');
-      if(main) baseCSS=main.textContent;
+      // 스타일 블록이 여러 개이므로 전부 합친다 (하나만 가져오면 카드 모양이 깨짐)
+      [].forEach.call(document.querySelectorAll('style'), function(s){ baseCSS+=s.textContent; });
     }catch(e){}
     var clone=node.cloneNode(true);
-    var inner='<div xmlns="http://www.w3.org/1999/xhtml"><style>'+baseCSS+fontCSS+'</style>'
+    /* 주의: 아래 태그 이름을 문자열로 직접 쓰지 않는다.
+       파일 안에 style 종료 태그가 그대로 있으면 CSS 자동 삽입 도구가
+       스타일 영역의 끝으로 오인해 이 자바스크립트 안에 CSS를 끼워 넣는 사고가 난다. */
+    var ST='st'+'yle';
+    var inner='<div xmlns="http://www.w3.org/1999/xhtml"><'+ST+'>'+baseCSS+fontCSS+'</'+ST+'>'
       +'<div style="width:'+w+'px">'+clone.outerHTML+'</div></div>';
     var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
       +'<foreignObject width="100%" height="100%">'+inner+'</foreignObject></svg>';
@@ -6661,7 +6828,7 @@ function savePartnerNameFromInput2(){
     <div id="diary-preview-divider-gray" style="display:none;border-top:1px solid #ddd;margin-bottom:14px"></div>
     <div id="diary-preview-photos" style="display:none;gap:6px;margin-bottom:18px"></div>
     <button onclick="editFromPreview()" style="width:100%;background:var(--dm);color:#fff;border:none;border-radius:10px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">✏️ 수정하기</button>
-    <button onclick="openCardModal()" style="width:100%;background:var(--dm-lt3);color:var(--dm-d);border:1.5px solid var(--dm-lt);border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px">🎨 카드로 저장</button>
+    <button onclick="openCardModal(false)" style="width:100%;background:var(--dm-lt3);color:var(--dm-d);border:1.5px solid var(--dm-lt);border-radius:10px;padding:11px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px">🎨 카드로 저장</button>
   </div>
 </div>
 
@@ -7129,7 +7296,7 @@ function savePartnerNameFromInput2(){
     g.innerHTML=html;
   };
   window.mhTogglePin=function(ds,i){var p={ds:ds,i:i},idx=pendingPins.findIndex(function(x){return samePin(x,p);});if(idx>=0)pendingPins.splice(idx,1);else{if(pendingPins.length>=4){if(typeof toast==='function')toast('고정 사진은 최대 4장이에요');return;}pendingPins.push(p);}mhRenderPicker();};
-  window.mhUploadHomePhoto=function(ev){var f=ev.target.files&&ev.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(x){var im=new Image();im.onload=function(){var max=900,w=im.width,h=im.height;if(w>max){h=Math.round(h*max/w);w=max;}if(h>max){w=Math.round(w*max/h);h=max;}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);var data=c.toDataURL('image/jpeg',.78);if(pendingPins.length>=4)pendingPins.shift();pendingPins.push({custom:data});mhRenderPicker();};im.src=x.target.result;};r.readAsDataURL(f);ev.target.value='';};
+  window.mhUploadHomePhoto=function(ev){var f=ev.target.files&&ev.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(x){var im=new Image();im.onload=function(){/* 미니홈 사진은 일반 저장공간에 들어가므로 다른 사진(400~500px)과 비슷한 크기로 맞춘다. 900px로 두면 용량을 크게 차지해 저장 실패를 유발함 */var max=560,w=im.width,h=im.height;if(w>max){h=Math.round(h*max/w);w=max;}if(h>max){w=Math.round(w*max/h);h=max;}var c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);var data=c.toDataURL('image/jpeg',.78);if(pendingPins.length>=4)pendingPins.shift();pendingPins.push({custom:data});mhRenderPicker();};im.src=x.target.result;};r.readAsDataURL(f);ev.target.value='';};
   window.mhSavePinnedPhotos=function(){jset(PIN_KEY[currentMode],pendingPins.slice(0,4));mhClosePhotoPicker();mhRenderHome();if(typeof toast==='function')toast('HOME 사진을 고정했어요');};
 
   /* FAVORITES */
