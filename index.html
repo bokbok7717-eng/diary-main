@@ -5945,6 +5945,36 @@ function renderCard(){
 }
 
 /* 사진을 여러 장 쓰는 카드들 */
+/* 카드 렌더링에 필요한 CSS 규칙만 추린다 (:root 변수 + .dcard 관련) */
+function collectCardCSS(){
+  var out='';
+  try{
+    [].forEach.call(document.styleSheets, function(sheet){
+      var rules;
+      try{ rules=sheet.cssRules; }catch(err){ return; }
+      [].forEach.call(rules||[], function(r){
+        var t=r.cssText||'';
+        if(!t) return;
+        if(r.selectorText && (r.selectorText.indexOf('.dcard')>=0 || r.selectorText.indexOf(':root')>=0)) out+=t;
+      });
+    });
+  }catch(e){}
+  if(!out){ // 규칙을 못 읽는 경우엔 전체 스타일로 대체
+    try{ [].forEach.call(document.querySelectorAll('style'), function(x){ out+=x.textContent; }); }catch(e2){}
+  }
+  /* 카드가 스킨 색을 그대로 쓰도록 현재 확정된 변수값을 덧붙인다 */
+  try{
+    var cs=getComputedStyle(document.documentElement), vars='';
+    ['--dm','--dm-d','--dm-l','--dm-lt','--dm-lt2','--dm-lt3',
+     '--cm','--cm-d','--cm-l','--cm-lt','--cm-lt2','--cm-lt3'].forEach(function(v){
+      var val=cs.getPropertyValue(v);
+      if(val) vars+=v+':'+val.trim()+';';
+    });
+    if(vars) out+=':root{'+vars+'}';
+  }catch(e){}
+  return out;
+}
+
 function cardPhotoList(e){
   var out=[];
   (e.photos||[]).forEach(function(p){
@@ -6022,6 +6052,9 @@ function cardEmbedFontCSS(){
     var done=false;
     var t=setTimeout(function(){ if(!done){ done=true; resolve(''); } },6000); // 너무 느리면 포기
     fetch(src).then(function(r){ return r.blob(); }).then(function(b){
+      /* 글꼴 파일이 크면 이미지 변환 자체가 실패하므로 일정 크기를 넘으면 포기하고
+         기본 글꼴로 저장한다. (저장 실패보다 글꼴이 다른 편이 낫다) */
+      if(b && b.size > 1200000) return null;
       return new Promise(function(res){
         var fr=new FileReader(); fr.onload=function(){res(fr.result);}; fr.onerror=function(){res(null);};
         fr.readAsDataURL(b);
@@ -6046,12 +6079,18 @@ function saveDiaryCard(){
   hint.textContent='글꼴을 담는 중이라 몇 초 걸릴 수 있어요';
 
   cardEmbedFontCSS().then(function(fontCSS){
+    renderCardImage(node, btn, hint, fontCSS, true);
+  });
+}
+
+/* 카드를 실제 이미지로 굽는다.
+   글꼴을 담은 상태에서 실패하면(데이터가 너무 큼 등) 글꼴 없이 한 번 더 시도한다. */
+function renderCardImage(node, btn, hint, fontCSS, canRetry){
+  (function(){
     var w=node.offsetWidth, h=node.offsetHeight, scale=3;
-    var baseCSS='';
-    try{
-      // 스타일 블록이 여러 개이므로 전부 합친다 (하나만 가져오면 카드 모양이 깨짐)
-      [].forEach.call(document.querySelectorAll('style'), function(s){ baseCSS+=s.textContent; });
-    }catch(e){}
+    /* 스타일 전체(약 170KB)를 넣으면 데이터가 너무 커져 이미지 변환이 실패한다.
+       카드에 실제로 쓰이는 규칙만 추려서 담는다. */
+    var baseCSS=collectCardCSS();
     var clone=node.cloneNode(true);
     /* 주의: 아래 태그 이름을 문자열로 직접 쓰지 않는다.
        파일 안에 style 종료 태그가 그대로 있으면 CSS 자동 삽입 도구가
@@ -6080,9 +6119,18 @@ function saveDiaryCard(){
         toast('🖼️ 카드를 저장했어요!');
       },'image/png');
     };
-    img.onerror=function(){ cardReset(btn,hint); toast('이미지 변환에 실패했어요'); };
+    img.onerror=function(){
+      if(canRetry && fontCSS){
+        // 글꼴 데이터가 원인일 수 있으니 글꼴 없이 다시 시도
+        hint.textContent='글꼴 없이 다시 만드는 중…';
+        renderCardImage(node, btn, hint, '', false);
+        return;
+      }
+      cardReset(btn,hint);
+      toast('이미지 변환에 실패했어요. 사진을 줄여보세요');
+    };
     img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-  });
+  })();
 }
 function cardReset(btn,hint){
   btn.disabled=false; btn.textContent='🖼️ 이미지로 저장';
