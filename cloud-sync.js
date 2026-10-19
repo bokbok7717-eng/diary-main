@@ -4,11 +4,48 @@
 const URL='https://ylououtwifistyuwlqht.supabase.co';
 const KEY='sb_publishable_viaFToYOJ9NYcrfkF79FRA_-radbnkH';
 const META='diary_cloud_baseline_v1';
+const PRIVACY_GATE='diary_logout_privacy_gate_v1';
 const Core=window.DiaryCloudCore;
 let makePhotoStore=null;
 let syncFailed=false; // Keep errors visible until an explicit retry.
 let client,user=null,base=null,remote=null,busy=false,ready=false,epoch=0,status='로그인해서 휴대폰과 PC를 연결하세요.',lastClean='',saveTimer;
 const $=id=>document.getElementById(id);
+function signedOutOwner(){try{const saved=JSON.parse(localStorage.getItem(PRIVACY_GATE));return typeof saved?.user==='string'?saved.user:null;}catch{return null;}}
+const privacyStyle=document.createElement('style');
+privacyStyle.textContent=`
+html.diary-private-locked body{overflow:hidden!important;background:#f6f8f4!important}
+html.diary-private-locked body > :not(#diary-private-gate):not(#cloud-dialog){visibility:hidden!important}
+#diary-private-gate{display:none;position:fixed;inset:0;z-index:2147483640;background:#f6f8f4;color:#263a2c;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px;text-align:center;font-family:system-ui,-apple-system,sans-serif}
+html.diary-private-locked #diary-private-gate{display:flex!important;visibility:visible!important}
+#diary-private-gate h2{font-size:23px;margin:0}#diary-private-gate p{font-size:15px;line-height:1.7;margin:0;max-width:310px}
+#diary-private-login{background:#4e805c;color:#fff;border:0;border-radius:10px;padding:14px 25px;font-size:16px;font-weight:600;cursor:pointer}
+html.diary-private-locked #cloud-dialog[open]{visibility:visible!important}
+`;
+document.head.appendChild(privacyStyle);
+if(signedOutOwner())document.documentElement.classList.add('diary-private-locked');
+const privacyGate=document.createElement('section');
+privacyGate.id='diary-private-gate';
+privacyGate.setAttribute('role','region');
+privacyGate.setAttribute('aria-label','로그아웃 잠금');
+privacyGate.innerHTML='<div style="font-size:46px" aria-hidden="true">🔒</div><h2>로그아웃했어요</h2><p id="diary-private-copy">일기와 사진을 보려면 이전에 사용하던 계정으로 다시 로그인해 주세요.<br>기존 일기와 클라우드 백업은 삭제되지 않았어요.</p><button type="button" id="diary-private-login">로그인해서 열기</button>';
+document.body.appendChild(privacyGate);
+function showPrivacyGate(owner){
+  localStorage.setItem(PRIVACY_GATE,JSON.stringify({user:owner}));
+  document.documentElement.classList.add('diary-private-locked');
+}
+function clearPrivacyGateFor(userId){
+  if(signedOutOwner()!==userId)return false;
+  localStorage.removeItem(PRIVACY_GATE);
+  document.documentElement.classList.remove('diary-private-locked');
+  return true;
+}
+function refreshPrivacyGate(){
+  if(signedOutOwner())document.documentElement.classList.add('diary-private-locked');
+  else document.documentElement.classList.remove('diary-private-locked');
+}
+window.addEventListener('storage',event=>{
+  if(event.key===PRIVACY_GATE)refreshPrivacyGate();
+});
 const modal=document.createElement('dialog');modal.id='cloud-dialog';
 modal.setAttribute('aria-labelledby','cloud-heading');
 modal.innerHTML=`<button class="cloud-close" id="cloud-close" aria-label="닫기">✕</button>
@@ -29,6 +66,15 @@ const open=document.createElement('button');open.id='cloud-open';open.className=
 document.querySelector('.top-bar').insertBefore(open,document.querySelector('.mode-switch'));
 open.onclick=()=>{modal.showModal();render();if(user)void check();};
 $('cloud-close').onclick=()=>modal.close();
+$('diary-private-login').onclick=async()=>{
+  const owner=signedOutOwner();
+  if(user&&owner&&user.id!==owner){
+    const {error}=await client.auth.signOut({scope:'local'});
+    if(error){$('diary-private-copy').textContent='계정을 변경하는 중 오류가 발생했어요. 페이지를 새로고침한 뒤 다시 시도해주세요.';return;}
+  }
+  if(!modal.open)modal.showModal();
+  render();
+};
 function render(){
   $('cloud-message').textContent=status;
   $('cloud-auth').hidden=!!user;$('cloud-signed').hidden=!user;
@@ -164,8 +210,16 @@ $('cloud-upload').onclick=()=>run(async token=>{
 $('cloud-check').onclick=()=>{syncFailed=false;return check();};
 $('cloud-backup').onclick=()=>{try{backupCurrent();message('백업 파일을 내려받았어요.');}catch(e){failure(e);}};
 $('cloud-logout').onclick=()=>run(async()=>{
-  const {error}=await client.auth.signOut({scope:'local'});if(error)throw error;
-  message('로그아웃했어요. 이 기기에 저장된 일기와 사진은 남아 있어요.');
+  const owner=user.id;
+  if(!confirm('로그아웃하면 일기와 사진 화면이 잠겨요. 이 기기의 기록과 클라우드 자료는 삭제되지 않으며, 같은 계정으로 다시 로그인하면 열 수 있어요.'))return;
+  showPrivacyGate(owner);
+  const {error}=await client.auth.signOut({scope:'local'});
+  if(error){
+    clearPrivacyGateFor(owner);
+    throw error;
+  }
+  if(modal.open)modal.close();
+  message('로그아웃했어요. 일기와 사진 화면이 잠겼어요.');
 });
 async function authenticate(signup){
   if(busy||!ready||!$('cloud-auth').reportValidity())return;
@@ -187,11 +241,20 @@ async function start(){
     client=window.supabase.createClient(URL,KEY);
     client.auth.onAuthStateChange((_event,session)=>{
       const next=session?.user||null;
-      if(next?.id!==user?.id){epoch++;syncFailed=false;user=next;base=readBase();remote=null;status=user?'저장된 자료를 확인하고 있어요.':'로그인해서 휴대폰과 PC를 연결하세요.';render();if(user)setTimeout(()=>void check(),0);}
+      if(next?.id!==user?.id){
+        epoch++;syncFailed=false;user=next;base=readBase();remote=null;
+        if(user&&signedOutOwner())clearPrivacyGateFor(user.id);
+        refreshPrivacyGate();
+        status=user?'저장된 자료를 확인하고 있어요.':'로그인해서 휴대폰과 PC를 연결하세요.';
+        render();if(user&&!signedOutOwner())setTimeout(()=>void check(),0);
+      }
     });
     ready=true;render();
     const {data,error}=await client.auth.getSession();if(error)throw error;
-    user=data.session?.user||null;base=readBase();render();if(user)void check();
+    user=data.session?.user||null;base=readBase();
+    if(user&&signedOutOwner())clearPrivacyGateFor(user.id);
+    refreshPrivacyGate();
+    render();if(user&&!signedOutOwner())void check();
     setInterval(()=>{if(user&&document.visibilityState==='visible')void check();},12000);
     document.addEventListener('visibilitychange',()=>{if(user&&document.visibilityState==='visible')void check();});
     window.addEventListener('online',()=>{if(user)void check();});
