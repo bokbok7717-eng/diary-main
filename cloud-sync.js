@@ -74,7 +74,7 @@ document.querySelector('.top-bar').insertBefore(open,document.querySelector('.mo
 open.onclick=()=>{modal.showModal();render();if(user)void check();};
 $('cloud-close').onclick=()=>modal.close();
 $('diary-private-login').onclick=async()=>{
-  const owner=signedOutOwner();
+  const owner=signedOutOwner()||readBase()?.user;
   if(user&&owner&&user.id!==owner){
     const {error}=await client.auth.signOut({scope:'local'});
     if(error){$('diary-private-copy').textContent='계정을 변경하는 중 오류가 발생했어요. 페이지를 새로고침한 뒤 다시 시도해주세요.';return;}
