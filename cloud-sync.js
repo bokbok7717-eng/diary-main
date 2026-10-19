@@ -5,7 +5,7 @@ const URL='https://ylououtwifistyuwlqht.supabase.co';
 const KEY='sb_publishable_viaFToYOJ9NYcrfkF79FRA_-radbnkH';
 const META='diary_cloud_baseline_v1';
 const Core=window.DiaryCloudCore;
-const MAX_BYTES=15*1024*1024;
+let makePhotoStore=null;
 let client,user=null,base=null,remote=null,busy=false,ready=false,epoch=0,status='로그인해서 휴대폰과 PC를 연결하세요.',lastClean='',saveTimer;
 const $=id=>document.getElementById(id);
 const modal=document.createElement('dialog');modal.id='cloud-dialog';
@@ -21,7 +21,7 @@ modal.innerHTML=`<button class="cloud-close" id="cloud-close" aria-label="닫기
 <section id="cloud-signed" hidden><p id="cloud-guide"></p>
 <div class="cloud-actions"><button id="cloud-check" class="cloud-primary">지금 동기화</button><button id="cloud-download">저장된 내용 불러오기</button><button id="cloud-upload">이 기기 내용으로 연결</button></div>
 <div class="cloud-actions"><button id="cloud-backup">이 기기 백업 받기</button><button id="cloud-logout">로그아웃</button></div>
-<p class="cloud-note">저장한 일기·커플 기록·사진·꾸미기 설정을 연동해요. 작성 중인 초안과 잠금 비밀번호는 이 기기에만 남아요. 사진을 포함한 전체 자료는 현재 15MB까지 연동할 수 있어요.</p></section>`;
+<p class="cloud-note">저장한 일기·커플 기록·사진·꾸미기 설정을 연동해요. 작성 중인 초안과 잠금 비밀번호는 이 기기에만 남아요. 사진은 계정별 비공개 저장소에 따로 보관해요. 글과 사진은 같은 계정의 다른 기기에서 자동으로 동기화돼요.</p></section>`;
 document.body.appendChild(modal);
 const open=document.createElement('button');open.id='cloud-open';open.className='backup-btn';open.textContent='☁️';open.title='기기 연동';open.setAttribute('aria-label','기기 연동');
 document.querySelector('.top-bar').insertBefore(open,document.querySelector('.mode-switch'));
@@ -41,36 +41,51 @@ function render(){
 function message(s){status=s;render();}
 function readBase(){try{return JSON.parse(localStorage.getItem(META));}catch{return null;}}
 function saveBase(version,hash){base={user:user.id,version,hash};localStorage.setItem(META,JSON.stringify(base));}
-async function digest(s){const bytes=new TextEncoder().encode(Core.stable(s));if(bytes.length>MAX_BYTES)throw new Error('자료가 15MB를 넘었어요. 백업을 받은 뒤 사진을 정리해주세요.');return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(b=>b.toString(16).padStart(2,'0')).join('');}
+async function digest(s){const bytes=new TextEncoder().encode(Core.stable(s));return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes))).map(b=>b.toString(16).padStart(2,'0')).join('');}
 function capture(){return Core.snapshot(localStorage,window.photoCache||{});}
 function failure(e){console.warn('Diary sync:',e.code||e.name||'error');message(e.message&&/어요|주세요|습니다/.test(e.message)?e.message:'연결에 실패했어요. 인터넷과 로그인 상태를 확인하고 다시 시도해주세요. ('+(e.code||'network')+')');}
-async function readRemote(uid){
+async function readRemote(uid,token){
   const {data,error}=await client.from('diary_sync').select('data,version').eq('user_id',uid).maybeSingle();
+  current(token);
   if(error)throw error;
   if(!data)return null;
-  Core.validate(data.data);
-  return {data:data.data,version:data.version,hash:await digest(data.data)};
+  if(remote?.user===uid&&remote.version===data.version)return remote;
+  const snapshot=await makePhotoStore(client,uid).download(data.data,message,remote?.user===uid?remote:null);
+  current(token);
+  Core.validate(snapshot);
+  return {user:uid,data:snapshot,manifest:data.data,version:data.version,hash:await digest(snapshot)};
 }
 async function run(fn){if(busy||!ready||!user)return;busy=true;render();const token=epoch;
   try{await fn(token);}catch(e){if(token===epoch)failure(e);}finally{busy=false;render();}}
 function current(token){if(token!==epoch)throw new Error('로그인이 변경됐어요. 다시 연결해주세요.');}
 async function write(snapshot,expected,token){
   const uid=user.id;const hash=await digest(snapshot);current(token);
-  let query=expected===null?client.from('diary_sync').insert({user_id:uid,data:snapshot,version:1}):client.from('diary_sync').update({data:snapshot,version:expected+1}).eq('user_id',uid).eq('version',expected);
+  const manifest=await makePhotoStore(client,uid).upload(snapshot,remote?.user===uid?remote.manifest:null,message);
+  current(token);
+  let query=expected===null?client.from('diary_sync').insert({user_id:uid,data:manifest,version:1}):client.from('diary_sync').update({data:manifest,version:expected+1}).eq('user_id',uid).eq('version',expected);
   const {data,error}=await query.select('version');current(token);
   if(error?.code==='23505'||(!error&&data.length!==1))throw new Error('다른 기기에서도 수정했어요. 자동 저장을 멈췄어요. 백업 후 저장된 내용을 불러와주세요.');
   if(error)throw error;
-  saveBase(data[0].version,hash);lastClean=Core.stable(snapshot);remote={data:snapshot,version:data[0].version,hash};
+  saveBase(data[0].version,hash);lastClean=Core.stable(snapshot);remote={user:uid,data:snapshot,manifest,version:data[0].version,hash};
   message('☁️ 저장 완료 · '+new Date().toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'}));
 }
 async function check(){return run(async token=>{
-  base=readBase();const snapshot=capture(),hash=await digest(snapshot);remote=await readRemote(user.id);current(token);
+  base=readBase();const snapshot=capture(),hash=await digest(snapshot);remote=await readRemote(user.id,token);current(token);
   // Keep the baseline captured with this snapshot; later tabs must not rebase stale data.
   const action=Core.decision(user.id,base,hash,remote);
   if(action==='choose'){message(remote?'저장된 자료가 있어요. 아래에서 이 기기에 불러올 수 있어요.':'클라우드가 비어 있어요. “이 기기 내용으로 연결”을 눌러 시작하세요.');return;}
   if(action==='equal'){saveBase(remote.version,hash);lastClean=Core.stable(snapshot);message('☁️ 저장된 내용이 같아요.');return;}
   if(action==='upload'){await write(snapshot,base.version,token);return;}
-  if(action==='download'){message('다른 기기에서 새 기록을 저장했어요. 작성 중인 내용을 먼저 저장하고 “저장된 내용 불러오기”를 눌러주세요.');return;}
+  if(action==='download'){
+    const active=document.activeElement;
+    const typing=!!active?.matches?.('input,textarea,[contenteditable="true"]');
+    const openEditor=Array.from(document.querySelectorAll('.entry-modal')).some(el=>getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden');
+    if(typing||openEditor){message('다른 기기 변경이 있어요. 편집을 닫으면 자동으로 반영할게요.');return;}
+    message('☁️ 다른 기기의 변경을 반영하고 있어요.');
+    await applySnapshot(remote.data);current(token);
+    saveBase(remote.version,remote.hash);
+    location.reload();return;
+  }
   message('두 기기의 변경이 겹쳤어요. 자동 저장을 멈췄어요. 이 기기 백업을 받은 뒤 저장된 내용을 불러와주세요.');
 });}
 function backup(s){
@@ -88,7 +103,7 @@ async function applySnapshot(s){
   catch(e){Core.keys.forEach(k=>{try{if(old[k]===null)localStorage.removeItem(k);else localStorage.setItem(k,old[k]);}catch{}});throw new Error('기기 저장 공간이 부족해 불러오지 못했어요. 백업을 보관하고 공간을 확보해주세요.');}
 }
 $('cloud-download').onclick=()=>run(async token=>{
-  const latest=await readRemote(user.id);current(token);if(!latest)throw new Error('아직 저장된 자료가 없어요.');
+  const latest=await readRemote(user.id,token);current(token);if(!latest)throw new Error('아직 저장된 자료가 없어요.');
   if(!confirm('현재 기기의 내용을 백업 파일로 받은 뒤, 클라우드의 일기·사진·설정으로 바꿀까요? 작성 중인 초안은 이 기기에 남습니다.'))return;
   backupCurrent();await applySnapshot(latest.data);current(token);saveBase(latest.version,latest.hash);location.reload();
 });
@@ -120,6 +135,7 @@ async function start(){
   try{
     await window.diaryReady;
     if(!window.supabase)throw new Error('로그인 기능을 불러오지 못했어요. 인터넷 연결을 확인해주세요.');
+    makePhotoStore=(await import('./cloud-photo.mjs')).makePhotoStore;
     client=window.supabase.createClient(URL,KEY);
     client.auth.onAuthStateChange((_event,session)=>{
       const next=session?.user||null;
@@ -128,7 +144,8 @@ async function start(){
     ready=true;render();
     const {data,error}=await client.auth.getSession();if(error)throw error;
     user=data.session?.user||null;base=readBase();render();if(user)void check();
-    setInterval(()=>{if(user&&document.visibilityState==='visible')void check();},20000);
+    setInterval(()=>{if(user&&document.visibilityState==='visible')void check();},12000);
+    document.addEventListener('visibilitychange',()=>{if(user&&document.visibilityState==='visible')void check();});
     window.addEventListener('online',()=>{if(user)void check();});
     window.addEventListener('diary-saved',()=>{clearTimeout(saveTimer);saveTimer=setTimeout(()=>void check(),1200);});
     window.addEventListener('beforeunload',e=>{if(!user||base?.user!==user.id)return;let dirty=true;try{dirty=Core.stable(capture())!==lastClean;}catch{}if(busy||dirty){e.preventDefault();e.returnValue='';}});
