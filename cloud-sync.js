@@ -22,7 +22,8 @@ html.diary-private-locked #diary-private-gate{display:flex!important;visibility:
 html.diary-private-locked #cloud-dialog[open]{visibility:visible!important}
 `;
 document.head.appendChild(privacyStyle);
-if(signedOutOwner())document.documentElement.classList.add('diary-private-locked');
+// Fail closed on every page load until an authenticated session is confirmed.
+document.documentElement.classList.add('diary-private-locked');
 const privacyGate=document.createElement('section');
 privacyGate.id='diary-private-gate';
 privacyGate.setAttribute('role','region');
@@ -40,8 +41,14 @@ function clearPrivacyGateFor(userId){
   return true;
 }
 function refreshPrivacyGate(){
-  if(signedOutOwner())document.documentElement.classList.add('diary-private-locked');
-  else document.documentElement.classList.remove('diary-private-locked');
+  const owner=signedOutOwner(),baseline=readBase()?.user;
+  // Legacy logout did not write a gate. A missing session must still lock
+  // any diary already saved in this browser, including after a reload.
+  if(owner||!user||(baseline&&baseline!==user.id)){
+    document.documentElement.classList.add('diary-private-locked');
+  }else{
+    document.documentElement.classList.remove('diary-private-locked');
+  }
 }
 window.addEventListener('storage',event=>{
   if(event.key===PRIVACY_GATE)refreshPrivacyGate();
@@ -242,11 +249,13 @@ async function start(){
     client.auth.onAuthStateChange((_event,session)=>{
       const next=session?.user||null;
       if(next?.id!==user?.id){
+        const previousUser=user?.id;
         epoch++;syncFailed=false;user=next;base=readBase();remote=null;
+        if(!user&&previousUser&&!signedOutOwner())showPrivacyGate(previousUser);
         if(user&&signedOutOwner())clearPrivacyGateFor(user.id);
         refreshPrivacyGate();
         status=user?'저장된 자료를 확인하고 있어요.':'로그인해서 휴대폰과 PC를 연결하세요.';
-        render();if(user&&!signedOutOwner())setTimeout(()=>void check(),0);
+        render();if(user&&!document.documentElement.classList.contains('diary-private-locked'))setTimeout(()=>void check(),0);
       }
     });
     ready=true;render();
@@ -254,7 +263,7 @@ async function start(){
     user=data.session?.user||null;base=readBase();
     if(user&&signedOutOwner())clearPrivacyGateFor(user.id);
     refreshPrivacyGate();
-    render();if(user&&!signedOutOwner())void check();
+    render();if(user&&!document.documentElement.classList.contains('diary-private-locked'))void check();
     setInterval(()=>{if(user&&document.visibilityState==='visible')void check();},12000);
     document.addEventListener('visibilitychange',()=>{if(user&&document.visibilityState==='visible')void check();});
     window.addEventListener('online',()=>{if(user)void check();});
