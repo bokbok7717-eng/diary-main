@@ -108,7 +108,7 @@ $('cloud-download').onclick=()=>run(async token=>{
   backupCurrent();await applySnapshot(latest.data);current(token);saveBase(latest.version,latest.hash);location.reload();
 });
 $('cloud-upload').onclick=()=>run(async token=>{
-  const latest=await readRemote(user.id);current(token);remote=latest;
+  const latest=await readRemote(user.id,token);current(token);remote=latest;
   if(latest){message('이미 클라우드에 자료가 있어요. 이 기기 백업을 받은 뒤 “저장된 내용 불러오기”로 연결해주세요. 서로 다른 자료를 자동으로 덮어쓰지 않아요.');return;}
   if(!confirm('이 기기의 일기·사진·설정을 내 Supabase 계정에 올리고 자동 동기화를 시작할까요?'))return;
   backupCurrent();await write(capture(),null,token);
