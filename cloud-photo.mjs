@@ -57,12 +57,16 @@ export function makePhotoStore(client,userId,bucket='diary-photos'){
     if(textEncoder.encode(JSON.stringify(packed)).length>MAX_META_BYTES)throw new Error('일기 글과 설정 데이터가 너무 커서 저장하지 못했어요.');
     return packed;
   }
-  async function download(packed,progress=()=>{}){
+  async function download(packed,progress=()=>{},cached=null){
     if(packed?.format===1)return packed;
     if(packed?.format!==2||!packed.values||typeof packed.values!=='object'||Array.isArray(packed.values)||!packed.photos||typeof packed.photos!=='object'||Array.isArray(packed.photos))throw new Error('지원하지 않는 클라우드 저장 형식이에요.');
     const photos={},list=Object.entries(packed.photos);
     for(let i=0;i<list.length;i++){
       const [id,path]=list[i],hash=ensurePath(userId,id,path);
+      if(cached?.manifest?.format===2&&cached.manifest.photos?.[id]===path&&typeof cached.data?.photos?.[id]==='string'){
+        photos[id]=cached.data.photos[id];
+        continue;
+      }
       progress('☁️ 사진 불러오기 '+(i+1)+'/'+list.length);
       const {data,error}=await storage.download(path);
       if(error)throw error;
