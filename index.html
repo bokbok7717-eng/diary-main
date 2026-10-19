@@ -2337,6 +2337,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 </style>
 
 <!-- Minihome v15: FAVORITES/HOME moved to profile action rail; bottom navigation stays four items -->
+<link rel="stylesheet" href="cloud-sync.css">
 </head>
 <body class="mode-diary">
 
@@ -5079,6 +5080,7 @@ function saveCp(){ safeSave(CP_KEY, cpData, '커플 다이어리'); }
 function safeSave(key, obj, label){
   try{
     localStorage.setItem(key, JSON.stringify(obj));
+    window.dispatchEvent(new Event('diary-saved'));
     return true;
   }catch(e){
     var full = e && (e.name==='QuotaExceededError' || e.code===22 || e.code===1014);
@@ -6287,7 +6289,7 @@ renderStatCards();
 renderBC();
 
 // 사진 캐시(IndexedDB) 로딩 후 이관 + 사진 관련 렌더 진행
-openPhotoDB().then(loadAllPhotosToCache).then(function(){
+window.diaryReady = openPhotoDB().then(loadAllPhotosToCache).then(function(){
   migratePhotosToIDB();
   migrateDiaryPhotosToIDBV2();
 
@@ -7379,5 +7381,8 @@ function savePartnerNameFromInput2(){
 })();
 </script>
 
+<script src="vendor/supabase-2.49.4.js"></script>
+<script src="cloud-core.js"></script>
+<script src="cloud-sync.js"></script>
 </body>
 </html>

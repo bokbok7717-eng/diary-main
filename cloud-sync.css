@@ -1,0 +1,18 @@
+#cloud-open{font-family:inherit;cursor:pointer;white-space:nowrap}
+#cloud-open[data-alert="true"]{outline:2px solid #d59c45;outline-offset:1px}
+#cloud-dialog{width:min(440px,calc(100% - 24px));max-height:88dvh;margin:auto;padding:22px;border:1px solid #cad8c8;border-radius:16px;background:#fff;color:#28372b;box-shadow:0 20px 70px #0004;font-family:system-ui,sans-serif;overflow:auto}
+#cloud-dialog::backdrop{background:#0007}
+#cloud-dialog h2{font-size:20px;margin:0 0 12px}
+#cloud-dialog p{font-size:13px;line-height:1.7;margin:10px 0;overflow-wrap:anywhere}
+#cloud-dialog label{display:block;font-size:13px;margin-top:12px}
+#cloud-dialog input{display:block;box-sizing:border-box;width:100%;padding:11px;margin:5px 0 10px;border:1px solid #cbd4c8;border-radius:7px;font-size:16px;background:#fff;color:#222}
+#cloud-dialog button{padding:11px 14px;border:1px solid #cbd4c8;border-radius:8px;background:#eff5eb;color:#29442d;font:inherit;font-size:13px;cursor:pointer;min-height:42px}
+#cloud-dialog button:disabled{opacity:.5;cursor:wait}
+#cloud-dialog .cloud-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+#cloud-dialog .cloud-primary{background:#507e58;color:#fff;border-color:#507e58}
+#cloud-dialog .cloud-close{float:right;padding:3px 10px;min-height:32px;background:transparent}
+#cloud-dialog #cloud-message{padding:10px;background:#f1f5ef;border-radius:8px;white-space:pre-line}
+#cloud-dialog [hidden]{display:none!important}
+#cloud-dialog .cloud-note{font-size:11px;color:#657064}
+#cloud-dialog a{color:#356943}
+@media(max-width:380px){.top-bar{gap:4px!important}.top-bar #cloud-open{padding:4px 6px}.top-bar .inp-year{width:56px!important}.top-bar .inp-month{width:34px!important}}
