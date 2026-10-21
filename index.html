@@ -2339,6 +2339,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <!-- Minihome v15: FAVORITES/HOME moved to profile action rail; bottom navigation stays four items -->
 <script>document.documentElement.classList.add("diary-private-locked","diary-auth-checking");</script>
 <link rel="stylesheet" href="cloud-sync.css?v=20261021-1">
+<link rel="stylesheet" href="usagi-theme.css?v=20261021-1">
 </head>
 <body class="mode-diary">
 
@@ -2433,7 +2434,12 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
       </div>
     </div>
     <div id="mh-mobile-pagebar"><span class="mh-page-folder">▣</span><b id="mh-mobile-page-title">DIARY</b><small>mini page</small></div>
-    <div id="mh-home-page" class="mh-virtual-page">
+    <div class="usagi-welcome" aria-hidden="true">
+        <div class="usagi-welcome-copy"><span class="usagi-eyebrow">USAGI MINIHOME</span><strong class="usagi-diary-copy">작은 하루도, 소중하게.</strong><strong class="usagi-couple-copy">너와 나의 포근한 기록.</strong><span class="usagi-caption">오늘의 마음을 이곳에 차곡차곡</span></div>
+        <img class="usagi-welcome-diary" src="assets/usagi/happy.png" alt="" width="2363" height="2363">
+        <img class="usagi-welcome-couple" src="assets/usagi/heart.png" alt="" width="402" height="350">
+      </div>
+      <div id="mh-home-page" class="mh-virtual-page">
       <div class="mh-vpage-head"><span>⌂</span><span>HOME</span><small>my little front page</small></div>
       <div class="mh-today-line">
         <span class="ico">✎</span>
@@ -2991,6 +2997,7 @@ var D_SKIN_KEY='diary_skin_v1', C_SKIN_KEY='couple_skin_v1';
 var skinTab='diary';
 
 var D_SKINS={
+  usagi:{n:'우사기의 작은 하루',miniOnly:true,m:'#b28a3d',d:'#82602e',l:'#ead28e',lt:'#f8eabd',lt2:'#fcf3d5',lt3:'#fff9e9',pg:'#fbf1d1',bg:'#211c14',card:'#30291c',card2:'#393020',bd:'#56472c',tb:'#493b24'},
   freshgreen:{n:'새싹',m:'#8fc47a',d:'#70995f',l:'#aed59f',lt:'#cde4c3',lt2:'#e6f2e2',lt3:'#f4f9f2',pg:'#f9fcf8',g:'linear-gradient(120deg,#9ccf88,#bcd98e,#dbe39a)',gd:'linear-gradient(120deg,#465d3d,#556240,#636645)',
     bg:'#0e140c',card:'#1d2718',card2:'#1f2b1b',bd:'#314329',tb:'#253320'},
   aurora:{n:'오로라',m:'#7fc4b8',d:'#639990',l:'#a3d5cc',lt:'#c5e4df',lt2:'#e3f2ef',lt3:'#f2f9f8',pg:'#f8fcfb',gd:'linear-gradient(120deg,#405e58,#475368,#574c65)',g:'linear-gradient(120deg,#8fd0c4,#9db8e8,#c2a8e0)',
@@ -3013,6 +3020,7 @@ var D_SKINS={
     bg:'#141a16',card:'#1e2c22',card2:'#223026',bd:'#324434',tb:'#2c3c30'}
 };
 var C_SKINS={
+  usagi:{n:'우사기와 우리 둘',miniOnly:true,m:'#b28a3d',d:'#82602e',l:'#ead28e',lt:'#f8eabd',lt2:'#fcf3d5',lt3:'#fff9ed',pg:'#fcf1d7',lt4:'#efc1c5',cell:'#fff2ec',bg:'#231b17',card:'#352820',card2:'#3d3027',bd:'#5c4634',tb:'#49372a'},
   blossom:{n:'벚꽃',m:'#f2a8bc',d:'#bd8393',l:'#f6c0cf',lt:'#f9d8e1',lt2:'#fcecf0',lt3:'#fef6f8',pg:'#fefafb',lt4:'#f7cbd7',cell:'#fef7f9',g:'linear-gradient(120deg,#f5b3c5,#f7c8d6,#fadfe6)',gd:'linear-gradient(120deg,#6e5159,#6f5a60,#706467)',
     bg:'#181113',card:'#302226',card2:'#352529',bd:'#523940',tb:'#3f2c31'},
   sunset:{n:'선셋',m:'#f5947e',d:'#bf7362',l:'#f8b2a2',lt:'#facfc5',lt2:'#fde7e3',lt3:'#fef4f2',pg:'#fef9f8',gd:'linear-gradient(120deg,#6f4b40,#70553d,#706245)',lt4:'#f9bfb2',cell:'#fef6ec',g:'linear-gradient(120deg,#f7a68e,#f8bd88,#f9d99a)',
@@ -3038,6 +3046,17 @@ var C_SKINS={
 function getDSkin(){ return localStorage.getItem(D_SKIN_KEY)||'green'; }
 function getCSkin(){ return localStorage.getItem(C_SKIN_KEY)||'pink'; }
 
+/* Character skins keep the existing synced skin keys, but only render in minihome. */
+function resolvedSkin(set,k,fallback){
+  var s=set[k]||set[fallback];
+  return s.miniOnly&&!document.body.classList.contains('layout-minihome')?set[fallback]:s;
+}
+function updateUsagiTheme(){
+  var couple=document.body.classList.contains('mode-couple');
+  var active=document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='usagi';
+  document.body.classList.toggle('theme-usagi',active);
+}
+
 /* canvas(fillStyle)는 var(--x)를 해석하지 못하므로 실제 색상값을 꺼내 쓴다 */
 function cssVar(name){
   var v=getComputedStyle(document.documentElement).getPropertyValue(name);
@@ -3062,7 +3081,7 @@ function applyPageBg(){
 }
 
 function applyDSkin(k){
-  var s=D_SKINS[k]||D_SKINS.green, r=document.documentElement.style;
+  var s=resolvedSkin(D_SKINS,k,'green'), r=document.documentElement.style;
   r.setProperty('--dm',s.m); r.setProperty('--dm-d',s.d); r.setProperty('--dm-l',s.l);
   r.setProperty('--dm-lt',s.lt); r.setProperty('--dm-lt2',s.lt2); r.setProperty('--dm-lt3',s.lt3);
   r.setProperty('--dm-pg',s.pg||s.lt3);
@@ -3072,10 +3091,11 @@ function applyDSkin(k){
   r.setProperty('--dm-bg',s.bg); r.setProperty('--dm-card',s.card); r.setProperty('--dm-card2',s.card2);
   r.setProperty('--dm-bd',s.bd); r.setProperty('--dm-tb',s.tb);
   localStorage.setItem(D_SKIN_KEY,k);
+  updateUsagiTheme();
   updateThemeMeta();
 }
 function applyCSkin(k){
-  var s=C_SKINS[k]||C_SKINS.pink, r=document.documentElement.style;
+  var s=resolvedSkin(C_SKINS,k,'pink'), r=document.documentElement.style;
   r.setProperty('--cm',s.m); r.setProperty('--cm-d',s.d); r.setProperty('--cm-l',s.l);
   r.setProperty('--cm-lt',s.lt); r.setProperty('--cm-lt2',s.lt2);
   r.setProperty('--cm-lt3',s.lt3); r.setProperty('--cm-lt4',s.lt4);
@@ -3087,13 +3107,14 @@ function applyCSkin(k){
   r.setProperty('--cm-bg',s.bg); r.setProperty('--cm-card',s.card); r.setProperty('--cm-card2',s.card2);
   r.setProperty('--cm-bd',s.bd); r.setProperty('--cm-tb',s.tb);
   localStorage.setItem(C_SKIN_KEY,k);
+  updateUsagiTheme();
   updateThemeMeta();
 }
 function updateThemeMeta(){
   var mt=document.querySelector('meta[name="theme-color"]');
   if(!mt) return;
   var isCp=document.body.classList.contains('mode-couple');
-  mt.content=isCp?(C_SKINS[getCSkin()]||C_SKINS.pink).m:(D_SKINS[getDSkin()]||D_SKINS.green).m;
+  mt.content=isCp?resolvedSkin(C_SKINS,getCSkin(),'pink').m:resolvedSkin(D_SKINS,getDSkin(),'green').m;
 }
 /* ===== 글꼴 ===== */
 var FONT_KEY='diary_font_v1', FONT_SCOPE_KEY='diary_font_scope_v1';
@@ -3463,7 +3484,10 @@ function applyLayoutMode(mode,silent){
   document.body.classList.toggle('layout-minihome',mode==='minihome');
   document.body.setAttribute('data-layout',mode);
   localStorage.setItem(LAYOUT_MODE_KEY,mode);
+  applyDSkin(getDSkin());
+  applyCSkin(getCSkin());
   renderLayoutPicker();
+  if(document.getElementById("skin-grid")) renderSkinGrid();
   updateMinihomeSidebar();
   if(!silent && typeof toast==='function') toast(mode==='minihome'?'🖥️ 미니홈피 레이아웃으로 바꿨어요':'📱 기본 레이아웃으로 바꿨어요');
 }
@@ -3617,7 +3641,14 @@ function setSkinTab(t){
 function renderSkinGrid(){
   var set=skinTab==='diary'?D_SKINS:C_SKINS;
   var cur=skinTab==='diary'?getDSkin():getCSkin();
-  document.getElementById('skin-grid').innerHTML=Object.keys(set).map(function(k){
+  var featured=document.getElementById('usagi-theme-choice');
+  if(featured){
+    featured.classList.toggle('on',cur==='usagi'&&getLayoutMode()==='minihome');
+    featured.setAttribute('aria-pressed',String(cur==='usagi'&&getLayoutMode()==='minihome'));
+    featured.querySelector('b').textContent=set.usagi.n;
+    featured.querySelector('.usagi-theme-art').src='assets/usagi/'+(skinTab==='couple'?'heart':'happy')+'.png';
+  }
+  document.getElementById('skin-grid').innerHTML=Object.keys(set).filter(function(k){return !set[k].miniOnly;}).map(function(k){
     var s=set[k];
     var prev = s.g
       ? '<div class="sk-prev" style="background:'+s.g+';border-radius:7px"></div>'
@@ -3629,6 +3660,7 @@ function renderSkinGrid(){
 }
 function pickSkin(el){
   var k=el.dataset.k;
+  if(k==='usagi') applyLayoutMode('minihome',true);
   if(skinTab==='diary') applyDSkin(k); else applyCSkin(k);
   renderSkinGrid();
   if(typeof toast==='function') toast('테마를 바꿨어요');
@@ -3748,6 +3780,7 @@ function applyMode(){
     checkDiaryMonthlyReport();
     checkDiaryEveningReminder();
   }
+  updateUsagiTheme();
   if(typeof updateMinihomeSidebar==='function') setTimeout(function(){updateMinihomeSidebar();},0);
 }
 
@@ -7044,6 +7077,10 @@ function savePartnerNameFromInput2(){
         <button class="sk-tab on" id="sktab-d" onclick="setSkinTab('diary')">📔 일기장</button>
         <button class="sk-tab" id="sktab-c" onclick="setSkinTab('couple')">💑 커플</button>
       </div>
+      <button type="button" class="usagi-theme-choice" id="usagi-theme-choice" data-k="usagi" onclick="pickSkin(this)" aria-pressed="false">
+        <img class="usagi-theme-art" src="assets/usagi/happy.png" alt="" width="2363" height="2363">
+        <span><small>미니홈피 전용</small><b>우사기의 작은 하루</b><em>포근한 연노랑 · 우사기 PNG 장식</em><em class="usagi-layout-hint">선택하면 미니홈피로 전환돼요</em></span><span class="usagi-choice-check" aria-hidden="true">✓</span>
+      </button>
       <div id="skin-grid" class="sk-grid"></div>
     </div>
   </div>
