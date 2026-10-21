@@ -8,55 +8,70 @@
 .usagi-theme-choice b{display:block;font-size:14px;margin-bottom:4px}
 .usagi-theme-choice em{display:block;font-size:10px;font-style:normal;color:#8c7656;line-height:1.6}
 .usagi-choice-check{visibility:hidden;font-size:20px}.usagi-theme-choice.on .usagi-choice-check{visibility:visible}
-body.layout-minihome.theme-usagi{--us-paper:#fffdf5;--us-panel:#fff8e5;--us-line:#e2cea1;--us-ink:#70532f;--us-muted:#9a825e;--us-accent:#f5e6b7;--us-blush:#f2c9c8;background-image:radial-gradient(#d9bd7d55 1px,transparent 1px)!important;background-size:18px 18px!important}
-body.layout-minihome.theme-usagi.mode-couple{--us-blush:#eebcc2;--us-panel:#fff7e9}
-body.layout-minihome.theme-usagi #layout-host{border-color:var(--us-line)!important;box-shadow:0 12px 40px #7e5b2520!important;background:var(--us-paper)!important}
-body.layout-minihome.theme-usagi #mh-window-chrome{background:var(--us-accent)!important;border-color:var(--us-line)!important;color:var(--us-ink)!important}
-body.layout-minihome.theme-usagi .mh-window-title{color:var(--us-ink)!important}
-body.layout-minihome.theme-usagi #mh-left,body.layout-minihome.theme-usagi #mh-right{background:var(--us-panel)!important;border-color:var(--us-line)!important}
-body.layout-minihome.theme-usagi #layout-main{background:var(--us-paper)!important}
-body.layout-minihome.theme-usagi .top-bar{background:var(--us-accent)!important;color:var(--us-ink)!important;border-color:var(--us-line)!important}
-body.layout-minihome.theme-usagi:not(.dark-mode) .top-bar input,body.layout-minihome.theme-usagi:not(.dark-mode) .backup-btn{background:#fffaf0!important;color:var(--us-ink)!important;border-color:var(--us-line)!important}
-body.layout-minihome.theme-usagi .mh-profile-card,body.layout-minihome.theme-usagi #mh-mobile-profile,body.layout-minihome.theme-usagi .mh-panel,body.layout-minihome.theme-usagi .mh-today-note,body.layout-minihome.theme-usagi .mh-vpage-head{border-color:var(--us-line)!important;background:var(--us-paper)!important}
-body.layout-minihome.theme-usagi .mh-profile-name,body.layout-minihome.theme-usagi .mh-mobile-text b,body.layout-minihome.theme-usagi .mh-panel-title,body.layout-minihome.theme-usagi .mh-vpage-head{color:var(--us-ink)!important}
-body.layout-minihome.theme-usagi .mh-avatar,body.layout-minihome.theme-usagi .mh-mobile-avatar{background:var(--us-panel)!important;border-color:var(--us-line)!important}
-body.layout-minihome.theme-usagi .mh-nav-btn{border-color:var(--us-line)!important}
-body.layout-minihome.theme-usagi .mh-nav-btn.on{background:var(--us-accent)!important;color:var(--us-ink)!important;border-color:#b99757!important}
-body.layout-minihome.theme-usagi .mh-sticker{height:154px!important;background:var(--us-paper) url('assets/usagi/sparkle.png') center 4px / 128px 128px no-repeat!important;border-color:var(--us-line)!important}
-body.layout-minihome.theme-usagi .mh-sticker:before{content:none!important}
-body.layout-minihome.theme-usagi .mh-sticker:after{content:'HAPPY LITTLE DAYS';color:var(--us-muted)!important;font-size:8px;bottom:10px}
-body.layout-minihome.theme-usagi.mode-couple .mh-sticker{background-image:url('assets/usagi/heart-backdrop.png')!important;background-size:120px auto!important;background-position:center 10px!important}
-body.layout-minihome.theme-usagi.dark-mode{--us-paper:#29231c;--us-panel:#30291f;--us-line:#645035;--us-ink:#f7e7be;--us-muted:#c1ab86;--us-accent:#4b3c27;--us-blush:#68474b;background-image:radial-gradient(#b99b6330 1px,transparent 1px)!important}
-body.layout-minihome.theme-usagi.dark-mode .mh-nav-btn{background:var(--us-panel)!important;color:var(--us-ink)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware){--us-paper:#fffdf5;--us-panel:#fff8e5;--us-line:#e2cea1;--us-ink:#70532f;--us-muted:#9a825e;--us-accent:#f5e6b7;--us-blush:#f2c9c8;background-image:radial-gradient(#d9bd7d55 1px,transparent 1px)!important;background-size:18px 18px!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-couple{--us-blush:#eebcc2;--us-panel:#fff7e9}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #layout-host{border-color:var(--us-line)!important;box-shadow:0 12px 40px #7e5b2520!important;background:var(--us-paper)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-window-chrome{background:var(--us-accent)!important;border-color:var(--us-line)!important;color:var(--us-ink)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-window-title{color:var(--us-ink)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-left,body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-right{background:var(--us-panel)!important;border-color:var(--us-line)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #layout-main{background:var(--us-paper)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .top-bar{background:var(--us-accent)!important;color:var(--us-ink)!important;border-color:var(--us-line)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware):not(.dark-mode) .top-bar input,body.layout-minihome:is(.theme-usagi,.theme-hachiware):not(.dark-mode) .backup-btn{background:#fffaf0!important;color:var(--us-ink)!important;border-color:var(--us-line)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-profile-card,body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-mobile-profile,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-panel,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-today-note,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-vpage-head{border-color:var(--us-line)!important;background:var(--us-paper)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-profile-name,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-mobile-text b,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-panel-title,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-vpage-head{color:var(--us-ink)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-avatar,body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-mobile-avatar{background:var(--us-panel)!important;border-color:var(--us-line)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-nav-btn{border-color:var(--us-line)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-nav-btn.on{background:var(--us-accent)!important;color:var(--us-ink)!important;border-color:#b99757!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-sticker{height:154px!important;background:var(--us-paper) url('assets/usagi/sparkle.png') center 4px / 128px 128px no-repeat!important;border-color:var(--us-line)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-sticker:before{content:none!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) .mh-sticker:after{content:'HAPPY LITTLE DAYS';color:var(--us-muted)!important;font-size:8px;bottom:10px}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-couple .mh-sticker{background-image:url('assets/usagi/heart-backdrop.png')!important;background-size:120px auto!important;background-position:center 10px!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).dark-mode{--us-paper:#29231c;--us-panel:#30291f;--us-line:#645035;--us-ink:#f7e7be;--us-muted:#c1ab86;--us-accent:#4b3c27;--us-blush:#68474b;background-image:radial-gradient(#b99b6330 1px,transparent 1px)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).dark-mode .mh-nav-btn{background:var(--us-panel)!important;color:var(--us-ink)!important}
 body.dark-mode .usagi-theme-choice{background:#30291f;color:#f7e7be;border-color:#79613d}
 body.dark-mode .usagi-theme-choice small{background:#4b3c27}.dark-mode .usagi-theme-choice em{color:#c1ab86}
 /* A character portrait is used only while the user has no profile photo. */
-body.layout-minihome.theme-usagi #mh-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / 90% auto no-repeat!important}
-body.layout-minihome.theme-usagi #mh-profile-fallback .mh-pixel-scene,body.layout-minihome.theme-usagi #mh-profile-fallback .mh-pixel-face{display:none!important}
-body.layout-minihome.theme-usagi #mh-mobile-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / contain no-repeat!important;font-size:0!important}
-body.layout-minihome.theme-usagi.mode-couple #mh-profile-fallback,body.layout-minihome.theme-usagi.mode-couple #mh-mobile-profile-fallback{background-image:url('assets/usagi/ribbon-profile.png')!important}
-body.layout-minihome.theme-usagi.mode-diary .top-bar,body.layout-minihome.theme-usagi.mode-couple .top-bar{background:var(--us-accent)!important;color:var(--us-ink)!important}
-body.layout-minihome.theme-usagi:not(.dark-mode) .top-bar .sep{color:var(--us-ink)!important;opacity:1}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / 90% auto no-repeat!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-profile-fallback .mh-pixel-scene,body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-profile-fallback .mh-pixel-face{display:none!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #mh-mobile-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / contain no-repeat!important;font-size:0!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-couple #mh-profile-fallback,body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-couple #mh-mobile-profile-fallback{background-image:url('assets/usagi/ribbon-profile.png')!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-diary .top-bar,body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-couple .top-bar{background:var(--us-accent)!important;color:var(--us-ink)!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware):not(.dark-mode) .top-bar .sep{color:var(--us-ink)!important;opacity:1}
 /* Full-body watermark pattern: saturation 0, with a faint separate overlay. */
-body.layout-minihome.theme-usagi{isolation:isolate;background-image:none!important}
-body.layout-minihome.theme-usagi::before,
-body.layout-minihome.theme-usagi #lock-screen::before,
-body.layout-minihome.theme-usagi #lock-screen .lk-mini-main::before{
+body.layout-minihome:is(.theme-usagi,.theme-hachiware){isolation:isolate;background-image:none!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware)::before,
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen::before,
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen .lk-mini-main::before{
   content:'';position:fixed;inset:0;pointer-events:none;
   background:url('assets/usagi/pattern.svg') 0 0 / 360px 360px repeat;
   filter:grayscale(1);opacity:.065;z-index:-1;
 }
-body.layout-minihome.theme-usagi #lock-screen{isolation:isolate}
-body.layout-minihome.theme-usagi #lock-screen::before{z-index:-1}
-body.layout-minihome.theme-usagi #lock-screen .lk-mini-main{isolation:isolate}
-body.layout-minihome.theme-usagi #lock-screen .lk-mini-main::before{position:absolute;background-size:300px 300px;opacity:.045}
-body.layout-minihome.theme-usagi #lock-screen .lk-ico{
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen{isolation:isolate}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen::before{z-index:-1}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen .lk-mini-main{isolation:isolate}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen .lk-mini-main::before{position:absolute;background-size:300px 300px;opacity:.045}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen .lk-ico{
   font-size:0!important;width:78px!important;height:78px!important;
   background:var(--lk-soft) url('assets/usagi/face-lock.png') center / contain no-repeat!important;
   border:0!important;border-radius:12px!important;
 }
-body.layout-minihome.theme-usagi.dark-mode::before,
-body.layout-minihome.theme-usagi.dark-mode #lock-screen::before{opacity:.09;filter:grayscale(1) invert(.7)}
-body.layout-minihome.theme-usagi.mode-couple .mh-sticker{background-size:118px 118px!important;background-position:center 4px!important}
-@media(max-width:599px){body.layout-minihome.theme-usagi::before,body.layout-minihome.theme-usagi #lock-screen::before{background-size:280px 280px}}
-body.layout-minihome.theme-usagi.dark-mode{background-image:none!important}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).dark-mode::before,
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).dark-mode #lock-screen::before{opacity:.09;filter:grayscale(1) invert(.7)}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).mode-couple .mh-sticker{background-size:118px 118px!important;background-position:center 4px!important}
+@media(max-width:599px){body.layout-minihome:is(.theme-usagi,.theme-hachiware)::before,body.layout-minihome:is(.theme-usagi,.theme-hachiware) #lock-screen::before{background-size:280px 280px}}
+body.layout-minihome:is(.theme-usagi,.theme-hachiware).dark-mode{background-image:none!important}
+/* Hachiware shares the minihome structure; each character keeps its own art. */
+.hachiware-theme-choice{background:#f1f9fd;border-color:#bfdce9;color:#3e6a82}
+.hachiware-theme-choice:hover,.hachiware-theme-choice.on{border-color:#679bb6;box-shadow:0 0 0 2px #d9ecf5}
+.hachiware-theme-choice small{background:#dceef6}.hachiware-theme-choice em{color:#64859a}
+body.layout-minihome.theme-hachiware{--us-paper:#fbfdff;--us-panel:#f0f8fc;--us-line:#bfd9e6;--us-ink:#3a6279;--us-muted:#6d8b9c;--us-accent:#d7ebf5;--us-blush:#f2d4df}
+body.layout-minihome.theme-hachiware.mode-couple{--us-panel:#f1f8fd}
+body.layout-minihome.theme-hachiware.dark-mode{--us-paper:#1c2832;--us-panel:#23333f;--us-line:#446174;--us-ink:#dceff9;--us-muted:#a3bdcd;--us-accent:#314c5f;--us-blush:#604856}
+body.layout-minihome.theme-hachiware::before,body.layout-minihome.theme-hachiware #lock-screen::before,body.layout-minihome.theme-hachiware #lock-screen .lk-mini-main::before{background-image:url('assets/hachiware/pattern.svg')}
+body.layout-minihome.theme-hachiware #mh-profile-fallback,body.layout-minihome.theme-hachiware #mh-mobile-profile-fallback,
+body.layout-minihome.theme-hachiware.mode-couple #mh-profile-fallback,body.layout-minihome.theme-hachiware.mode-couple #mh-mobile-profile-fallback{background-image:url('assets/hachiware/profile.png')!important}
+body.layout-minihome.theme-hachiware .mh-sticker{background-image:url('assets/hachiware/shark.png')!important}
+body.layout-minihome.theme-hachiware.mode-couple .mh-sticker{background-image:url('assets/hachiware/heart.png')!important}
+body.layout-minihome.theme-hachiware .mh-nav-btn.on{border-color:#759fb6!important}
+body.layout-minihome.theme-hachiware #lock-screen .lk-ico{background:transparent url('assets/hachiware/face-lock.png') center / contain no-repeat!important;height:78px!important}
+body.dark-mode .hachiware-theme-choice{background:#23333f;color:#dceff9;border-color:#446174}body.dark-mode .hachiware-theme-choice small{background:#314c5f}body.dark-mode .hachiware-theme-choice em{color:#a3bdcd}
