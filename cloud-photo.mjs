@@ -33,33 +33,49 @@ export function makePhotoStore(client,user,bucket='diary-photos'){
     return packed;
   }
   async function upload(snapshot,previous,progress=()=>{},current=()=>true){
-    const photos={},list=[...references(snapshot.values)];let completed=0;
-    await pool(list,async id=>{
+    const photos={},jobs=[];
+    // Decide what really needs a network transfer before showing a counter.
+    await pool([...references(snapshot.values)],async id=>{
       if(!current())throw Object.assign(new Error('사진 전송을 취소했어요.'),{cancelled:true});
       const src=snapshot.photos[id];
       if(typeof src!=='string')throw new Error('사진 원본을 읽지 못했어요. 원본 사진이 있는 기기에서 다시 저장해주세요.');
       if(!src.startsWith('data:')){info(user,id,src);photos[id]=src;return;}
       const image=decode(src),hash=await fingerprint(image.bytes),path=user+'/'+id+'/'+hash+'.'+image.ext;
+      photos[id]=path;
+      if(previous?.format!==2||previous.photos[id]!==path)jobs.push({path,image});
+    });
+    let completed=0;
+    if(jobs.length&&current())progress('☁️ 새 사진 업로드 0/'+jobs.length);
+    await pool(jobs,async({path,image})=>{
       if(!current())throw Object.assign(new Error('사진 전송을 취소했어요.'),{cancelled:true});
-      if(previous?.format!==2||previous.photos[id]!==path){
-        const {error}=await store.upload(path,new Blob([image.bytes],{type:image.mime}),{contentType:image.mime,upsert:false});if(error&&!duplicate(error))throw error;
-      }
-      photos[id]=path;progress('☁️ 사진 업로드 '+(++completed)+'/'+list.length);
+      const {error}=await store.upload(path,new Blob([image.bytes],{type:image.mime}),{contentType:image.mime,upsert:false});
+      if(error&&!duplicate(error))throw error;
+      if(current())progress('☁️ 새 사진 업로드 '+(++completed)+'/'+jobs.length);
     });
     const packed={format:2,values:snapshot.values,photos};
     if(new TextEncoder().encode(JSON.stringify(packed)).length>15*1024*1024)throw new Error('일기 글과 설정 데이터가 너무 커서 저장하지 못했어요.');
     return packed;
   }
   async function hydrate(packed,{cache={},save=async()=>{},progress=()=>{},current=()=>true}={}){
-    validate(packed);const errors=[];let completed=0;const list=[...references(packed.values)];
-    await pool(list,async id=>{
+    validate(packed);const errors=[],jobs=[];
+    await pool([...references(packed.values)],async id=>{
       try{
         if(!current())return;
         const src=packed.photos[id];
         if(packed.format===1){if(cache[id]!==src)await save(id,src);return;}
         const expected=info(user,id,src);
         if(verified.get(src)===cache[id]&&cache[id])return;
-        if(cache[id]&&await fingerprint(decode(cache[id]).bytes)===expected.hash){verified.set(src,cache[id]);return;}
+        // Cache validation is local work, not photo downloading. Do not label it n/all-photos.
+        if(cache[id]){
+          try{if(await fingerprint(decode(cache[id]).bytes)===expected.hash){verified.set(src,cache[id]);return;}}catch{}
+        }
+        jobs.push({id,src,expected});
+      }catch(error){errors.push({id,error});}
+    });
+    let completed=0;
+    if(jobs.length&&current())progress('☁️ 새 사진 받기 0/'+jobs.length);
+    await pool(jobs,async({id,src,expected})=>{
+      try{
         if(!current())return;
         const {data,error}=await store.download(src);if(error)throw error;
         const bytes=new Uint8Array(await data.arrayBuffer());
@@ -68,7 +84,7 @@ export function makePhotoStore(client,user,bucket='diary-photos'){
         const url=encode(bytes,expected.mime);await save(id,url);
         if(current())verified.set(src,url);
       }catch(error){errors.push({id,error});}
-      finally{if(current())progress('☁️ 사진 불러오기 '+(++completed)+'/'+list.length);}
+      finally{if(current())progress('☁️ 새 사진 받기 '+(++completed)+'/'+jobs.length);}
     });
     return errors;
   }

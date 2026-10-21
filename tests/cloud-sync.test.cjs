@@ -61,7 +61,7 @@ test('217 photos do not block text import or a new PC upload',async()=>{
  const db=backend();const a=await device(db);const ids=Array.from({length:217},(_,i)=>'ph_'+(1000+i)+'_abc');
  ids.forEach(id=>a.cache[id]='data:image/png;base64,YQ==');a.set('2026-10-19','217 photos',ids);await a.engine.sync({initialize:true});
  db.photoGate=deferred();const b=await device(db);await b.engine.sync();
- assert.equal(b.entries()['2026-10-19'].body,'217 photos');assert.equal(b.phase(),'synced');assert.equal(db.downloads,4);
+ assert.equal(b.entries()['2026-10-19'].body,'217 photos');assert.equal(b.phase(),'synced');await tick();assert.equal(db.downloads,4);
  b.set('2026-10-20','PC while photos pending');await b.engine.sync();
  assert.equal(JSON.parse(db.row.data.values.diary_v2)['2026-10-20'].body,'PC while photos pending');
  db.photoGate.resolve();await Promise.all(b.jobs);assert.equal(Object.keys(b.cache).length,217);
@@ -161,4 +161,24 @@ test('network response lost after a commit converges without a second overwrite'
  // A committed remote row matching local contents is enough to acknowledge the next sync.
  db.row={version:db.row.version+1,data:{format:2,values:clone(b.values),photos:{}}};
  const before=db.writes;await b.engine.sync();assert.equal(b.phase(),'synced');assert.equal(db.writes,before);
+});
+test('216 cached photos on a new page show no loading counter and make no download requests',async()=>{
+ const [,{makePhotoStore}]=await modules,db=backend();
+ const ids=Array.from({length:216},(_,i)=>'ph_'+(5000+i)+'_abc');
+ const cache=Object.fromEntries(ids.map(id=>[id,'data:image/png;base64,YQ==']));
+ const data={format:1,values:snapshot({d:record('cached',ids)}).values,photos:cache};
+ const packed=await makePhotoStore(db.client,'alice').upload(data,null);
+ const progress=[];const reopened=makePhotoStore(db.client,'alice');
+ const errors=await reopened.hydrate(packed,{cache,save:async()=>assert.fail('cached photos should not be saved again'),progress:s=>progress.push(s)});
+ assert.equal(errors.length,0);assert.equal(db.downloads,0);assert.deepEqual(progress,[]);
+ const uploadProgress=[];await reopened.upload(data,packed,s=>uploadProgress.push(s));assert.deepEqual(uploadProgress,[]);
+});
+test('with 216 cached photos and 2 new photos the loading counter is n/2, never n/218',async()=>{
+ const [,{makePhotoStore}]=await modules,db=backend();
+ const ids=Array.from({length:218},(_,i)=>'ph_'+(6000+i)+'_abc');
+ const photos=Object.fromEntries(ids.map(id=>[id,'data:image/png;base64,YQ==']));
+ const packed=await makePhotoStore(db.client,'alice').upload({format:1,values:snapshot({d:record('new',ids)}).values,photos},null);
+ const cache=Object.fromEntries(ids.slice(0,216).map(id=>[id,photos[id]])),progress=[];
+ const errors=await makePhotoStore(db.client,'alice').hydrate(packed,{cache,save:async(id,data)=>cache[id]=data,progress:s=>progress.push(s)});
+ assert.equal(errors.length,0);assert.equal(db.downloads,2);assert.deepEqual(progress,['☁️ 새 사진 받기 0/2','☁️ 새 사진 받기 1/2','☁️ 새 사진 받기 2/2']);
 });

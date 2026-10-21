@@ -101,7 +101,7 @@ function hydrate(manifest){
   photoSignature=signature;const job=++photoJob,e=epoch,service=photoStore;
   clearTimeout(photoRetry);
   const current=()=>job===photoJob&&e===epoch&&!!user;
-  photoText=merge.references(manifest.values).size?'사진을 준비하고 있어요.':'';render();
+  photoText='';render(); // No loading label for photos already saved on this device.
   void service.hydrate(manifest,{
     cache:window.photoCache,
     current,
@@ -113,7 +113,7 @@ function hydrate(manifest){
     }
   }).then(errors=>{
     if(!current())return;
-    photoText=errors.length?'일기는 연동됐어요. 사진 '+errors.length+'장은 자동으로 다시 받아요.':'사진 연동 완료';render();refreshPhotos();
+    photoText=errors.length?'일기는 연동됐어요. 사진 '+errors.length+'장은 자동으로 다시 받아요.':'';render();refreshPhotos();
     if(errors.length){photoRetry=setTimeout(()=>{if(current()){photoSignature='';hydrate(manifest);}},10000);}
   }).catch(error=>{if(current()){photoText=errorMessage(error);photoSignature='';render();}});
 }
