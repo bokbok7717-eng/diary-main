@@ -2337,7 +2337,8 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 </style>
 
 <!-- Minihome v15: FAVORITES/HOME moved to profile action rail; bottom navigation stays four items -->
-<link rel="stylesheet" href="cloud-sync.css">
+<script>document.documentElement.classList.add("diary-private-locked","diary-auth-checking");</script>
+<link rel="stylesheet" href="cloud-sync.css?v=20261021-1">
 </head>
 <body class="mode-diary">
 
@@ -7483,7 +7484,47 @@ function savePartnerNameFromInput2(){
 </script>
 
 <script src="vendor/supabase-2.49.4.js"></script>
+
+<script>
+/* Sync hooks update the existing models without reloading or discarding an editor. */
+window.diaryHasUnsavedEdits=function(){
+  if(document.querySelector('.entry-modal.open'))return true;
+  var profile=document.getElementById('mh-profile-editor');
+  if(profile&&profile.classList.contains('open'))return true;
+  var saved=entries[selDate]||{},title=document.getElementById('e-title'),body=document.getElementById('e-body');
+  if(!title||!body)return false;
+  return title.value.trim()!==(saved.title||'')||body.value.trim()!==(saved.body||'')||
+    selMood!==(saved.mood||'')||selWeather!==(saved.weather||'')||
+    JSON.stringify(curTags||[])!==JSON.stringify(saved.tags||[])||
+    JSON.stringify(curDiaryPhotos||[])!==JSON.stringify(saved.photos||[]);
+};
+window.diaryRefreshCloudPhotos=function(){
+  renderDiaryPhotoGrid();
+  if(document.querySelector('.entry-modal.open'))renderPhotoGrid();
+  if(document.getElementById('tab-c-gallery')?.classList.contains('active'))renderGallery();
+  if(document.getElementById('tab-c-bucket')?.classList.contains('active'))renderBucket();
+  updateMinihomeProfilePhoto();renderCoupleProfile();
+  if(typeof mhRenderHome==='function')mhRenderHome();
+};
+window.diaryApplyCloudValues=function(){
+  loadDiary();
+  if(!localStorage.getItem(CP_KEY))cpData={startDate:null,anniversaries:[],entries:{},bucket:[],promises:{},bucketCategories:['✈️ 여행','🍽️ 맛집','🎭 문화','💪 도전','🎁 선물','💝 기타']};
+  loadCp();loadDiarySettings();loadDiaryGoal();
+  applyDSkin(getDSkin());applyCSkin(getCSkin());applyFont();
+  if(document.body.dataset.layout!==getLayoutMode())applyLayoutMode(getLayoutMode(),true);
+  var e=entries[selDate]||{};
+  document.getElementById('e-title').value=e.title||'';document.getElementById('e-body').value=e.body||'';
+  curDiaryPhotos=(e.photos||[]).slice();curTags=(e.tags||[]).slice();selMood=e.mood||'';selWeather=e.weather||'';
+  Object.keys(MOOD_IDS).forEach(function(k){document.getElementById(MOOD_IDS[k]).classList.toggle('on',k===selMood);});
+  Object.keys(WEATHER_IDS).forEach(function(k){document.getElementById(WEATHER_IDS[k]).classList.toggle('on',k===selWeather);});
+  renderTags();updCC();renderDiaryPrompt();
+  renderBC();renderFL();renderStatCards();renderHeatmap();
+  renderCpCal();renderAnnivList();renderPlanSummary();renderDday();updateTopDday();renderBucket();
+  window.diaryRefreshCloudPhotos();updateMinihomeSidebar();
+};
+</script>
+
 <script src="cloud-core.js"></script>
-<script src="cloud-sync.js?v=20261019-logout3"></script>
+<script src="cloud-sync.js?v=20261021-1"></script>
 </body>
 </html>

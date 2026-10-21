@@ -16,3 +16,17 @@
 #cloud-dialog .cloud-note{font-size:11px;color:#657064}
 #cloud-dialog a{color:#356943}
 @media(max-width:380px){.top-bar{gap:4px!important}.top-bar #cloud-open{padding:4px 6px}.top-bar .inp-year{width:56px!important}.top-bar .inp-month{width:34px!important}}
+
+/* Keep cached diary content private while resolving auth, without claiming a logout. */
+html.diary-private-locked body{overflow:hidden!important;background:#f6f8f4!important}
+html.diary-private-locked body>:not(#diary-private-gate):not(#cloud-dialog){visibility:hidden!important}
+#diary-private-gate{display:none;position:fixed;inset:0;z-index:2147483640;background:#f6f8f4;color:#263a2c;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:24px;text-align:center;font-family:system-ui,-apple-system,sans-serif}
+html.diary-private-locked #diary-private-gate{display:flex!important;visibility:visible!important}
+#diary-private-gate h2{font-size:23px;margin:0}
+#diary-private-gate p{font-size:15px;line-height:1.7;margin:0;max-width:310px}
+#diary-private-login{background:#4e805c;color:#fff;border:0;border-radius:10px;padding:14px 25px;font-size:16px;font-weight:600;cursor:pointer}
+#diary-private-gate [hidden]{display:none!important}
+html.diary-private-locked #cloud-dialog[open]{visibility:visible!important}
+#cloud-conflicts{border:1px solid #ddbd7b;border-radius:8px;padding:10px;margin-top:12px}
+#cloud-conflict-copy{white-space:pre-line}
+#cloud-photos{font-size:12px!important;color:#657064}

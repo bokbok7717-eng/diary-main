@@ -1,80 +1,81 @@
-/* Private, per-user photo storage for diary sync. No privileged keys. */
-const PHOTO_TYPES={jpeg:'jpg',png:'png',webp:'webp',gif:'gif'};
-const MAX_META_BYTES=15*1024*1024;
-const textEncoder=new TextEncoder();
-const PHOTO_ID=/^ph_[0-9]+_[a-z0-9]+$/;
-const HASH=/^[a-f0-9]{64}$/;
-function hex(bytes){return Array.from(new Uint8Array(bytes),v=>v.toString(16).padStart(2,'0')).join('');}
-function typeFromPath(path){
-  const ext=path.split('.').pop();
-  return ext==='jpg'?'image/jpeg':ext==='png'?'image/png':ext==='webp'?'image/webp':ext==='gif'?'image/gif':null;
+/* Private immutable photos. Metadata synchronizes independently of this bounded background queue. */
+import {references} from './cloud-merge.mjs?v=20261021-1';
+const TYPES={jpeg:'jpg',png:'png',webp:'webp',gif:'gif'};
+const ID=/^ph_[0-9]+_[a-z0-9]+$/,HASH=/^[a-f0-9]{64}$/;
+const hex=b=>Array.from(new Uint8Array(b),v=>v.toString(16).padStart(2,'0')).join('');
+const fingerprint=async bytes=>hex(await crypto.subtle.digest('SHA-256',bytes));
+function decode(url){
+  const m=/^data:image\/(jpeg|png|webp|gif);base64,/.exec(url);
+  if(!m)throw new Error('지원하지 않는 사진 형식이에요.');
+  const raw=atob(url.slice(m[0].length));return{bytes:Uint8Array.from(raw,c=>c.charCodeAt(0)),mime:'image/'+m[1],ext:TYPES[m[1]]};
 }
-function photoBytes(dataUrl){
-  const match=/^data:image\/(jpeg|png|webp|gif);base64,/.exec(dataUrl);
-  if(!match)throw new Error('지원하지 않는 사진 형식이에요.');
-  const encoded=dataUrl.slice(match[0].length),decoded=atob(encoded);
-  const bytes=new Uint8Array(decoded.length);
-  for(let i=0;i<decoded.length;i++)bytes[i]=decoded.charCodeAt(i);
-  return {bytes,mime:'image/'+match[1],ext:PHOTO_TYPES[match[1]]};
+function encode(bytes,mime){const chunks=[];for(let i=0;i<bytes.length;i+=16384)chunks.push(String.fromCharCode(...bytes.subarray(i,i+16384)));return 'data:'+mime+';base64,'+btoa(chunks.join(''));}
+function info(user,id,path){
+  if(!ID.test(id)||typeof path!=='string'||!path.startsWith(user+'/'+id+'/'))throw new Error('사진 접근 권한을 확인해주세요.');
+  const name=path.slice((user+'/'+id+'/').length),dot=name.lastIndexOf('.'),ext=name.slice(dot+1);
+  if(!HASH.test(name.slice(0,dot))||!Object.values(TYPES).includes(ext))throw new Error('클라우드 사진 경로를 확인해주세요.');
+  return{hash:name.slice(0,dot),mime:'image/'+(ext==='jpg'?'jpeg':ext)};
 }
-function toDataUrl(bytes,mime){
-  const parts=[];
-  for(let i=0;i<bytes.length;i+=16384)parts.push(String.fromCharCode(...bytes.subarray(i,i+16384)));
-  return 'data:'+mime+';base64,'+btoa(parts.join(''));
+export async function pool(items,worker,limit=4){
+  let index=0;const result=new Array(items.length);
+  await Promise.all(Array.from({length:Math.min(limit,items.length)},async()=>{while(index<items.length){const i=index++;result[i]=await worker(items[i],i);}}));return result;
 }
-function ensurePath(userId,id,path){
-  if(!PHOTO_ID.test(id)||typeof path!=='string')throw new Error('클라우드 사진 목록이 올바르지 않아요.');
-  const prefix=userId+'/'+id+'/';
-  if(!path.startsWith(prefix))throw new Error('사진 접근 권한을 확인해주세요.');
-  const filename=path.slice(prefix.length),dot=filename.lastIndexOf('.');
-  if(dot<1||!HASH.test(filename.slice(0,dot))||!typeFromPath(path))throw new Error('클라우드 사진 경로가 올바르지 않아요.');
-  return filename.slice(0,dot);
-}
-function duplicate(error){
-  return error&&(String(error.statusCode)==='409'||String(error.status)==='409'||/already exists|duplicate|resource already/i.test(error.message||''));
-}
-/* All cloud writes use immutable, content-addressed paths. Existing files are never overwritten. */
-export function makePhotoStore(client,userId,bucket='diary-photos'){
-  if(!client||typeof userId!=='string'||!userId)throw new Error('먼저 로그인해주세요.');
-  const storage=client.storage.from(bucket);
-  async function fingerprint(bytes){return hex(await crypto.subtle.digest('SHA-256',bytes));}
-  async function upload(snapshot,previous,progress=()=>{}){
-    const photos={},list=Object.entries(snapshot.photos||{});
-    for(let i=0;i<list.length;i++){
-      const [id,dataUrl]=list[i];
-      if(!PHOTO_ID.test(id))throw new Error('사진 식별자를 확인해주세요.');
-      const image=photoBytes(dataUrl);
-      const hash=await fingerprint(image.bytes);
-      const path=userId+'/'+id+'/'+hash+'.'+image.ext;
-      if(previous?.format!==2||previous.photos?.[id]!==path){
-        progress('☁️ 사진 업로드 '+(i+1)+'/'+list.length);
-        const {error}=await storage.upload(path,new Blob([image.bytes],{type:image.mime}),{contentType:image.mime,upsert:false});
-        if(error&&!duplicate(error))throw error;
-      }
-      photos[id]=path;
+const duplicate=e=>e&&(String(e.statusCode||e.status)==='409'||/already exists|duplicate|resource already/i.test(e.message||''));
+export function makePhotoStore(client,user,bucket='diary-photos'){
+  if(!user)throw new Error('먼저 로그인해주세요.');
+  const store=client.storage.from(bucket),verified=new Map();
+  function validate(packed){
+    if(![1,2].includes(packed?.format)||!packed.values||Array.isArray(packed.values)||typeof packed.values!=='object'||!packed.photos||Array.isArray(packed.photos)||typeof packed.photos!=='object')throw new Error('지원하지 않는 클라우드 저장 형식이에요.');
+    for(const id of references(packed.values)){
+      const src=packed.photos[id];if(!ID.test(id)||typeof src!=='string')throw new Error('클라우드의 사진 목록이 올바르지 않아요.');
+      if(packed.format===2)info(user,id,src);else decode(src);
     }
-    const packed={format:2,values:snapshot.values,photos};
-    if(textEncoder.encode(JSON.stringify(packed)).length>MAX_META_BYTES)throw new Error('일기 글과 설정 데이터가 너무 커서 저장하지 못했어요.');
     return packed;
   }
-  async function download(packed,progress=()=>{},cached=null){
-    if(packed?.format===1)return packed;
-    if(packed?.format!==2||!packed.values||typeof packed.values!=='object'||Array.isArray(packed.values)||!packed.photos||typeof packed.photos!=='object'||Array.isArray(packed.photos))throw new Error('지원하지 않는 클라우드 저장 형식이에요.');
-    const photos={},list=Object.entries(packed.photos);
-    for(let i=0;i<list.length;i++){
-      const [id,path]=list[i],hash=ensurePath(userId,id,path);
-      if(cached?.manifest?.format===2&&cached.manifest.photos?.[id]===path&&typeof cached.data?.photos?.[id]==='string'){
-        photos[id]=cached.data.photos[id];
-        continue;
+  async function upload(snapshot,previous,progress=()=>{},current=()=>true){
+    const photos={},list=[...references(snapshot.values)];let completed=0;
+    await pool(list,async id=>{
+      if(!current())throw Object.assign(new Error('사진 전송을 취소했어요.'),{cancelled:true});
+      const src=snapshot.photos[id];
+      if(typeof src!=='string')throw new Error('사진 원본을 읽지 못했어요. 원본 사진이 있는 기기에서 다시 저장해주세요.');
+      if(!src.startsWith('data:')){info(user,id,src);photos[id]=src;return;}
+      const image=decode(src),hash=await fingerprint(image.bytes),path=user+'/'+id+'/'+hash+'.'+image.ext;
+      if(!current())throw Object.assign(new Error('사진 전송을 취소했어요.'),{cancelled:true});
+      if(previous?.format!==2||previous.photos[id]!==path){
+        const {error}=await store.upload(path,new Blob([image.bytes],{type:image.mime}),{contentType:image.mime,upsert:false});if(error&&!duplicate(error))throw error;
       }
-      progress('☁️ 사진 불러오기 '+(i+1)+'/'+list.length);
-      const {data,error}=await storage.download(path);
-      if(error)throw error;
-      const bytes=new Uint8Array(await data.arrayBuffer());
-      if(await fingerprint(bytes)!==hash)throw new Error('사진 데이터가 손상되어 가져오기를 중단했어요.');
-      photos[id]=toDataUrl(bytes,typeFromPath(path));
-    }
-    return {format:1,values:packed.values,photos};
+      photos[id]=path;progress('☁️ 사진 업로드 '+(++completed)+'/'+list.length);
+    });
+    const packed={format:2,values:snapshot.values,photos};
+    if(new TextEncoder().encode(JSON.stringify(packed)).length>15*1024*1024)throw new Error('일기 글과 설정 데이터가 너무 커서 저장하지 못했어요.');
+    return packed;
   }
-  return {upload,download};
+  async function hydrate(packed,{cache={},save=async()=>{},progress=()=>{},current=()=>true}={}){
+    validate(packed);const errors=[];let completed=0;const list=[...references(packed.values)];
+    await pool(list,async id=>{
+      try{
+        if(!current())return;
+        const src=packed.photos[id];
+        if(packed.format===1){if(cache[id]!==src)await save(id,src);return;}
+        const expected=info(user,id,src);
+        if(verified.get(src)===cache[id]&&cache[id])return;
+        if(cache[id]&&await fingerprint(decode(cache[id]).bytes)===expected.hash){verified.set(src,cache[id]);return;}
+        if(!current())return;
+        const {data,error}=await store.download(src);if(error)throw error;
+        const bytes=new Uint8Array(await data.arrayBuffer());
+        if(await fingerprint(bytes)!==expected.hash)throw new Error('사진 데이터가 손상되어 다시 확인해야 해요.');
+        if(!current())return;
+        const url=encode(bytes,expected.mime);await save(id,url);
+        if(current())verified.set(src,url);
+      }catch(error){errors.push({id,error});}
+      finally{if(current())progress('☁️ 사진 불러오기 '+(++completed)+'/'+list.length);}
+    });
+    return errors;
+  }
+  // Compatibility for callers that explicitly need a complete export.
+  async function download(packed,progress=()=>{},cached=null){
+    const photos={...(cached?.data?.photos||{})};const errors=await hydrate(packed,{cache:photos,save:async(id,url)=>{photos[id]=url;},progress});
+    if(errors.length)throw errors[0].error;return{format:1,values:packed.values,photos};
+  }
+  return {validate,upload,hydrate,download};
 }
