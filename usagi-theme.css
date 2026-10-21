@@ -1,5 +1,4 @@
 /* Usagi art is decorative. User photos and record contents remain separate. */
-.usagi-welcome{display:none}
 .usagi-theme-choice{width:100%;display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:12px;border:1px solid #e9d7a7;border-radius:12px;background:#fff9e9;text-align:left;color:#71532e;font-family:inherit;cursor:pointer}
 .usagi-theme-choice:hover,.usagi-theme-choice.on{border-color:#a47a35;box-shadow:0 0 0 2px #f6e6b7}
 .usagi-theme-choice:focus-visible{outline:3px solid #a47a35;outline-offset:3px}
@@ -27,22 +26,10 @@ body.layout-minihome.theme-usagi .mh-sticker{height:154px!important;background:v
 body.layout-minihome.theme-usagi .mh-sticker:before{content:none!important}
 body.layout-minihome.theme-usagi .mh-sticker:after{content:'HAPPY LITTLE DAYS';color:var(--us-muted)!important;font-size:8px;bottom:10px}
 body.layout-minihome.theme-usagi.mode-couple .mh-sticker{background-image:url('assets/usagi/heart.png')!important;background-size:120px auto!important;background-position:center 10px!important}
-body.layout-minihome.theme-usagi .usagi-welcome{display:flex;align-items:center;justify-content:space-between;min-height:112px;padding:12px 24px;margin:0 0 14px;border:1px solid var(--us-line);border-radius:12px;background:linear-gradient(110deg,var(--us-panel),var(--us-accent));overflow:hidden;gap:8px}
-.usagi-welcome-copy{display:flex;flex-direction:column;min-width:0;gap:6px;color:var(--us-ink)}
-.usagi-eyebrow{font-size:9px;letter-spacing:.2em;font-weight:700;color:var(--us-muted)}
-.usagi-welcome strong{font-size:19px;letter-spacing:-.6px;line-height:1.4;word-break:keep-all}
-.usagi-caption{font-size:10px;color:var(--us-muted)}
-.usagi-welcome img{width:108px;height:108px;object-fit:contain;flex-shrink:0}
-.usagi-couple-copy,.usagi-welcome-couple{display:none!important}
-.mode-couple .usagi-diary-copy,.mode-couple .usagi-welcome-diary{display:none!important}
-.mode-couple .usagi-couple-copy{display:block!important}.mode-couple .usagi-welcome-couple{display:block!important}
-body.layout-minihome.theme-usagi.mode-couple .usagi-welcome{background:linear-gradient(110deg,var(--us-panel) 30%,var(--us-accent) 75%,var(--us-blush))}
 body.layout-minihome.theme-usagi.dark-mode{--us-paper:#29231c;--us-panel:#30291f;--us-line:#645035;--us-ink:#f7e7be;--us-muted:#c1ab86;--us-accent:#4b3c27;--us-blush:#68474b;background-image:radial-gradient(#b99b6330 1px,transparent 1px)!important}
 body.layout-minihome.theme-usagi.dark-mode .mh-nav-btn{background:var(--us-panel)!important;color:var(--us-ink)!important}
 body.dark-mode .usagi-theme-choice{background:#30291f;color:#f7e7be;border-color:#79613d}
 body.dark-mode .usagi-theme-choice small{background:#4b3c27}.dark-mode .usagi-theme-choice em{color:#c1ab86}
-@media(max-width:899px){body.layout-minihome.theme-usagi .usagi-welcome{min-height:96px;padding:10px 14px;margin-bottom:10px;gap:5px}.usagi-welcome strong{font-size:17px}.usagi-welcome img{width:90px;height:90px}.usagi-caption{font-size:9px}}
-@media(max-width:380px){.usagi-welcome strong{font-size:15px}.usagi-welcome img{width:76px;height:84px}.usagi-welcome .usagi-eyebrow{font-size:8px}}
 /* A character portrait is used only while the user has no profile photo. */
 body.layout-minihome.theme-usagi #mh-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / 90% auto no-repeat!important}
 body.layout-minihome.theme-usagi #mh-profile-fallback .mh-pixel-scene,body.layout-minihome.theme-usagi #mh-profile-fallback .mh-pixel-face{display:none!important}
