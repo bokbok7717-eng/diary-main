@@ -34,7 +34,7 @@ body.dark-mode .usagi-theme-choice small{background:#4b3c27}.dark-mode .usagi-th
 body.layout-minihome.theme-usagi #mh-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / 90% auto no-repeat!important}
 body.layout-minihome.theme-usagi #mh-profile-fallback .mh-pixel-scene,body.layout-minihome.theme-usagi #mh-profile-fallback .mh-pixel-face{display:none!important}
 body.layout-minihome.theme-usagi #mh-mobile-profile-fallback{background:var(--us-panel) url('assets/usagi/happy.png') center / contain no-repeat!important;font-size:0!important}
-body.layout-minihome.theme-usagi.mode-couple #mh-profile-fallback,body.layout-minihome.theme-usagi.mode-couple #mh-mobile-profile-fallback{background-image:url('assets/usagi/heart-backdrop.png')!important}
+body.layout-minihome.theme-usagi.mode-couple #mh-profile-fallback,body.layout-minihome.theme-usagi.mode-couple #mh-mobile-profile-fallback{background-image:url('assets/usagi/ribbon-profile.png')!important}
 body.layout-minihome.theme-usagi.mode-diary .top-bar,body.layout-minihome.theme-usagi.mode-couple .top-bar{background:var(--us-accent)!important;color:var(--us-ink)!important}
 body.layout-minihome.theme-usagi:not(.dark-mode) .top-bar .sep{color:var(--us-ink)!important;opacity:1}
 /* Full-body watermark pattern: saturation 0, with a faint separate overlay. */
@@ -52,10 +52,9 @@ body.layout-minihome.theme-usagi #lock-screen .lk-mini-main{isolation:isolate}
 body.layout-minihome.theme-usagi #lock-screen .lk-mini-main::before{position:absolute;background-size:300px 300px;opacity:.045}
 body.layout-minihome.theme-usagi #lock-screen .lk-ico{
   font-size:0!important;width:78px!important;height:78px!important;
-  background:var(--lk-soft) url('assets/usagi/happy.png') center / contain no-repeat!important;
+  background:var(--lk-soft) url('assets/usagi/face-lock.png') center / contain no-repeat!important;
   border:0!important;border-radius:12px!important;
 }
-body.layout-minihome.theme-usagi.mode-couple #lock-screen .lk-ico{background-image:url('assets/usagi/heart-backdrop.png')!important}
 body.layout-minihome.theme-usagi.dark-mode::before,
 body.layout-minihome.theme-usagi.dark-mode #lock-screen::before{opacity:.09;filter:grayscale(1) invert(.7)}
 body.layout-minihome.theme-usagi.mode-couple .mh-sticker{background-size:118px 118px!important;background-position:center 4px!important}

@@ -9,3 +9,5 @@ Original images are used without raster edits.
 - heart.png: https://r2.chiikawawallpaper.com/wallpaper/20260913/4656804e239c2547482382bd989d3b84.png
 
 User-supplied PNGs (2026-10-21): broom.png, balloons.png, heart-backdrop.png. Original files preserved. pattern.svg arranges the full-body PNGs; CSS applies grayscale and low opacity.
+
+User correction (2026-10-21): ribbon-profile.png is the couple default profile; face-lock.png is the face-only lock icon for both modes. Source PNGs preserved without raster edits.
