@@ -6087,52 +6087,153 @@ function saveDiaryCard(){
 
 /* 카드를 실제 이미지로 굽는다.
    글꼴을 담은 상태에서 실패하면(데이터가 너무 큼 등) 글꼴 없이 한 번 더 시도한다. */
-function renderCardImage(node, btn, hint, fontCSS, canRetry){
-  (function(){
-    var w=node.offsetWidth, h=node.offsetHeight, scale=3;
-    /* 스타일 전체(약 170KB)를 넣으면 데이터가 너무 커져 이미지 변환이 실패한다.
-       카드에 실제로 쓰이는 규칙만 추려서 담는다. */
-    var baseCSS=collectCardCSS();
-    var clone=node.cloneNode(true);
-    /* 주의: 아래 태그 이름을 문자열로 직접 쓰지 않는다.
-       파일 안에 style 종료 태그가 그대로 있으면 CSS 자동 삽입 도구가
-       스타일 영역의 끝으로 오인해 이 자바스크립트 안에 CSS를 끼워 넣는 사고가 난다. */
+/* Reduce only the images inside the exported card. Original diary photos are untouched. */
+function cardExportImage(src, maxEdge, quality){
+  return new Promise(function(resolve){
+    if(!src || !/^data:image\//i.test(src)){resolve(src);return;}
+    var photo=new Image();
+    photo.onload=function(){
+      try{
+        var w=photo.naturalWidth,h=photo.naturalHeight;
+        if(!w||!h){resolve(src);return;}
+        var ratio=Math.min(1,maxEdge/Math.max(w,h));
+        var canvas=document.createElement('canvas');
+        canvas.width=Math.max(1,Math.round(w*ratio));
+        canvas.height=Math.max(1,Math.round(h*ratio));
+        canvas.getContext('2d').drawImage(photo,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+        canvas.width=canvas.height=1;
+      }catch(err){resolve(src);}
+    };
+    photo.onerror=function(){resolve(src);};
+    photo.src=src;
+  });
+}
+async function cardOptimizeImages(clone, maxEdge, quality){
+  var photos=[].slice.call(clone.querySelectorAll('img'));
+  for(var i=0;i<photos.length;i++){
+    var original=photos[i].getAttribute('src')||'';
+    if(original)photos[i].setAttribute('src',await cardExportImage(original,maxEdge,quality));
+  }
+}
+function cardSaveCanvas(canvas,btn,hint){
+  try{
+    canvas.toBlob(function(blob){
+      if(!blob){cardReset(btn,hint);toast('이미지 저장에 실패했어요');return;}
+      var url=URL.createObjectURL(blob);
+      var a=document.createElement('a');
+      a.href=url;a.download='diary_'+cardDate+'.png';
+      document.body.appendChild(a);a.click();document.body.removeChild(a);
+      setTimeout(function(){URL.revokeObjectURL(url);},10000);
+      cardReset(btn,hint);
+      toast('🖼️ 카드를 저장했어요!');
+    },'image/png');
+  }catch(err){cardReset(btn,hint);toast('이미지 저장에 실패했어요');}
+}
+/* WebKit sometimes refuses to load an SVG with foreignObject even when
+   the embedded photos are small. Draw the existing card layout directly to
+   canvas instead, preserving the photos, text, and backgrounds. */
+function cardCanvasFallback(node,btn,hint){
+  hint.textContent='아이폰 호환 방식으로 카드 만드는 중…';
+  try{
+    var w=node.offsetWidth,h=node.offsetHeight;
+    if(!w||!h)throw Error('empty card');
+    var scale=2,cv=document.createElement('canvas');
+    cv.width=Math.ceil(w*scale);cv.height=Math.ceil(h*scale);
+    var ctx=cv.getContext('2d');
+    if(!ctx)throw Error('canvas unavailable');
+    ctx.scale(scale,scale);
+    var origin=node.getBoundingClientRect();
+    ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
+    function paint(el){
+      if(el.nodeType!==1)return;
+      var cs=getComputedStyle(el),r=el.getBoundingClientRect();
+      var x=r.left-origin.left,y=r.top-origin.top,ew=r.width,eh=r.height;
+      if(!ew||!eh)return;
+      if(cs.visibility==='hidden'||cs.display==='none')return;
+      ctx.save();
+      var bg=cs.backgroundColor;
+      if(bg&&bg!=='transparent'&&bg!=='rgba(0, 0, 0, 0)'){
+        ctx.fillStyle=bg;ctx.fillRect(x,y,ew,eh);
+      }
+      if(el.tagName==='IMG'&&el.complete&&el.naturalWidth){
+        var iw=el.naturalWidth,ih=el.naturalHeight;
+        var cover=cs.objectFit==='cover',sx=0,sy=0,sw=iw,sh=ih;
+        if(cover){
+          var aspect=ew/eh,srcAspect=iw/ih;
+          if(srcAspect>aspect){sw=ih*aspect;sx=(iw-sw)/2;}
+          else{sh=iw/aspect;sy=(ih-sh)/2;}
+        }
+        ctx.drawImage(el,sx,sy,sw,sh,x,y,ew,eh);
+      }else if(!el.children.length&&el.textContent.trim()){
+        var size=parseFloat(cs.fontSize)||13;
+        ctx.font=(cs.fontWeight||'400')+' '+size+'px '+(cs.fontFamily||'sans-serif');
+        ctx.fillStyle=cs.color||'#333';
+        ctx.textAlign=cs.textAlign==='right'?'right':cs.textAlign==='center'?'center':'left';
+        ctx.textBaseline='top';
+        var lineHeight=parseFloat(cs.lineHeight)||size*1.5;
+        var tx=ctx.textAlign==='right'?x+ew:ctx.textAlign==='center'?x+ew/2:x;
+        var ty=y;
+        String(el.textContent).split('\n').forEach(function(paragraph){
+          var line='';
+          Array.from(paragraph).forEach(function(ch){
+            if(line&&ctx.measureText(line+ch).width>ew){
+              ctx.fillText(line,tx,ty);ty+=lineHeight;line=ch;
+            }else line+=ch;
+          });
+          if(line)ctx.fillText(line,tx,ty);
+          ty+=lineHeight;
+        });
+      }
+      ctx.restore();
+      [].forEach.call(el.children,paint);
+    }
+    paint(node);
+    cardSaveCanvas(cv,btn,hint);
+  }catch(err){
+    console.warn('Diary card fallback failed',err);
+    cardReset(btn,hint);
+    toast('카드 저장에 실패했어요. 다시 시도해주세요');
+  }
+}
+function renderCardImage(node,btn,hint,fontCSS,canRetry,compact){
+  compact=!!compact;
+  (async function(){
+    var w=node.offsetWidth,h=node.offsetHeight,scale=2;
+    if(!w||!h){cardReset(btn,hint);toast('카드 크기를 확인할 수 없어요');return;}
+    var baseCSS=collectCardCSS(),clone=node.cloneNode(true);
+    hint.textContent='사진을 카드용으로 최적화하는 중…';
+    await cardOptimizeImages(clone,compact?360:640,compact?.58:.78);
     var ST='st'+'yle';
     var inner='<div xmlns="http://www.w3.org/1999/xhtml"><'+ST+'>'+baseCSS+fontCSS+'</'+ST+'>'
       +'<div style="width:'+w+'px">'+clone.outerHTML+'</div></div>';
     var svg='<svg xmlns="http://www.w3.org/2000/svg" width="'+w+'" height="'+h+'">'
       +'<foreignObject width="100%" height="100%">'+inner+'</foreignObject></svg>';
-
     var img=new Image();
     img.onload=function(){
-      var cv=document.createElement('canvas');
-      cv.width=w*scale; cv.height=h*scale;
-      var ctx=cv.getContext('2d');
-      ctx.fillStyle='#fff'; ctx.fillRect(0,0,cv.width,cv.height);
-      ctx.scale(scale,scale); ctx.drawImage(img,0,0);
-      cv.toBlob(function(blob){
-        cardReset(btn,hint);
-        if(!blob){ toast('이미지 만들기에 실패했어요'); return; }
-        var url=URL.createObjectURL(blob);
-        var a=document.createElement('a');
-        a.href=url; a.download='diary_'+cardDate+'.png';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-        setTimeout(function(){URL.revokeObjectURL(url);},1500);
-        toast('🖼️ 카드를 저장했어요!');
-      },'image/png');
+      try{
+        var cv=document.createElement('canvas');
+        cv.width=Math.ceil(w*scale);cv.height=Math.ceil(h*scale);
+        var ctx=cv.getContext('2d');
+        ctx.fillStyle='#fff';ctx.fillRect(0,0,cv.width,cv.height);
+        ctx.scale(scale,scale);ctx.drawImage(img,0,0,w,h);
+        cardSaveCanvas(cv,btn,hint);
+      }catch(err){cardCanvasFallback(node,btn,hint);}
     };
     img.onerror=function(){
-      if(canRetry && fontCSS){
-        // 글꼴 데이터가 원인일 수 있으니 글꼴 없이 다시 시도
-        hint.textContent='글꼴 없이 다시 만드는 중…';
-        renderCardImage(node, btn, hint, '', false);
-        return;
-      }
-      cardReset(btn,hint);
-      toast('이미지 변환에 실패했어요. 사진을 줄여보세요');
+      if(canRetry&&fontCSS){
+        hint.textContent='기본 글꼴로 다시 만드는 중…';
+        renderCardImage(node,btn,hint,'',false,false);
+      }else if(!compact){
+        hint.textContent='사진 용량을 더 줄여 다시 만드는 중…';
+        renderCardImage(node,btn,hint,'',false,true);
+      }else cardCanvasFallback(node,btn,hint);
     };
     img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg);
-  })();
+  })().catch(function(err){
+    console.warn('Diary card conversion error',err);
+    cardCanvasFallback(node,btn,hint);
+  });
 }
 function cardReset(btn,hint){
   btn.disabled=false; btn.textContent='🖼️ 이미지로 저장';
