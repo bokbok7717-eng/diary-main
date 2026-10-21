@@ -70,7 +70,7 @@ body.layout-minihome.theme-hachiware.dark-mode{--us-paper:#1c2832;--us-panel:#23
 body.layout-minihome.theme-hachiware::before,body.layout-minihome.theme-hachiware #lock-screen::before,body.layout-minihome.theme-hachiware #lock-screen .lk-mini-main::before{background-image:url('assets/hachiware/pattern.svg')}
 body.layout-minihome.theme-hachiware #mh-profile-fallback,body.layout-minihome.theme-hachiware #mh-mobile-profile-fallback,
 body.layout-minihome.theme-hachiware.mode-couple #mh-profile-fallback,body.layout-minihome.theme-hachiware.mode-couple #mh-mobile-profile-fallback{background-image:url('assets/hachiware/profile.png')!important}
-body.layout-minihome.theme-hachiware .mh-sticker{background-image:url('assets/hachiware/shark.png')!important}
+body.layout-minihome.theme-hachiware .mh-sticker{background-image:url('assets/hachiware/profile.png')!important}
 body.layout-minihome.theme-hachiware.mode-couple .mh-sticker{background-image:url('assets/hachiware/heart.png')!important}
 body.layout-minihome.theme-hachiware .mh-nav-btn.on{border-color:#759fb6!important}
 body.layout-minihome.theme-hachiware #lock-screen .lk-ico{background:transparent url('assets/hachiware/face-lock.png') center / contain no-repeat!important;height:78px!important}
