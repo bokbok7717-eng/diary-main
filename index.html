@@ -2339,7 +2339,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <!-- Minihome v15: FAVORITES/HOME moved to profile action rail; bottom navigation stays four items -->
 <script>document.documentElement.classList.add("diary-private-locked","diary-auth-checking");</script>
 <link rel="stylesheet" href="cloud-sync.css?v=20261021-1">
-<link rel="stylesheet" href="usagi-theme.css?v=20261021-6">
+<link rel="stylesheet" href="usagi-theme.css?v=20261021-7">
 </head>
 <body class="mode-diary">
 
@@ -2992,6 +2992,7 @@ var D_SKIN_KEY='diary_skin_v1', C_SKIN_KEY='couple_skin_v1';
 var skinTab='diary';
 
 var D_SKINS={
+  chiikawa:{n:'치이카와의 작은 하루',miniOnly:true,m:'#bb8192',d:'#915e6d',l:'#e9bac8',lt:'#f4d9e1',lt2:'#faeaf0',lt3:'#fff8fa',pg:'#fceef3',bg:'#23191e',card:'#35272e',card2:'#3e2d35',bd:'#5e414e',tb:'#4d3340'},
   hachiware:{n:'하치와레의 작은 하루',miniOnly:true,m:'#5b93b1',d:'#3e708c',l:'#a7cfdf',lt:'#d1e9f3',lt2:'#e6f3f9',lt3:'#f5fbfe',pg:'#e9f4fa',bg:'#151e26',card:'#20313d',card2:'#263945',bd:'#395364',tb:'#2a4352'},
   usagi:{n:'우사기의 작은 하루',miniOnly:true,m:'#b28a3d',d:'#82602e',l:'#ead28e',lt:'#f8eabd',lt2:'#fcf3d5',lt3:'#fff9e9',pg:'#fbf1d1',bg:'#211c14',card:'#30291c',card2:'#393020',bd:'#56472c',tb:'#493b24'},
   freshgreen:{n:'새싹',m:'#8fc47a',d:'#70995f',l:'#aed59f',lt:'#cde4c3',lt2:'#e6f2e2',lt3:'#f4f9f2',pg:'#f9fcf8',g:'linear-gradient(120deg,#9ccf88,#bcd98e,#dbe39a)',gd:'linear-gradient(120deg,#465d3d,#556240,#636645)',
@@ -3016,6 +3017,7 @@ var D_SKINS={
     bg:'#141a16',card:'#1e2c22',card2:'#223026',bd:'#324434',tb:'#2c3c30'}
 };
 var C_SKINS={
+  chiikawa:{n:'치이카와와 우리 둘',miniOnly:true,m:'#bb8192',d:'#915e6d',l:'#e9bac8',lt:'#f4d9e1',lt2:'#faeaf0',lt3:'#fff8fa',pg:'#fceef3',bg:'#23191e',card:'#35272e',card2:'#3e2d35',bd:'#5e414e',tb:'#4d3340',lt4:'#efb5c8',cell:'#fff2f6'},
   hachiware:{n:'하치와레와 우리 둘',miniOnly:true,m:'#5b93b1',d:'#3e708c',l:'#a7cfdf',lt:'#d1e9f3',lt2:'#e6f3f9',lt3:'#f5fbfe',pg:'#e9f4fa',bg:'#151e26',card:'#20313d',card2:'#263945',bd:'#395364',tb:'#2a4352',lt4:'#f0cad7',cell:'#edf7fc'},
   usagi:{n:'우사기와 우리 둘',miniOnly:true,m:'#b28a3d',d:'#82602e',l:'#ead28e',lt:'#f8eabd',lt2:'#fcf3d5',lt3:'#fff9ed',pg:'#fcf1d7',lt4:'#efc1c5',cell:'#fff2ec',bg:'#231b17',card:'#352820',card2:'#3d3027',bd:'#5c4634',tb:'#49372a'},
   blossom:{n:'벚꽃',m:'#f2a8bc',d:'#bd8393',l:'#f6c0cf',lt:'#f9d8e1',lt2:'#fcecf0',lt3:'#fef6f8',pg:'#fefafb',lt4:'#f7cbd7',cell:'#fef7f9',g:'linear-gradient(120deg,#f5b3c5,#f7c8d6,#fadfe6)',gd:'linear-gradient(120deg,#6e5159,#6f5a60,#706467)',
@@ -3053,6 +3055,7 @@ function updateUsagiTheme(){
   var active=document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='usagi';
   document.body.classList.toggle('theme-usagi',active);
   document.body.classList.toggle('theme-hachiware',document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='hachiware');
+  document.body.classList.toggle('theme-chiikawa',document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='chiikawa');
 }
 
 /* canvas(fillStyle)는 var(--x)를 해석하지 못하므로 실제 색상값을 꺼내 쓴다 */
@@ -3639,14 +3642,15 @@ function setSkinTab(t){
 function renderSkinGrid(){
   var set=skinTab==='diary'?D_SKINS:C_SKINS;
   var cur=skinTab==='diary'?getDSkin():getCSkin();
-  ['usagi','hachiware'].forEach(function(k){
+  ['usagi','hachiware','chiikawa'].forEach(function(k){
     var featured=document.getElementById(k+'-theme-choice');
     if(!featured) return;
     var selected=cur===k&&getLayoutMode()==='minihome';
     featured.classList.toggle('on',selected);
     featured.setAttribute('aria-pressed',String(selected));
     featured.querySelector('b').textContent=set[k].n;
-    featured.querySelector('.usagi-theme-art').src=k==='hachiware'?'assets/hachiware/'+(skinTab==='couple'?'heart':'profile')+'.png':'assets/usagi/'+(skinTab==='couple'?'heart-backdrop':'happy')+'.png';
+    var art=k==='chiikawa'?'assets/chiikawa/'+(skinTab==='couple'?'magical-profile':'melon-profile')+'.png':k==='hachiware'?'assets/hachiware/shark.png':'assets/usagi/'+(skinTab==='couple'?'heart-backdrop':'happy')+'.png';
+    featured.querySelector('.usagi-theme-art').src=art;
   });
   document.getElementById('skin-grid').innerHTML=Object.keys(set).filter(function(k){return !set[k].miniOnly;}).map(function(k){
     var s=set[k];
@@ -7085,6 +7089,10 @@ function savePartnerNameFromInput2(){
       <button type="button" class="usagi-theme-choice hachiware-theme-choice" id="hachiware-theme-choice" data-k="hachiware" onclick="pickSkin(this)" aria-pressed="false">
         <img class="usagi-theme-art" src="assets/hachiware/profile.png" alt="" width="2363" height="2363">
         <span><small>미니홈피 전용</small><b>하치와레의 작은 하루</b><em>맑은 하늘색 · 하치와레 PNG 장식</em><em>선택하면 미니홈피로 전환돼요</em></span><span class="usagi-choice-check" aria-hidden="true">✓</span>
+      </button>
+      <button type="button" class="usagi-theme-choice chiikawa-theme-choice" id="chiikawa-theme-choice" data-k="chiikawa" onclick="pickSkin(this)" aria-pressed="false">
+        <img class="usagi-theme-art" src="assets/chiikawa/melon-profile.png" alt="" width="2364" height="2363">
+        <span><small>미니홈피 전용</small><b>치이카와의 작은 하루</b><em>포근한 연분홍 · 치이카와 PNG 장식</em><em>선택하면 미니홈피로 전환돼요</em></span><span class="usagi-choice-check" aria-hidden="true">✓</span>
       </button>
       <div id="skin-grid" class="sk-grid"></div>
     </div>
