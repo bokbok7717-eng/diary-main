@@ -2343,6 +2343,9 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <link rel="stylesheet" href="mood-characters.css?v=20261022-2">
 <script src="vendor/omggif-1.0.10.js"></script>
 <script src="mood-gif.js?v=20261022-1"></script>
+<link rel="stylesheet" href="bgm-player.css?v=20261022-2">
+<script src="bgm-tracks.js?v=20261022-1"></script>
+<script defer src="bgm-player.js?v=20261022-2"></script>
 </head>
 <body class="mode-diary">
 
@@ -2416,6 +2419,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
       </div>
     </div>
     <div class="mh-today-note" onclick="openMinihomeProfileEditor()" title="문구 편집"><div class="mh-note-head"><b>TODAY'S NOTE</b><span>edit</span></div><span id="mh-note">작은 기록도 모이면 나만의 시간이 돼요 ♡</span></div>
+    <div id="mh-bgm-desktop-slot"></div>
   </aside>
   <main id="layout-main">
     <div id="mh-mobile-profile">
@@ -2427,6 +2431,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
       <div class="mh-mobile-text">
         <div class="mh-mobile-titleline"><b id="mh-mobile-title">MY DIARY</b><span class="mh-mobile-online">● online</span></div>
         <span id="mh-mobile-status">오늘의 마음을 천천히 기록하는 작은 공간.</span>
+        <div id="mh-bgm-mobile-slot"></div>
         <div class="mh-mobile-meta"><span>TODAY <b id="mh-mobile-today">1</b></span><span>TOTAL <b id="mh-mobile-total">0</b></span><span id="mh-mobile-stat-label">THIS MONTH</span> <b id="mh-mobile-stat">0</b></div>
       </div>
       <div class="mh-mobile-actions">
@@ -3098,6 +3103,7 @@ function updateUsagiTheme(){
   document.body.classList.toggle('theme-hachiware',document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='hachiware');
   document.body.classList.toggle('theme-chiikawa',document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='chiikawa');
   refreshMoodCharacters();
+  if(window.DiaryBgm)window.DiaryBgm.refresh();
 }
 
 /* canvas(fillStyle)는 var(--x)를 해석하지 못하므로 실제 색상값을 꺼내 쓴다 */
@@ -7619,6 +7625,20 @@ window.diaryApplyCloudValues=function(){
   window.diaryRefreshCloudPhotos();updateMinihomeSidebar();
 };
 </script>
+
+
+<section id="mh-bgm" class="bgm-player" aria-label="테마 배경음악" hidden>
+  <div class="bgm-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 18V5l12-2v13M9 8l12-2"/><ellipse cx="5" cy="18" rx="4" ry="3"/><ellipse cx="17" cy="16" rx="4" ry="3"/></svg> MY PLAYLIST</div>
+  <img class="bgm-cover" alt="앨범커버">
+  <div class="bgm-copy"><div class="bgm-copy-text"><strong class="bgm-title"></strong><span class="bgm-artist"></span></div></div>
+  <div class="bgm-progress"><input class="bgm-seek" type="range" min="0" max="1" step="0.1" value="0" aria-label="음악 재생 위치" disabled><div class="bgm-times"><span class="bgm-current">0:00</span><span class="bgm-duration">0:00</span></div></div>
+  <div class="bgm-controls">
+    <button type="button" class="bgm-skip" data-skip="-10" aria-label="10초 전" title="10초 전" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5v14l-9-7zm10 0v14l-9-7z"/></svg><small>10</small></button>
+    <button type="button" class="bgm-toggle" aria-label="재생" aria-pressed="false" disabled><svg class="bgm-play-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16l14-8z"/></svg><svg class="bgm-pause-icon" viewBox="0 0 24 24" aria-hidden="true" hidden><path d="M6 4h4v16H6zm8 0h4v16h-4z"/></svg></button>
+    <button type="button" class="bgm-skip" data-skip="10" aria-label="10초 후" title="10초 후" disabled><small>10</small><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5v14l9-7zm10 0v14l9-7z"/></svg></button>
+  </div>
+  <p class="bgm-status" role="status"></p>
+</section>
 
 <script src="cloud-core.js"></script>
 <script src="cloud-sync.js?v=20261021-1"></script>
