@@ -12,7 +12,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 test('metadata uses the requested title, artist and distinct covers for all themes',()=>{
  assert.equal(tracks.usagi.title,'우사기랩');assert.equal(tracks.chiikawa.artist,'파자마 파티스');assert.equal(tracks.hachiware.title,'ひとりごつ');
  assert.equal(new Set(Object.values(tracks).map(t=>t.cover)).size,3);
- for(const t of Object.values(tracks))assert.equal(t.audioUrl,'','no extracted or placeholder audio is published');
+ for(const [skin,t] of Object.entries(tracks)){assert.equal(t.audioUrl,`assets/bgm/${skin}.mp3`);const bytes=require('node:fs').readFileSync(require('node:path').join(__dirname,'..',t.audioUrl));assert.ok(bytes.length>1000);assert.ok(bytes.subarray(0,3).toString()==='ID3'||bytes[0]===255,'provided audio has an MP3 header');}
 });
 test('autoplays once and keeps position while navigating or changing viewport',async()=>{
  const a=new AudioFixture(),c=createController(a,()=>{},true);c.setTrack(track(),true);await tick();a.currentTime=12;

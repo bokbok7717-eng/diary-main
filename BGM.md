@@ -1,6 +1,6 @@
 # Theme music player
 
-Release mode: design preview with UI and playback controls implemented; the three requested music files have not been supplied. The user requested deployment of the design before audio is connected. YouTube links are metadata only; no audio is extracted, proxied, or downloaded.
+The three supplied MP3 files are connected to their corresponding character themes. YouTube links remain metadata only; playback uses the supplied local assets.
 
 - Configure each theme's `audioUrl` in `bgm-tracks.js` with a supplied audio file. Relative site assets or direct audio URLs are supported. The server must return a valid media content type and support seeking.
 - Metadata and original supplied cover images are mapped separately for Usagi, Chiikawa, and Hachiware.
@@ -9,4 +9,4 @@ Release mode: design preview with UI and playback controls implemented; the thre
 - Empty sources show the album cover and disabled controls without a pending-audio message or requests for nonexistent files. No record or authentication data is changed.
 - Controls: play/pause, seek, 10 seconds backward/forward. Long metadata scrolls; reduced-motion mode disables the animation.
 
-Validation: `node --test tests/*.test.cjs`. Browser playback and seek controls were checked with a generated test tone served only by the local preview fixture. The test tone is not included in the repository and is not one of the requested songs. Actual songs and their autoplay behavior remain to be verified after files are provided.
+Validation: `node --test tests/*.test.cjs` passes all 49 tests. The provided MP3s were checked byte-for-byte against the input files. Browser checks with actual files verified playback, pause, and 10-second seeking for all three tracks, recovery from blocked autoplay by user interaction, and uninterrupted playback during calendar navigation. Browser durations are approximately 1:10 (Usagi), 3:39 (Chiikawa), and 1:31 (Hachiware).
