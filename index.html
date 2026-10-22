@@ -2343,6 +2343,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <link rel="stylesheet" href="mood-characters.css?v=20261022-2">
 <script src="vendor/omggif-1.0.10.js"></script>
 <script src="mood-gif.js?v=20261022-1"></script>
+<link rel="stylesheet" href="pinned-picker.css?v=20261022-1">
 <link rel="stylesheet" href="bgm-player.css?v=20261022-2">
 <script src="bgm-tracks.js?v=20261022-2"></script>
 <script defer src="bgm-player.js?v=20261022-3"></script>
@@ -2887,6 +2888,10 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <div id="mh-photo-picker" onclick="mhClosePhotoPicker(event)">
   <div class="mh-picker-window" onclick="event.stopPropagation()">
     <div class="mh-picker-head"><span>HOME / PINNED PHOTO</span><button type="button" onclick="mhClosePhotoPicker()">×</button></div>
+    <section class="mh-picker-pinned" aria-label="고정된 사진">
+      <div class="mh-picker-pinned-title">PINNED <span id="mh-picker-pin-count">0 / 4</span><small>사진을 누르면 고정 해제</small></div>
+      <div class="mh-picker-pins" id="mh-picker-pins"></div>
+    </section>
     <div class="mh-picker-grid" id="mh-picker-grid"></div>
     <div class="mh-picker-foot">
       <label class="mh-picker-upload">+ UPLOAD<input id="mh-home-photo-file" type="file" accept="image/*" style="display:none" onchange="mhUploadHomePhoto(event)"></label>
@@ -7525,7 +7530,7 @@ function savePartnerNameFromInput2(){
   /* pinned photo picker */
   window.mhOpenPhotoPicker=function(){
     pendingPins=getPins().slice(0,4);
-    var show=function(){mhRenderPicker();var p=document.getElementById('mh-photo-picker');if(p)p.classList.add('open');};
+    var show=function(){mhRenderPicker();var grid=document.getElementById('mh-picker-grid');if(grid)grid.scrollTop=0;var p=document.getElementById('mh-photo-picker');if(p)p.classList.add('open');};
     /* 사진 DB 캐시가 아직 완전히 로드되지 않은 시점에도 특정 월만 보이지 않게 전체 캐시를 다시 확인한다. */
     if(typeof loadAllPhotosToCache==='function'&&photoDB){loadAllPhotosToCache().then(show).catch(show);}
     else if(typeof openPhotoDB==='function'&&typeof loadAllPhotosToCache==='function'){openPhotoDB().then(loadAllPhotosToCache).then(show).catch(show);}
@@ -7533,10 +7538,25 @@ function savePartnerNameFromInput2(){
   };
   window.mhClosePhotoPicker=function(ev){if(ev&&ev.target&&ev.target.id!=='mh-photo-picker')return;document.getElementById('mh-photo-picker').classList.remove('open');};
   function samePin(a,b){return a&&b&&((a.custom&&a.custom===b.custom)||(!a.custom&&!b.custom&&a.ds===b.ds&&a.i===b.i));}
+  function renderPinnedPicker(){
+    var grid=document.getElementById('mh-picker-pins'),count=document.getElementById('mh-picker-pin-count');
+    if(count)count.textContent=pendingPins.length+' / 4';
+    if(!grid)return;
+    var html=pendingPins.map(function(pin,index){
+      var photo=photoFromPin(pin),date=pin.custom?'직접 업로드':pin.ds;
+      return '<button type="button" class="mh-picker-pin" onclick="mhRemovePendingPin('+index+')" aria-label="'+esc(date)+' 사진 고정 해제">'
+        +'<span class="mh-picker-pin-photo">'+(photo&&photo.src?'<img src="'+esc(photo.src)+'" alt="'+esc(date)+' 고정 사진">':'<span>사진 없음</span>')
+        +'<span class="mh-picker-pin-remove" aria-hidden="true">×</span></span><span class="mh-picker-pin-date">'+esc(date)+'</span></button>';
+    }).join('');
+    for(var i=pendingPins.length;i<4;i++)html+='<div class="mh-picker-pin mh-picker-pin-empty"><span class="mh-picker-pin-photo" aria-hidden="true">+</span><span class="mh-picker-pin-date">빈 슬롯</span></div>';
+    grid.innerHTML=html;
+  }
+  window.mhRemovePendingPin=function(index){if(Number.isInteger(index)&&index>=0&&index<pendingPins.length){pendingPins.splice(index,1);mhRenderPicker();}};
   window.mhRenderPicker=function(){
+    renderPinnedPicker();
     var g=document.getElementById('mh-picker-grid');if(!g)return;
-    var photos=allPhotos();
-    if(!photos.length){g.innerHTML='<div class="mh-empty-page" style="padding:28px 8px">기록에 저장된 사진이 없어요.<br>아래 UPLOAD로 홈 전용 사진을 추가할 수 있어요.</div>';return;}
+    var photos=allPhotos().filter(function(photo){return !pendingPins.some(function(pin){return samePin(pin,photo);});});
+    if(!photos.length){g.innerHTML='<div class="mh-empty-page" style="padding:28px 8px">'+(pendingPins.length?'고정되지 않은 사진이 없어요.':'기록에 저장된 사진이 없어요.')+'<br>아래 UPLOAD로 홈 전용 사진을 추가할 수 있어요.</div>';return;}
     var lastMonth='',html='';
     photos.forEach(function(p){
       var month=(p.ds||'').slice(0,7);
