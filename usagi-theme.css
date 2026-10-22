@@ -90,3 +90,6 @@ body.layout-minihome.theme-chiikawa.mode-couple .mh-sticker{background-image:url
 body.layout-minihome.theme-chiikawa .mh-nav-btn.on{border-color:#ba8396!important}
 body.layout-minihome.theme-chiikawa #lock-screen .lk-ico{background:transparent url('assets/chiikawa/face-lock.png') center / contain no-repeat!important;height:78px!important}
 body.dark-mode .chiikawa-theme-choice{background:#35262e;color:#f7dfe8;border-color:#704c5d}body.dark-mode .chiikawa-theme-choice small{background:#533744}body.dark-mode .chiikawa-theme-choice em{color:#c8a5b3}
+
+/* User-selected artwork for the Usagi diary's HAPPY LITTLE DAYS card. */
+body.layout-minihome.theme-usagi.mode-diary .mh-sticker{background-image:url('assets/usagi/rice-little-days.png')!important;background-size:128px 128px!important;background-position:center 4px!important}
