@@ -51,8 +51,8 @@ function mount(){
   const el=document.getElementById('mh-bgm');if(!el)return;
   const audio=document.createElement('audio');audio.id='diary-bgm-audio';audio.preload='metadata';audio.loop=true;audio.volume=.35;document.body.appendChild(audio);
   const cover=el.querySelector('.bgm-cover'),copy=el.querySelector('.bgm-copy'),title=el.querySelector('.bgm-title'),artist=el.querySelector('.bgm-artist'),toggle=el.querySelector('.bgm-toggle'),seek=el.querySelector('.bgm-seek'),note=el.querySelector('.bgm-status');
-  let enabled=true;try{enabled=localStorage.getItem('diary_bgm_enabled_v1')!=='false';}catch(_){}
-  const controller=createController(audio,render,enabled,value=>{try{localStorage.setItem('diary_bgm_enabled_v1',String(value));}catch(_){}});
+  // A pause applies to this visit; every new page load attempts autoplay again.
+  const controller=createController(audio,render,true);
   let oldKey='',resizePending=false;
   function marquee(){
     const text=el.querySelector('.bgm-copy-text');
@@ -71,7 +71,7 @@ function mount(){
     seek.style.setProperty('--bgm-progress',(state.duration?state.current/state.duration*100:0)+'%');
     seek.setAttribute('aria-valuetext',timeLabel(state.current)+' / '+timeLabel(state.duration));
     el.querySelector('.bgm-current').textContent=timeLabel(state.current);el.querySelector('.bgm-duration').textContent=timeLabel(state.duration);
-    note.textContent=!ready?'':state.status==='blocked'?'한 번 누르면 음악이 시작돼요':state.status==='error'?'음원을 재생할 수 없어요':state.status==='loading'?'음악을 준비하고 있어요':'';
+    note.textContent=!ready?'':state.status==='blocked'?'':state.status==='error'?'음원을 재생할 수 없어요':state.status==='loading'?'음악을 준비하고 있어요':'';
   }
   function refresh(){
     const mobile=window.matchMedia('(max-width:899px)').matches;
@@ -89,7 +89,9 @@ function mount(){
   el.querySelector('[data-skip="-10"]').addEventListener('click',()=>controller.skip(-10));
   el.querySelector('[data-skip="10"]').addEventListener('click',()=>controller.skip(10));
   seek.addEventListener('input',()=>controller.seek(Number(seek.value)));
-  document.addEventListener('pointerdown',event=>{if(!el.contains(event.target))controller.retry();});
+  const retryOnInteraction=event=>{if(!el.contains(event.target))controller.retry();};
+  document.addEventListener('pointerup',retryOnInteraction);
+  document.addEventListener('click',retryOnInteraction);
   document.addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&!el.contains(event.target))controller.retry();});
   window.addEventListener('resize',()=>{if(resizePending)return;resizePending=true;requestAnimationFrame(()=>{resizePending=false;refresh();});});
   new MutationObserver(refresh).observe(document.documentElement,{attributes:true,attributeFilter:['class']});
