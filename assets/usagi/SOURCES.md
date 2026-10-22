@@ -11,3 +11,5 @@ Original images are used without raster edits.
 User-supplied PNGs (2026-10-21): broom.png, balloons.png, heart-backdrop.png. Original files preserved. pattern.svg arranges the full-body PNGs; CSS applies grayscale and low opacity.
 
 User correction (2026-10-21): ribbon-profile.png is the couple default profile; face-lock.png is the face-only lock icon for both modes. Source PNGs preserved without raster edits.
+
+User-supplied PNG (2026-10-22): rice-little-days.png replaces only the Usagi diary's HAPPY LITTLE DAYS illustration. Original PNG preserved without raster edits.
