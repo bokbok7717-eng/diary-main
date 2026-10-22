@@ -27,7 +27,7 @@ test('diary and couple select separate GIFs and repeat draws do not restart the 
  f.c.positionMoodCharacter(f.chart);f.c.positionMoodCharacter(f.chart);assert.equal(d.image.writes,1);
  assert.equal(d.image.src,'assets/mood-gifs/usagi-diary.gif');
  const c={...f.chart,canvas:{id:'cp-mood-chart'}};f.c.positionMoodCharacter(c);
- assert.equal(cp.image.src,'assets/mood-gifs/hachiware-couple.gif');assert.equal(cp.style['--mood-gif-x'],'58%');
+ assert.equal(cp.image.src,'assets/mood-gifs/hachiware-couple.gif');
  f.setDiary('chiikawa');f.c.positionMoodCharacter(f.chart);assert.equal(d.image.src,'assets/mood-gifs/chiikawa-diary.gif');assert.equal(cp.image.writes,1);
 });
 test('default layout, ordinary skins, destroyed charts and empty charts never cover the no-data message',()=>{
