@@ -1,0 +1,5 @@
+/* The chart plugin provides the actual arc center and hole diameter on draw/resize. */
+.mood-chart-character{position:absolute;transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;pointer-events:none;z-index:1;contain:paint}
+.mood-chart-character[hidden]{display:none!important}
+body:not(.layout-minihome) .mood-chart-character{display:none!important}
+.mood-chart-character img{position:absolute;left:var(--mood-gif-x,50%);top:var(--mood-gif-y,50%);width:var(--mood-gif-scale,145%);height:var(--mood-gif-scale,145%);max-width:none!important;max-height:none!important;object-fit:contain;transform:translate(-50%,-50%);border-radius:0!important;pointer-events:none}

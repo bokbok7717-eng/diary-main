@@ -2340,6 +2340,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <script>document.documentElement.classList.add("diary-private-locked","diary-auth-checking");</script>
 <link rel="stylesheet" href="cloud-sync.css?v=20261021-1">
 <link rel="stylesheet" href="usagi-theme.css?v=20261021-7">
+<link rel="stylesheet" href="mood-characters.css?v=20261022-1">
 </head>
 <body class="mode-diary">
 
@@ -2626,7 +2627,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
   <div class="tab-content" id="tab-d-stats">
     <div class="box">
       <div class="box-title">😊 기분 통계</div>
-      <div class="cw"><canvas id="mood-chart"></canvas></div>
+      <div class="cw"><canvas id="mood-chart"></canvas><span class="mood-chart-character" id="mood-chart-character" aria-hidden="true" hidden><img alt="" decoding="async"></span></div>
       <div class="ml" id="mood-leg"></div>
     </div>
     <div class="box">
@@ -2772,7 +2773,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
     <!-- 기분 통계 -->
     <div class="box">
       <div class="cp-box-title">😊 기분 통계 <span id="cp-mood-stat-period" style="font-size:11px;color:var(--cm-lt4);font-weight:400"></span></div>
-      <div class="cw"><canvas id="cp-mood-chart"></canvas></div>
+      <div class="cw"><canvas id="cp-mood-chart"></canvas><span class="mood-chart-character" id="cp-mood-chart-character" aria-hidden="true" hidden><img alt="" decoding="async"></span></div>
       <div class="ml" id="cp-mood-leg"></div>
     </div>
     <div class="box">
@@ -3050,12 +3051,53 @@ function resolvedSkin(set,k,fallback){
   var s=set[k]||set[fallback];
   return s.miniOnly&&!document.body.classList.contains('layout-minihome')?set[fallback]:s;
 }
+/* Keep animated GIFs as DOM images; drawing them to canvas would freeze a frame. */
+var MOOD_CHARACTER_GIFS={
+  usagi:{diary:{scale:1.3,y:61},couple:{scale:1.4,y:63}},
+  hachiware:{diary:{scale:1.3,y:34},couple:{scale:1.4,x:58,y:57}},
+  chiikawa:{diary:{scale:1.45,y:57},couple:{scale:1.4,y:56}}
+};
+function hideMoodCharacter(id){
+  var el=document.getElementById(id+'-character');
+  if(el) el.hidden=true;
+}
+function positionMoodCharacter(chart){
+  var id=chart&&chart.canvas&&chart.canvas.id;
+  if(id!=='mood-chart'&&id!=='cp-mood-chart') return;
+  var el=document.getElementById(id+'-character');
+  if(!el) return;
+  var mode=id==='cp-mood-chart'?'couple':'diary';
+  var skin=mode==='couple'?getCSkin():getDSkin();
+  var spec=MOOD_CHARACTER_GIFS[skin]&&MOOD_CHARACTER_GIFS[skin][mode];
+  if(!document.body.classList.contains('layout-minihome')||!spec||!chart.ctx||typeof chart.getDatasetMeta!=='function'){
+    el.hidden=true;return;
+  }
+  var arc=chart.getDatasetMeta(0).data[0];
+  if(!arc||!Number.isFinite(arc.x)||!Number.isFinite(arc.y)||!(arc.innerRadius>3)){
+    el.hidden=true;return;
+  }
+  var img=el.querySelector('img'),src='assets/mood-gifs/'+skin+'-'+mode+'.gif';
+  if(img.getAttribute('src')!==src) img.setAttribute('src',src);
+  el.style.left=arc.x+'px';el.style.top=arc.y+'px';
+  el.style.width=el.style.height=(arc.innerRadius*2-6)+'px';
+  el.style.setProperty('--mood-gif-scale',(spec.scale*100)+'%');
+  el.style.setProperty('--mood-gif-y',spec.y+'%');
+  el.style.setProperty('--mood-gif-x',(spec.x||50)+'%');
+  el.hidden=false;
+}
+function refreshMoodCharacters(){
+  if(typeof moodChart!=='undefined'&&moodChart) positionMoodCharacter(moodChart);else hideMoodCharacter('mood-chart');
+  if(typeof cpMoodChart!=='undefined'&&cpMoodChart) positionMoodCharacter(cpMoodChart);else hideMoodCharacter('cp-mood-chart');
+}
+var moodCharacterPlugin={id:'diaryMoodCharacter',afterDraw:positionMoodCharacter};
+
 function updateUsagiTheme(){
   var couple=document.body.classList.contains('mode-couple');
   var active=document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='usagi';
   document.body.classList.toggle('theme-usagi',active);
   document.body.classList.toggle('theme-hachiware',document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='hachiware');
   document.body.classList.toggle('theme-chiikawa',document.body.classList.contains('layout-minihome')&&(couple?getCSkin():getDSkin())==='chiikawa');
+  refreshMoodCharacters();
 }
 
 /* canvas(fillStyle)는 var(--x)를 해석하지 못하므로 실제 색상값을 꺼내 쓴다 */
@@ -4953,10 +4995,12 @@ function renderStats(){
   var moodCounts={};
   mKeys.forEach(function(k){var m=entries[k].mood;if(m)moodCounts[m]=(moodCounts[m]||0)+1;});
   var mk=Object.keys(moodCounts);
-  if(moodChart) moodChart.destroy();
+  hideMoodCharacter('mood-chart');
+  if(moodChart){ moodChart.destroy();moodChart=null; }
   if(mk.length>0){
     moodChart=new Chart(document.getElementById('mood-chart'),{
       type:'doughnut',
+      plugins:[moodCharacterPlugin],
       data:{labels:mk.map(function(m){return m+' '+MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return MOOD_COLORS[m]||'#e8c4a0';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fdf6ee'}]},
       options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/mKeys.length*100)+'%)';}}}}}
     });
@@ -5289,7 +5333,8 @@ function renderCpMoodStats(){
   keys.forEach(function(k){ var m=cpData.entries[k].mood; if(m) moodCounts[m]=(moodCounts[m]||0)+1; });
   var mk=Object.keys(moodCounts);
   var totalMoodDays=mk.reduce(function(s,m){return s+moodCounts[m];},0);
-  if(cpMoodChart) cpMoodChart.destroy();
+  hideMoodCharacter('cp-mood-chart');
+  if(cpMoodChart){ cpMoodChart.destroy();cpMoodChart=null; }
   var periodEl=document.getElementById('cp-mood-stat-period');
   if(periodEl) periodEl.textContent=ym.replace('-','년 ')+'월';
   if(mk.length>0){
@@ -5297,6 +5342,7 @@ function renderCpMoodStats(){
       if(cpMoodChart){ cpMoodChart.destroy(); cpMoodChart=null; }
       cpMoodChart=new Chart(canvas,{
         type:'doughnut',
+      plugins:[moodCharacterPlugin],
         data:{labels:mk.map(function(m){return m+' '+CP_MOOD_LABELS[m];}),datasets:[{data:mk.map(function(m){return moodCounts[m];}),backgroundColor:mk.map(function(m){return CP_MOOD_COLORS[m]||'#ffb3c1';}),borderWidth:2,borderColor:isDarkMode()?'#232323':'#fff'}]},
         options:{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw+'일 ('+Math.round(c.raw/totalMoodDays*100)+'%)';}}}}}
       });
