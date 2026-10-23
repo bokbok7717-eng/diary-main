@@ -43,3 +43,13 @@ test('a late rejection from a previous theme does not overwrite the active track
  const c=createController(a,()=>{},true);c.setTrack(track(),true);c.setTrack({...track('chiikawa'),audioUrl:''},true);reject({name:'NotAllowedError'});await tick();assert.equal(c.snapshot().status,'empty');
 });
 test('time labels are stable for loading and long tracks',()=>{assert.equal(timeLabel(NaN),'0:00');assert.equal(timeLabel(65.9),'1:05');assert.equal(timeLabel(-1),'0:00');});
+test('volume persists across new players, including mute, and survives unavailable storage',()=>{
+ const {createVolume}=require('../bgm-player.js');let saved=null;
+ const storage={getItem:()=>saved,setItem:(key,value)=>{saved=value;}};
+ const a={},first=createVolume(a,storage);assert.equal(a.volume,.35);
+ first.set(.62);assert.equal(a.volume,.62);assert.equal(createVolume({},storage).get(),.62);
+ first.set(0);assert.equal(createVolume({},storage).get(),0);
+ saved='broken';assert.equal(createVolume({},storage).get(),.35);
+ saved='2';assert.equal(createVolume({},storage).get(),.35);
+ const fallback=createVolume({},null);fallback.set(.2);assert.equal(fallback.get(),.2);
+});
