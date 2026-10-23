@@ -40,7 +40,7 @@ body.layout-minihome #layout-main #mh-bgm .bgm-seek{height:4px!important;min-hei
 
 /* Keep volume beside the artist while the title scrolls independently. */
 .bgm-meta{display:flex;align-items:center;gap:3px;min-width:0;margin:7px 0 5px}
-.bgm-meta .bgm-copy{flex:0 1 auto;margin:0;min-width:0}
+.bgm-meta .bgm-copy{flex:1 1 0;margin:0;min-width:0}
 .bgm-player .bgm-volume-toggle{flex:0 0 22px;display:flex;align-items:center;justify-content:center;width:22px;height:22px;min-height:0!important;padding:2px!important;background:transparent!important;border:0!important;box-shadow:none!important;color:var(--bgm-accent);cursor:pointer}
 .bgm-volume-toggle svg{width:15px;height:15px}.bgm-volume-mute,.is-muted .bgm-volume-waves{display:none}.is-muted .bgm-volume-mute{display:block}
 .bgm-volume-panel[hidden]{display:none!important}
