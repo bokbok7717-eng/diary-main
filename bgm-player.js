@@ -47,10 +47,40 @@ function createController(audio,notify,enabled,onPreference){
   return {setTrack,toggle,seek,skip:seconds=>seek(audio.currentTime+seconds),snapshot,
     retry(){if(want&&status==='blocked')play();}};
 }
+function createVolume(audio,storage){
+  const key='diary_bgm_volume_v1';
+  let saved=null;try{saved=storage.getItem(key);}catch(e){}
+  const value=saved===null||saved.trim()===''?NaN:Number(saved);
+  audio.volume=Number.isFinite(value)&&value>=0&&value<=1?value:.35;
+  return {get:()=>audio.volume,set(value){
+    value=Number(value);if(!Number.isFinite(value))return;
+    audio.volume=Math.max(0,Math.min(1,value));
+    try{storage.setItem(key,String(audio.volume));}catch(e){}
+  }};
+}
 function mount(){
   const el=document.getElementById('mh-bgm');if(!el)return;
-  const audio=document.createElement('audio');audio.id='diary-bgm-audio';audio.preload='metadata';audio.loop=true;audio.volume=.35;document.body.appendChild(audio);
+  const audio=document.createElement('audio');audio.id='diary-bgm-audio';audio.preload='metadata';audio.loop=true;document.body.appendChild(audio);
   const cover=el.querySelector('.bgm-cover'),copy=el.querySelector('.bgm-copy'),title=el.querySelector('.bgm-title'),artist=el.querySelector('.bgm-artist'),toggle=el.querySelector('.bgm-toggle'),seek=el.querySelector('.bgm-seek'),note=el.querySelector('.bgm-status');
+  const volumeButton=el.querySelector('.bgm-volume-toggle'),volumePanel=el.querySelector('.bgm-volume-panel'),volumeSlider=el.querySelector('.bgm-volume');
+  let storage;try{storage=window.localStorage;}catch(e){storage=null;}
+  const volume=createVolume(audio,storage);
+  function renderVolume(){
+    const percent=Math.round(volume.get()*100);
+    volumeSlider.value=String(percent);volumeSlider.setAttribute('aria-valuetext',percent+'%');
+    el.querySelector('.bgm-volume-value').textContent=percent+'%';
+    volumeButton.setAttribute('aria-label','볼륨 조절, 현재 '+percent+'%');
+    volumeButton.classList.toggle('is-muted',percent===0);
+  }
+  function closeVolume(){volumePanel.hidden=true;volumeButton.setAttribute('aria-expanded','false');}
+  volumeButton.addEventListener('click',()=>{
+    const open=volumePanel.hidden;volumePanel.hidden=!open;volumeButton.setAttribute('aria-expanded',String(open));
+    if(open)volumeSlider.focus();
+  });
+  volumeSlider.addEventListener('input',()=>{volume.set(Number(volumeSlider.value)/100);renderVolume();});
+  document.addEventListener('click',event=>{if(!el.contains(event.target))closeVolume();});
+  el.addEventListener('keydown',event=>{if(event.key==='Escape'&&!volumePanel.hidden){closeVolume();volumeButton.focus();}});
+  renderVolume();
   // A pause applies to this visit; every new page load attempts autoplay again.
   const controller=createController(audio,render,true);
   let oldKey='',resizePending=false;
@@ -98,7 +128,7 @@ function mount(){
   new MutationObserver(refresh).observe(document.body,{attributes:true,attributeFilter:['class']});
   api.refresh=refresh;refresh();
 }
-const api={timeLabel,createController,refresh:function(){}};
+const api={timeLabel,createController,createVolume,refresh:function(){}};
 if(typeof document!=='undefined'){
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',mount,{once:true});else mount();
 }

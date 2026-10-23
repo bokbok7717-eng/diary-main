@@ -2344,9 +2344,9 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
 <script src="vendor/omggif-1.0.10.js"></script>
 <script src="mood-gif.js?v=20261022-1"></script>
 <link rel="stylesheet" href="pinned-picker.css?v=20261022-1">
-<link rel="stylesheet" href="bgm-player.css?v=20261022-2">
+<link rel="stylesheet" href="bgm-player.css?v=20261023-1">
 <script src="bgm-tracks.js?v=20261022-2"></script>
-<script defer src="bgm-player.js?v=20261022-3"></script>
+<script defer src="bgm-player.js?v=20261023-1"></script>
 </head>
 <body class="mode-diary">
 
@@ -7650,7 +7650,8 @@ window.diaryApplyCloudValues=function(){
 <section id="mh-bgm" class="bgm-player" aria-label="테마 배경음악" hidden>
   <div class="bgm-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 18V5l12-2v13M9 8l12-2"/><ellipse cx="5" cy="18" rx="4" ry="3"/><ellipse cx="17" cy="16" rx="4" ry="3"/></svg> MY PLAYLIST</div>
   <img class="bgm-cover" alt="앨범커버">
-  <div class="bgm-copy"><div class="bgm-copy-text"><strong class="bgm-title"></strong><span class="bgm-artist"></span></div></div>
+  <div class="bgm-meta"><div class="bgm-copy"><div class="bgm-copy-text"><strong class="bgm-title"></strong><span class="bgm-artist"></span></div></div><button type="button" class="bgm-volume-toggle" aria-label="볼륨 조절" aria-expanded="false" aria-controls="bgm-volume-panel" title="볼륨 조절"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="bgm-volume-waves" d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/><path class="bgm-volume-mute" d="m15 9 6 6m0-6-6 6"/></svg></button></div>
+  <div class="bgm-volume-panel" id="bgm-volume-panel" hidden><span>볼륨</span><input class="bgm-volume" type="range" min="0" max="100" step="1" value="35" aria-label="볼륨"><output class="bgm-volume-value">35%</output></div>
   <div class="bgm-progress"><input class="bgm-seek" type="range" min="0" max="1" step="0.1" value="0" aria-label="음악 재생 위치" disabled><div class="bgm-times"><span class="bgm-current">0:00</span><span class="bgm-duration">0:00</span></div></div>
   <div class="bgm-controls">
     <button type="button" class="bgm-skip" data-skip="-10" aria-label="10초 전" title="10초 전" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5v14l-9-7zm10 0v14l-9-7z"/></svg><small>10</small></button>

@@ -37,3 +37,21 @@
 @media(prefers-reduced-motion:reduce){.bgm-copy.is-long .bgm-copy-text{animation:none}.bgm-copy{overflow:auto}}
 /* Override the legacy mobile form rule for this compact timeline only. */
 body.layout-minihome #layout-main #mh-bgm .bgm-seek{height:4px!important;min-height:0!important;padding:0!important;margin:4px 0!important;border:0!important}
+
+/* Keep volume beside the artist while the title scrolls independently. */
+.bgm-meta{display:flex;align-items:center;gap:3px;min-width:0;margin:7px 0 5px}
+.bgm-meta .bgm-copy{flex:0 1 auto;margin:0;min-width:0}
+.bgm-player .bgm-volume-toggle{flex:0 0 22px;display:flex;align-items:center;justify-content:center;width:22px;height:22px;min-height:0!important;padding:2px!important;background:transparent!important;border:0!important;box-shadow:none!important;color:var(--bgm-accent);cursor:pointer}
+.bgm-volume-toggle svg{width:15px;height:15px}.bgm-volume-mute,.is-muted .bgm-volume-waves{display:none}.is-muted .bgm-volume-mute{display:block}
+.bgm-volume-panel[hidden]{display:none!important}
+.bgm-volume-panel{display:flex;align-items:center;gap:7px;padding:5px 2px 8px;font-size:9px;color:inherit;min-width:0}
+.bgm-player .bgm-volume{flex:1;min-width:0;width:100%;height:16px!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;box-shadow:none!important;accent-color:var(--bgm-accent);cursor:pointer}
+.bgm-volume-value{width:30px;text-align:right;font-variant-numeric:tabular-nums}
+.bgm-volume-toggle:focus-visible,.bgm-volume:focus-visible{outline:2px solid var(--bgm-accent);outline-offset:1px}
+@media(max-width:899px){
+ #mh-bgm-mobile-slot .bgm-meta{grid-column:2;grid-row:1;margin:0;height:14px}
+ body.layout-minihome #mh-bgm-mobile-slot .bgm-volume-toggle{height:14px;width:20px;flex-basis:20px;padding:0!important}
+ #mh-bgm-mobile-slot .bgm-volume-toggle svg{width:12px;height:12px}
+ #mh-bgm-mobile-slot .bgm-volume-panel{grid-column:1/-1;grid-row:4;padding:3px 2px 1px;gap:5px;font-size:8px}
+ #mh-bgm-mobile-slot .bgm-status{grid-row:5}
+}
