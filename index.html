@@ -2527,6 +2527,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
         <button class="emj-btn" id="w-cloud2" onclick="setW('☁️')">☁️</button>
         <button class="emj-btn" id="w-rain" onclick="setW('☔')">☔</button>
         <button class="emj-btn" id="w-snow" onclick="setW('❄️')">❄️</button>
+        <button class="emj-btn" id="w-wind" onclick="setW('💨')" title="바람" aria-label="바람">💨</button>
       </div>
       <div class="mood-row">
         <button class="emj-btn" id="m-1" onclick="setM('😄')">😄</button>
@@ -2611,7 +2612,7 @@ body.layout-minihome.dark-mode .mh-picker-window{background:#232323;border-color
         <select class="fsel" id="f-weather" onchange="renderFL()">
           <option value="">날씨 전체</option>
           <option>☀️</option><option>⛅</option><option>☁️</option>
-          <option>☔</option><option>❄️</option>
+          <option>☔</option><option>❄️</option><option value="💨">💨 바람</option>
         </select>
         <select class="fsel" id="f-range" onchange="renderFL()">
           <option value="month">이번달</option>
@@ -3275,7 +3276,7 @@ function toggleFold(id){
 }
 
 /* ===== 날짜 상세 팝업 ===== */
-var WEATHER_EMOJI={'☀️':['☀️','✨','🌻'],'⛅':['⛅','☁️','☀️'],'☁️':['☁️','☁️','💨'],'☔':['☔','💧','☁️'],'❄️':['❄️','⛄','☁️']};
+var WEATHER_EMOJI={'☀️':['☀️','✨','🌻'],'⛅':['⛅','☁️','☀️'],'☁️':['☁️','☁️','💨'],'☔':['☔','💧','☁️'],'❄️':['❄️','⛄','☁️'],'💨':['💨','🍃','💨']};
 function openDayModal(ds,isCp){
   var e=isCp?(cpData.entries||{})[ds]:entries[ds];
   var d=new Date(ds+'T00:00:00');
@@ -3938,7 +3939,7 @@ var bcYear, bcMonth;
 var moodChart=null, moChart=null;
 var MOOD_COLORS={'😄':'#fbbf24','😊':'#a3e635','🥰':'#ff8fa6','😐':'#94a3b8','😔':'#60a5fa','😢':'#818cf8','😡':'#f87171','😴':'#c084fc'};
 var MOOD_LABELS={'😄':'신남','😊':'좋음','🥰':'사랑','😐':'보통','😔':'슬픔','😢':'눈물','😡':'화남','😴':'피곤'};
-var WEATHER_IDS={'☀️':'w-sun','⛅':'w-cloud1','☁️':'w-cloud2','☔':'w-rain','❄️':'w-snow'};
+var WEATHER_IDS={'☀️':'w-sun','⛅':'w-cloud1','☁️':'w-cloud2','☔':'w-rain','❄️':'w-snow','💨':'w-wind'};
 var MOOD_IDS={'😄':'m-1','😊':'m-2','🥰':'m-3','😐':'m-4','😔':'m-5','😢':'m-6','😡':'m-7','😴':'m-8'};
 
 function loadDiary(){try{entries=JSON.parse(localStorage.getItem(DIARY_KEY))||{};}catch(e){entries={};}}
@@ -4551,7 +4552,7 @@ var DIARY_ALL_BADGES=[
     var used={}; Object.keys(entries).forEach(function(k){if(entries[k].mood)used[entries[k].mood]=true;});
     return Object.keys(MOOD_LABELS).every(function(m){return used[m];});
   }},
-  {icon:'🌈',label:'날씨 마스터',desc:'5가지 날씨를 모두 기록했어요!',check:function(){
+  {icon:'🌈',label:'날씨 마스터',desc:'6가지 날씨를 모두 기록했어요!',check:function(){
     var used={}; Object.keys(entries).forEach(function(k){if(entries[k].weather)used[entries[k].weather]=true;});
     return Object.keys(WEATHER_IDS).every(function(w){return used[w];});
   }},
